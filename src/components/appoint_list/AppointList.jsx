@@ -19,15 +19,15 @@ export class AppointList extends Component {
 		SuperAgent
 			.get('http://closet-api.tallty.com/appointments')
 			.set('Accept', 'application/json')
-			.set('X-User-Token', 'tqjqxAi9dLLJUmK9xjr9')
-			.set('X-User-Phone', '18516591232')
+			.set('X-User-Token', sessionStorage.authentication_token)
+			.set('X-User-Phone', sessionStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					let appointments = res.body.appointments
 					this.setState({ appointments: appointments })	
 				} else {
 					alert("获取信息失败")
-					this.setState({ appointments: [] })	
+					this.setState({ appointments: [] })
 				}
 			})
 	}
@@ -51,7 +51,7 @@ export class AppointList extends Component {
 			list_view.push(
 				<div key={index}>
 					{ header }
-					<Link to={`/work_warehouse?appointment_id=${item.id}`} className={css.item}>
+					<Link to={`/warehouse?appointment_id=${item.id}`} className={css.item}>
 						<UserInfo name={item.name} photo={item.photo} phone={item.phone} />
 						<div className={css.item_footer}>
 							<img src="src/images/address_icon.svg" alt="icon"/>

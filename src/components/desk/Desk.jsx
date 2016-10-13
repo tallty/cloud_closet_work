@@ -6,6 +6,11 @@ import { Link } from 'react-router'
 import css from './desk.less'
 
 export class Desk extends Component {
+	componentWillMount() {
+    sessionStorage.setItem('state', '200')
+    sessionStorage.setItem('phone', '18516591232')
+    sessionStorage.setItem('authentication_token', '9_mN3n7DUksoC9ysy1xz')
+	}
 
 	render() {
 		return (
