@@ -1,0 +1,204 @@
+:global {
+  html, body, #root {
+    height: 100%;
+  }
+
+  body {
+    position: relative;
+    * {
+      font-weight: 200;
+    }
+  }
+  
+  input,input:focus,input:active{user-select: text;}
+  
+  .active {
+    color: #FF9241 !important;
+  }
+
+  // 全局通用类
+  .text-left {
+  	text-align: left;
+  }
+  .text-right {
+  	text-align: right;
+  }
+  .text-center {
+  	text-align: center;
+  }
+  .text-justify {
+  	text-align: justify;
+  }
+  .pull-right {
+    float: right;
+  }
+  .pull-left {
+    float: left;
+  }
+
+  // 满屏
+  .full_height {
+    height: 100%;
+  }
+  // 滚动控制（触控滚动、隐藏滚动条）
+  .scrollContainer {
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 1px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+  } 
+
+  // 个人中心相关
+  .ant-progress-bg {
+    background-color: #F4C87B !important;
+  }
+  .weui_actionsheet {
+    background-color: transparent !important;
+    .weui_actionsheet_cell {
+      padding: 16px 0;
+      font-size: 20px;
+      color: #007AFF;
+    }
+    .weui_actionsheet_menu {
+      margin: 5px 10px;
+      border-radius: 14px;
+    }
+    .weui_actionsheet_action {
+      margin: 0 10px 10px;
+      border-radius: 14px;
+    }
+  }
+  // 我的小蜜 - 问题
+  .ant-collapse {
+    border: none !important;
+    border-radius: 0 !important;
+    .ant-collapse-item {
+      border: 1px solid #f8f8f8 !important;
+      background-color: #fff;
+      .ant-collapse-header {
+        height: 48px !important;
+        line-height: 48px !important;
+        color: #7F7F7F !important;
+        font-size: 16px !important;
+        padding-left: 48px !important;
+        .arrow {
+          font-size: 16px !important;
+          line-height: 48px !important;
+          color: #7F7F7F !important;
+          left: 24px !important;
+        }
+      }
+      .ant-collapse-content {
+        background-color: #f8f8f8;
+      }
+    }
+  }
+
+
+  // 我的订单 - tab 样式
+  .ant-tabs-bar {
+    margin-bottom: 0 !important;
+    background-color: #fff;
+    .ant-tabs-nav {
+      width: 100%;
+      .ant-tabs-tab {
+        margin-right: 0 !important;
+        width: 25%;
+        .ant-tabs-tab-inner {
+          padding: 8px 0px;
+          font-size: 12px;
+          text-align: center;
+          color: #7f7f7f !important;
+        }
+      }
+      .ant-tabs-ink-bar {
+        width: 11% !important;
+        left: 7% !important;
+      }
+    }
+  }
+
+  label.ant-radio-button-wrapper-checked {
+    border-color: #FF9241 !important;
+    background-color: #FF9241 !important;
+    color: #fff !important;
+    box-shadow: -1px 0 0 0 #FF9241 !important;
+  }
+  .ant-calendar-header {
+    background-color: #FFB075 !important;
+    a , span {
+      color: #fff !important;
+    }
+  }
+  .ant-input:focus{
+    box-shadow: none !important;
+  }
+  .ant-calendar-cell {
+    color: #919191 !important;
+  }
+  .ant-calendar-picker-container {
+    // 元素水平垂直居中显示
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(189,189,189,0.8);
+    // 添加毛玻璃效果
+    // background: inherit;
+    // -webkit-filter: blur(5px);
+    // -moz-filter: blur(5px);
+    // -ms-filter: blur(5px);
+    // -o-filter: blur(5px);
+    // filter: blur(5px);
+    // filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=4, MakeShadow=false);
+    .ant-calendar {
+      width: 80%;
+    }
+  }
+  
+  .ant-calendar-picker-icon {
+    display:none !important;
+  }
+  .ant-calendar-selected-day .ant-calendar-date {
+    border-radius: 50% !important;
+  }
+  .ant-calendar-today .ant-calendar-date {
+    border-radius: 50% !important;
+  }
+  .ant-card-body {
+    padding: 0 !important;
+  }
+
+  // 工作端
+  // 衣服入库
+  .ant-radio-button-wrapper {
+    border: none !important;
+    background: #E0E0E0 !important;
+    width: 65px;
+    text-align: center;
+    line-height: 28px !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    border-radius: 14px;
+    padding: 0 !important;
+    &:first-child {
+      border-radius: 14px !important;
+      margin-right: 10px;
+    }
+    &:last-child {
+      border-radius: 14px !important;
+      margin-left: 10px;
+    }
+  }
+}
+
+
