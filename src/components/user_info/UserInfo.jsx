@@ -12,9 +12,9 @@ export class UserInfo extends Component {
 	}
 
 	getItem() {
-		const { name, phone, count } = this.props
+		const { name, phone, clothe_count } = this.props
 
-		if (this.props.clothe_count > 0) {
+		if (this.props.clothe_count != -1) {
 			return (
 				<div className={css.content_left}>
 					<p className={css.count_user_info}>
@@ -24,7 +24,7 @@ export class UserInfo extends Component {
 							{phone}
 						</span>
 					</p>
-					<p className={css.count}>预约件数：50件</p>
+					<p className={css.count}>预约件数：{clothe_count}件</p>
 				</div>
 			)
 		} else {
@@ -53,7 +53,7 @@ UserInfo.defaultProps = {
 	name: '',
 	phone: '',
 	photo: '',
-	clothe_count: 0
+	clothe_count: -1
 }
 
 UserInfo.PropTypes = {

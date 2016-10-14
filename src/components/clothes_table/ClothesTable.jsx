@@ -48,7 +48,13 @@ export class ClothesTable extends Component {
 					<Col span={4}>单价</Col>
 					<Col span={4}>总价</Col>
 				</Row>
-				{ this.getOrderList() }
+				{ 
+					this.props.data.length > 0 ? 
+						this.getOrderList() :
+						<Row>
+							<Col span={24} className={css.empty_table}>未添加任何衣服</Col>
+						</Row>
+				}
 			</div>
 		)
 	}

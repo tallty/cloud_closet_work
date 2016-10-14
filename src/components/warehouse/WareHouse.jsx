@@ -7,12 +7,13 @@ import { Link } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { Spiner } from '../common/Spiner'
-import { Row, Col, Button, Radio, Slider, InputNumber } from 'antd';
+import { Row, Col, Button, Radio, Slider, InputNumber, Select } from 'antd';
 import SuperAgent from 'superagent'
 import { PopWindow } from '../common/PopWindow'
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+const Option = Select.Option;
 
 export class WareHouse extends Component {
 	state = {
@@ -21,7 +22,6 @@ export class WareHouse extends Component {
 		select_kind: null,
 		data: []
 	}
-
 
 	componentDidMount() {
 		let apointment_id = this.props.location.query.appointment_id
@@ -39,22 +39,21 @@ export class WareHouse extends Component {
 			})
 	}
 	
-	// 季节
+	// 季节radio
 	onChange(e) {
 		console.log(`radio checked:${e.target.value}`);
 	}
-
 	// 对话框关闭执行的事件，点击蒙层事件
 	hidePopWindow() {
 		this.setState({ pop: false, select_kind: null })
 		console.log("弹出框关闭了")
 	}
-
+	// 显示popWindow
 	showPopWindow(e) {
 		this.setState({ pop: true, select_kind: e.target.alt })
 		console.log("弹出框显示了")
 	}
-
+	// 添加衣服到列表
 	addClotheEvent() {
 		let _data = this.state.data
 		_data.push({
@@ -67,7 +66,7 @@ export class WareHouse extends Component {
 		})
 		this.setState({ data: _data, pop: false })
 	}
-
+	// 设置衣服种类
 	setKinds() {
 		let kinds = [
 			["shangyi", "上衣"],
@@ -94,8 +93,14 @@ export class WareHouse extends Component {
 		return array
 	}
 
+	// 选择护理方式
+	handleNurseChange(value) {
+	  console.log(`selected ${value}`);
+	}
+
 	render() {
-		let appointment = this.state.appointment
+		let { appointment, nurse } = this.state
+
 		return (
 			<div className={css.container}>
 				{/* 用户信息 */}
@@ -128,14 +133,24 @@ export class WareHouse extends Component {
 				{/* price */}
 				<div className={css.tips_container}>
 					<Row className={css.tips}>
-						<Col span={12}>护理要求：&nbsp;&nbsp;<span>每次护理</span></Col>
+						<Col span={12}>
+							护理要求：
+							<Select defaultValue="every" style={{ width: 90 }} 
+											onChange={this.handleNurseChange.bind(this)}>
+					      <Option value="every">每次护理</Option>
+					      <Option value="one">一次护理</Option>
+					      <Option value="no">不护理</Option>
+					    </Select>
+						</Col>
 						<Col span={12} className="text-right">运费：xxx</Col>
 					</Row>
 					<p className="text-right">服务费：xxx</p>
 					<p className={css.total_price}>合计：<span>884.0</span></p>
 				</div>
 				{/* 入库 */}
-				<Link to="/work_appoint_order" className={css.tab_btn}>入库</Link>
+				<div className={css.btn_container}>
+					<Link to="/work_appoint_order" className={css.tab_btn}>入库</Link>
+				</div>
 				{/* popwindow */}
 				<PopWindow show={this.state.pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
 					<div className={css.form}>

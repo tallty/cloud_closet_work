@@ -20,7 +20,6 @@
 		padding: 7px 13px 0px;
 		background: #fff;
 		text-align: center;
-		ccolor: #919191;
 		font-size: 13px;
 		img {
 			height: 46px;
@@ -34,6 +33,7 @@
 			padding: 0;
 			margin-bottom: 4px;
 			font-weight: 200;
+			color: #4A4A4A;
 			&:hover {
 				color: #919191;
 			}
@@ -44,7 +44,7 @@
 	}
 	// 存衣数量
 	.pane {
-		padding: 0 4px;
+		padding: 0px 3px;
 		.pane_header {
 			height: 28px;
 			line-height: 28px;
@@ -64,8 +64,10 @@
 		padding: 16px;
 		font-size: 10px;
 		.tips {
-			span {
-				color: #FF9241;
+			.dropdown {
+				margin-left: 8px; 
+				color: #757575 !important; 
+				border-color: #FF9241;
 			}
 		}
 	  .total_price {
@@ -78,21 +80,28 @@
 		}
 	}
 	// 入库
-	.tab_btn {
-		display: block;
+	.btn_container {
 		position: fixed;
 		bottom: 0;
 		left: 0;
-		height: 50px;
 		width: 100%;
-		line-height: 50px;
-		background: #F8F8F8;
-		color: #FFA35E;
-		font-size: 18px;
+		background: #fff;
+		padding: 12px 0;
 		text-align: center;
-		border-top: 1px solid #979797;
-		&:active {
-			background: #f1f1f1;
+		.tab_btn {
+			display: block;
+			height: 44px;
+			width: 270px;
+			line-height: 44px;
+			border-radius: 22px;
+			margin: 0 auto;
+			background: #FF9241;
+			color: #fff;
+			font-size: 18px;
+			text-align: center;
+			&:active {
+				background: darken(#FF9241, 10%);
+			}
 		}
 	}
 
