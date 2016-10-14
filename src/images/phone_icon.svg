@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 5</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="预约清单" transform="translate(-242.000000, -269.000000)">
+            <g id="Group-5" transform="translate(243.000000, 270.000000)">
+                <circle id="Oval-745" stroke="#FFA35E" stroke-width="0.6" cx="15" cy="15" r="15"></circle>
+                <g id="Group-9" transform="translate(13.763140, 16.142305) rotate(-30.000000) translate(-13.763140, -16.142305) translate(8.263140, 4.142305)" fill="#FFA35E">
+                    <path d="M0.245392416,12.1200227 C0.0538021307,2.97675151 6.06028104,0.569114272 6.06028104,0.569114272 C6.6327204,0.254801138 7.09677419,0.528058452 7.09677419,1.19417843 L7.09677419,4.99936996 C7.09677419,5.65889649 6.61981974,6.44614499 6.16483029,6.92268376 C6.16483029,6.92268376 5.0403474,6.56788684 5.04034745,12 C5.0403475,17.4321132 6.16483033,17.0773162 6.16483033,17.0773162 C6.67952871,17.4800066 7.09677419,18.3345101 7.09677419,19.00063 L7.09677419,22.8058216 C7.09677419,23.4653481 6.61697235,23.7628063 6.05318817,23.4295261 C6.05318817,23.4295261 0.436982701,21.2632939 0.245392416,12.1200227 Z" id="Rectangle-1187"></path>
+                    <rect id="Rectangle-1188" x="7.47028862" y="-3.41060513e-13" width="3.36162988" height="6.19354839" rx="1.2"></rect>
+                    <rect id="Rectangle-1188" x="7.47028862" y="17.8064516" width="3.36162988" height="6.19354839" rx="1.2"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

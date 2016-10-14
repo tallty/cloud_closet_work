@@ -52,7 +52,7 @@ export class AppointList extends Component {
 				<div key={index}>
 					{ header }
 					<Link to={`/warehouse?appointment_id=${item.id}`} className={css.item}>
-						<UserInfo name={item.name} photo={item.photo} phone={item.phone} />
+						<UserInfo name={item.name} photo={item.photo} phone={item.phone} clothe_count={50} />
 						<div className={css.item_footer}>
 							<img src="src/images/address_icon.svg" alt="icon"/>
 							<span>{item.address}</span>

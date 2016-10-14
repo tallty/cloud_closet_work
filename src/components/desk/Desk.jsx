@@ -52,7 +52,7 @@ export class Desk extends Component {
 						<Link to="/">
 							<div>
 								<h1>2</h1>
-								<p>已完成</p>
+								<p>历史订单</p>
 							</div>
 						</Link>
 						<Link to="/">
