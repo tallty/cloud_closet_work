@@ -1,0 +1,62 @@
+.toogle {
+	transform: translate(0, 0) !important;
+}
+.pop_bg {
+	background: rgba(0,0,0,.6);
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+	.bottom_window {
+		position: fixed;
+    left: 0;
+    bottom: 0;
+    transform: translate(0, 100%);
+    backface-visibility: hidden;
+    z-index: 5000;
+    width: 100%;
+    //slide up animation
+    transition: transform .3s;
+	}
+
+	.left_window {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		transform: translate(0, 100%);
+    backface-visibility: hidden;
+    z-index: 5000;
+    width: 100%;
+    //slide up animation
+    transition: transform .3s;
+	}
+
+	.top_window {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 5000;
+		transform: translate(0, 100%);
+    backface-visibility: hidden;
+    width: 100%;
+    //slide up animation
+    transition: transform .3s;
+	}
+
+	.right_window {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 5000;
+		transform: translate(0, 100%);
+    backface-visibility: hidden;
+    width: 100%;
+    //slide up animation
+    transition: transform .3s;
+	}
+}

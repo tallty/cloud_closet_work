@@ -7,12 +7,10 @@ import { Link } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { Spiner } from '../common/Spiner'
-import { Row, Col, Button, Radio } from 'antd';
+import { Row, Col, Button, Radio, Slider, InputNumber } from 'antd';
 import SuperAgent from 'superagent'
-import WeUI from 'react-weui'
-import 'weui'
+import { PopWindow } from '../common/PopWindow'
 
-const { ActionSheet } = WeUI
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
@@ -20,47 +18,9 @@ export class WareHouse extends Component {
 	state = {
 		appointment: null,
 		pop: false,
-		data: [
-			{
-				kind: '上衣',
-				season: '春夏',
-				time_length: '3个月',
-				count: 10,
-				price: 20.0,
-				total_price: 200.0
-			},
-			{
-				kind: '连衣裙',
-				season: '秋冬',
-				time_length: '3个月',
-				count: 18,
-				price: 38.0,
-				total_price: 684.0
-			}
-		]
+		select_kind: null,
+		data: []
 	}
-
-	menus = [{
-    label: '选择时长',
-    className: css.photo_item,
-    onClick: this.hidePopWindow.bind(this)
-  }, 
-  {
-    label: '选择数量',
-    className: css.photo_item,
-    onClick: this.hidePopWindow.bind(this)
-  }]
-	// 头像选择操作
-  actions = [{
-      label: '取消',
-      className: css.photo_item,
-      onClick: this.hidePopWindow.bind(this)
-  },
-  {
-	  label: '添加',
-    className: css.photo_item,
-    onClick: this.addClothes.bind(this)
-  }]
 
 
 	componentDidMount() {
@@ -78,23 +38,24 @@ export class WareHouse extends Component {
 				}
 			})
 	}
-
+	
+	// 季节
 	onChange(e) {
 		console.log(`radio checked:${e.target.value}`);
 	}
 
 	// 对话框关闭执行的事件，点击蒙层事件
 	hidePopWindow() {
-		this.setState({ pop: false })
+		this.setState({ pop: false, select_kind: null })
 		console.log("弹出框关闭了")
 	}
 
-	showPopWindow() {
-		this.setState({ pop: true })
+	showPopWindow(e) {
+		this.setState({ pop: true, select_kind: e.target.alt })
 		console.log("弹出框显示了")
 	}
 
-	addClothes() {
+	addClotheEvent() {
 		let _data = this.state.data
 		_data.push({
 			kind: '连衣裙',
@@ -120,9 +81,10 @@ export class WareHouse extends Component {
 		let array = []
 
 		kinds.forEach((item, index, obj) => {
+			let active = this.state.select_kind === item[1] ? css.active : null
 			array.push(
 				<Col span={6} key={index}>
-					<Button onClick={this.showPopWindow.bind(this)}>
+					<Button onClick={this.showPopWindow.bind(this)} className={active}>
 						<img src={`src/images/${item[0]}.png`} alt={`${item[1]}`}/>
 						<p>{item[1]}</p>
 					</Button>
@@ -175,10 +137,19 @@ export class WareHouse extends Component {
 				{/* 入库 */}
 				<Link to="/work_appoint_order" className={css.tab_btn}>入库</Link>
 				{/* popwindow */}
-				<ActionSheet show={this.state.pop} 
-										 menus={this.menus} 
-										 actions={this.actions}
-										 onRequestClose={this.hidePopWindow.bind(this)} />
+				<PopWindow show={this.state.pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
+					<div className={css.form}>
+						<div className={css.content}>
+							<Slider defaultValue={30} />
+							<br/>
+							<Slider defaultValue={30} />
+						</div>
+						<div className={css.actions}>
+							<button onClick={this.hidePopWindow.bind(this)}>取消</button>
+							<button onClick={this.addClotheEvent.bind(this)}>确定</button>
+						</div>
+					</div>
+				</PopWindow>
 			</div>
 		);
 	}
