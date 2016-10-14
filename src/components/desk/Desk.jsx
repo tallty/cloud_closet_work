@@ -9,7 +9,7 @@ export class Desk extends Component {
 	componentWillMount() {
     sessionStorage.setItem('state', '200')
     sessionStorage.setItem('phone', '18516591232')
-    sessionStorage.setItem('authentication_token', '9_mN3n7DUksoC9ysy1xz')
+    sessionStorage.setItem('authentication_token', 'H55BZoPXHU8W4c1J3zCB')
 	}
 
 	render() {

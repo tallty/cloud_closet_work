@@ -1,3 +1,4 @@
+@primary: #FF9241;
 .container {
 	height: 100%;
 	padding-bottom: 50px;
@@ -51,7 +52,7 @@
 			color: #fff;
 			text-align: center;
 			font-size: 13px;
-			background: #FF9241;
+			background: @primary;
 		}
 		.pane_body {
 			padding: 6px 10px;
@@ -64,17 +65,13 @@
 		padding: 16px;
 		font-size: 10px;
 		.tips {
-			.dropdown {
-				margin-left: 8px; 
-				color: #757575 !important; 
-				border-color: #FF9241;
-			}
+
 		}
 	  .total_price {
 			color: #757575;
 			font-size: 14px;
 			span {
-				color: #FF9241;
+				color: @primary;
 				font-size: 24px;
 			}
 		}
@@ -95,26 +92,96 @@
 			line-height: 44px;
 			border-radius: 22px;
 			margin: 0 auto;
-			background: #FF9241;
+			background: @primary;
 			color: #fff;
 			font-size: 18px;
 			text-align: center;
 			&:active {
-				background: darken(#FF9241, 10%);
+				background: darken(@primary, 10%);
 			}
 		}
 	}
 
-	// 添加衣服表单
+	// 添加衣服PopWindow
 	.form {
 		background: #EFEFF4;
 		.content {
-			padding: 16px;
+			padding: 0 16px;
 			background: #fff;
-		}
-		.actions {
-			margin-top: 6px;
-			background: #fff;
+			.title {
+				height: 58px;
+				line-height: 58px;
+				text-align: center;
+				color: @primary;
+				font-size: 20px;
+				font-weight: normal;
+				border-bottom: 1px solid #CCCCCC;
+			}
+			.warehouse_length {
+				padding: 15px;
+				border-bottom: 1px solid #CCCCCC;
+				text-align: center;
+				color: #4A4A4A;
+				font-size: 14px;
+				p {
+					margin-bottom: 10px;
+				}
+				.radio_container {
+					width: 225px;
+					text-align: left;
+					margin: 0 auto;
+				}
+			}
+			.form_count {
+				padding: 15px;
+				text-align: center;
+				color: #4A4A4A;
+				font-size: 14px;
+				p {
+					margin-bottom: 10px;
+				}
+				.count_input {
+					width: 150px;
+					height: 40px;
+					line-height: 40px;
+					margin: 0 auto;
+					img {
+						display: inline-block;
+						height: 40px;
+						width: 40px;
+						vertical-align: middle;
+					}
+					span {
+						vertical-align: middle;
+					}
+					input {
+						width: 50px;
+						margin: 0 10px;
+						display: inline-block;
+						vertical-align: middle;
+						text-align: center;
+					}
+				}
+			}
+			.actions {
+				height: 110px;
+				padding: 42px 0 24px;
+				width: 100%;
+				.btn {
+					width: 50%;
+					float: left;
+					text-align: center;
+					button {
+						color: #4A4A4A;
+						font-size: 19px;
+						border: 1px solid @primary;
+						border-radius: 22px; 
+						width: 90%;
+						height: 44px;
+						background: #fff;
+					}
+				}
+			}
 		}
 	}
 }

@@ -6,7 +6,7 @@
   body {
     position: relative;
     * {
-      font-weight: 200;
+      font-weight: normal;
     }
   }
   
@@ -188,16 +188,16 @@
     line-height: 28px !important;
     color: #fff !important;
     font-size: 13px !important;
-    border-radius: 14px;
+    border-radius: 14px !important;
     padding: 0 !important;
-    &:first-child {
-      border-radius: 14px !important;
-      margin-right: 10px;
-    }
+    margin-right: 10px !important;
     &:last-child {
-      border-radius: 14px !important;
-      margin-left: 10px;
+      margin-left: 0px;
     }
+  }
+  // 单选框
+  .ant-select-selection {
+    border: 1px solid #FF9241 !important;
   }
 }
 

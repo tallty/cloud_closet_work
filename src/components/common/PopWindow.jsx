@@ -45,9 +45,7 @@ export class PopWindow extends Component {
 		const { show, onCancel } = this.props
 
 		return (
-			<div className={css.pop_bg} 
-						style={{display: show ? 'block' : 'none'}} 
-						onClick={this.props.onCancel}>
+			<div className={css.pop_bg} style={{display: show ? 'block' : 'none'}}>
 				<div className={this.popStyle()}>
 					{this.props.children}
 				</div>
