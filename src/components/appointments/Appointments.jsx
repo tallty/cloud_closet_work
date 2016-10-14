@@ -10,7 +10,7 @@ import { Link } from 'react-router'
 import { UserInfo } from '../user_info/UserInfo'
 import SuperAgent from 'superagent'
 
-export class AppointList extends Component {
+export class Appointments extends Component {
 	state = {
 		appointments: null
 	}
@@ -51,7 +51,7 @@ export class AppointList extends Component {
 			list_view.push(
 				<div key={index}>
 					{ header }
-					<Link to={`/warehouse?appointment_id=${item.id}`} className={css.item}>
+					<Link to={`/appointment?appointment_id=${item.id}`} className={css.item}>
 						<UserInfo name={item.name} photo={item.photo} phone={item.phone} clothe_count={50} />
 						<div className={css.item_footer}>
 							<img src="src/images/address_icon.svg" alt="icon"/>
@@ -117,7 +117,7 @@ export class AppointList extends Component {
 								url="/" 
 								style={toolbar_style} 
 								back_style={back_style} />
-				<div className={css.list_view}>
+				<div className={css.appointments}>
 					{ this.state.appointments ? this.initList() : <Spiner/> }
 				</div>
 			</div>

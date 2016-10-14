@@ -1,4 +1,5 @@
-.list_view {
+// index
+.appointments {
 	background: #f8f8f8;
 	height: 100%;
 	padding-top: 50px;
@@ -40,6 +41,95 @@
 			span {
 				vertical-align: middle;
 			}
+		}
+	}
+}
+
+// show
+.appointment {
+	height: 100%;
+	padding-top: 50px;
+	background: #fff;
+	z-index: 1;
+	.div_one {
+		height: 68px;
+		border-bottom: 1px solid #EBEBEB;
+	}
+	.div_two {
+		height: 111px;
+		border-bottom: 1px solid #EBEBEB;
+		position: relative;
+		.photo {
+			height: 70px;
+			width: 70px;
+			position: absolute;
+			top: -35px;
+			left: 50%;
+			margin-left: -35px;
+		}
+		.name {
+			color: #919191;
+			padding-top: 40px;
+			font-size: 16px;
+			text-align: center;
+			font-weight: normal;
+		}
+		.phone {
+			font-size: 16px;
+			color: #000;
+			text-align: center;
+			display: block;
+			img {
+				height: 16px;
+				margin-right: 8px;
+				vertical-align: middle;
+			}
+			span {
+				vertical-align: middle;
+				font-weight: normal;
+			}
+		}
+	}
+	.div_three {
+		padding-top: 28px;
+		text-align: center;
+		line-height: 28px;
+		.address {
+			font-size: 14px;
+			color: #757575;
+			margin-bottom: 18px;
+			display: block;
+			img {
+				height: 15px;
+				margin-right: 8px;
+				vertical-align: middle;
+			}
+			span {
+				vertical-align: middle;
+			}
+		}
+		.time_count {
+			color: #000;
+			font-size: 13px;
+		}
+	}
+	.warehouse {
+		width: 270px;
+		height: 44px;
+		text-align: center;
+		line-height: 44px;
+		background-color: #FF9241;
+		color: #fff;
+		font-size: 16px;
+		border-radius: 22px;
+		margin: 48px auto 0;
+		display: block;
+		position: fixed;
+		bottom: 24px;
+		left: 50%;
+		margin-left: -135px;
+		&:active {
+			background-color: darken(#FF9241, 10%);
 		}
 	}
 }
@@ -130,5 +220,4 @@
 			}
 		}
 	}
-
 }

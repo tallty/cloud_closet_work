@@ -19,10 +19,10 @@ export class UserInfo extends Component {
 				<div className={css.content_left}>
 					<p className={css.count_user_info}>
 						<span className={css.name}>{name}</span>
-						<a className={css.phone}>
+						<span className={css.phone}>
 							<img src="src/images/phone_icon.svg" alt="icon"/>
 							{phone}
-						</a>
+						</span>
 					</p>
 					<p className={css.count}>预约件数：50件</p>
 				</div>

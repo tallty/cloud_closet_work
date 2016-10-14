@@ -7,13 +7,15 @@ import GetOpenId from '../components/WechatConect/GetOpenId'
 {/* 工作台 */}
 import { Desk } from '../components/desk/Desk'
 {/* 预约列表 */}
-import { AppointList } from '../components/appoint_list/AppointList'
+import { Appointments } from '../components/appointments/Appointments'
+{/* 预约详情 */}
+import { Appointment } from '../components/appointments/Appointment'
 {/* 预约入库 */}
 import { WareHouse } from '../components/warehouse/WareHouse'
 {/* 展示订单 */}
-import { AppointOrder } from '../components/appoint_list/AppointOrder'
+import { AppointOrder } from '../components/appointments/AppointOrder'
 {/* 订单完成-成功 */}
-import { AppointSuccess } from '../components/appoint_list/AppointSuccess'
+import { AppointSuccess } from '../components/appointments/AppointSuccess'
 
 export class Routes extends Component {
   checkout(){
@@ -36,7 +38,9 @@ export class Routes extends Component {
         {/* 工作台 */}
         <Route path="/" component={Desk}/>
         {/* 预约清单 */}
-        <Route path="/appoint_list" component={AppointList}/>
+        <Route path="/appointments" component={Appointments}/>
+        {/* 预约详情 */}
+        <Route path="/appointment" component={Appointment}/>
         {/* 预约入库 */}
         <Route path="/warehouse" component={WareHouse}/>
         {/* 预约清单 - 生成订单 */}

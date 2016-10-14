@@ -37,7 +37,7 @@ export class Desk extends Component {
 				</div>
 				<div className={css.bottom}>
 					<div className={css.grid_container}>
-						<Link to="/appoint_list">
+						<Link to="/appointments">
 							<div>
 								<h1>6</h1>
 								<p>预约入库</p>
