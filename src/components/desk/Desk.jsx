@@ -7,9 +7,9 @@ import css from './desk.less'
 
 export class Desk extends Component {
 	componentWillMount() {
-    sessionStorage.setItem('state', '200')
-    sessionStorage.setItem('phone', '18516591232')
-    sessionStorage.setItem('authentication_token', 'H55BZoPXHU8W4c1J3zCB')
+    localStorage.setItem('state', '200')
+    localStorage.setItem('phone', '18516591232')
+    localStorage.setItem('token', 'H55BZoPXHU8W4c1J3zCB')
 	}
 
 	render() {

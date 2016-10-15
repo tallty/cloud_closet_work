@@ -9,22 +9,22 @@ import { Link } from 'react-router'
 import SuperAgent from 'superagent'
 
 export class Appointment extends Component {
+	id = this.props.location.query.id
 	state = {
 		appointment: null
 	}
 
-
 	componentDidMount() {
-		let apointment_id = this.props.location.query.appointment_id
 		SuperAgent
-			.get(`http://closet-api.tallty.com/appointments/${apointment_id}`)
+			.get(`http://closet-api.tallty.com/appointments/${this.id}`)
 			.set('Accept', 'application/json')
-			.set('X-User-Token', sessionStorage.authentication_token)
-			.set('X-User-Phone', sessionStorage.phone)
+			.set('X-User-Token', localStorage.token)
+			.set('X-User-Phone', localStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					this.setState({ appointment: res.body })
 					console.dir(res.body)
+					console.log("获取的预约信息")
 				} else {
 					alert("获取信息失败")
 				}
@@ -40,7 +40,6 @@ export class Appointment extends Component {
 		let back_style = {
 			color: '#fff'
 		}
-		let appointment_id = this.props.location.query.appointment_id
 
 		return (
 			<div className={css.appointment}>
@@ -74,7 +73,7 @@ export class Appointment extends Component {
 					</div> : 
 					<Spiner />
 				}
-				<Link to={`/warehouse?appointment_id=${appointment_id}`} className={css.warehouse}>添加入库清单</Link>
+				<Link to={`/warehouse?appointment_id=${this.id}`} className={css.warehouse}>添加入库清单</Link>
 			</div>
 		);
 	}

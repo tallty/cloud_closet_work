@@ -51,7 +51,7 @@ export class Appointments extends Component {
 			list_view.push(
 				<div key={index}>
 					{ header }
-					<Link to={`/appointment?appointment_id=${item.id}`} className={css.item}>
+					<Link to={`/appointment?id=${item.id}`} className={css.item}>
 						<UserInfo name={item.name} photo={item.photo} phone={item.phone} clothe_count={50} />
 						<div className={css.item_footer}>
 							<img src="src/images/address_icon.svg" alt="icon"/>

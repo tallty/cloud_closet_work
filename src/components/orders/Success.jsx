@@ -2,10 +2,10 @@
  * 预约清单 - 成功申请
  */
 import React, { Component } from 'react'
-import css from './appoint.less'
+import css from './order.less'
 import { Link } from 'react-router'
 
-export class AppointSuccess extends Component {
+export class Success extends Component {
 	render() {
 		return (
 			<div className={css.appoint_success}>

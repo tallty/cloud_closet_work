@@ -3,7 +3,6 @@
  */
 import React, { Component, PropTypes } from 'react';
 import css from './ware_house.less';
-import { Link } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { Spiner } from '../common/Spiner'
@@ -14,32 +13,76 @@ import { PopWindow } from '../common/PopWindow'
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
-const formData = {
-	length: 3,
-	count: 10
-}
+const editItem = {
+	index: null,
+	item: null
+};
+const parseLength = new Map([
+	[3, '三个月'],
+	[6, '六个月'],
+	[9, '九个月'],
+	[12, '一年'],
+	[24, '两年']
+]);
 
 export class WareHouse extends Component {
+	appointment_id = this.props.location.query.appointment_id
 	state = {
 		appointment: null,
 		season: '春夏',
+		kinds: [],
 		kind: null,
-		nurse: 'every',
 		count: 10,
+		length: 3,
+		price_cache: 0,
+		clothes: {
+			data: [],
+			nurse: 'every',
+			total: 0,
+			freight: 10,
+			service_charge: 50
+		},
 		pop: false,
-		data: []
+		event: null
+	}
+
+	componentWillMount() {
+		let event = this.props.location.query.event
+		console.log(event)
+		if (event === 'edit') {
+			console.log("begin")
+			let clothes_str = localStorage.clothes
+			let clothes = JSON.parse(clothes_str)
+
+			if (clothes) {
+				console.log("state")
+				this.setState({ clothes: clothes })
+			}
+		}
 	}
 
 	componentDidMount() {
-		let apointment_id = this.props.location.query.appointment_id
 		SuperAgent
-			.get(`http://closet-api.tallty.com/appointments/${apointment_id}`)
+			.get(`http://closet-api.tallty.com/appointments/${this.appointment_id}`)
 			.set('Accept', 'application/json')
-			.set('X-User-Token', sessionStorage.authentication_token)
-			.set('X-User-Phone', sessionStorage.phone)
+			.set('X-User-Token', localStorage.token)
+			.set('X-User-Phone', localStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
-					this.setState({ appointment: res.body })
+					// 以后可以通过接口获取衣服种类和单价
+					let kinds = [
+						["shangyi", "上衣", 8],
+						["lianyiqun", "连衣裙", 12],
+						["kuzhuang", "裤装", 8],
+						["banqun", "半裙", 5],
+						["waitao", "外套", 10],
+						["yurongfu", "羽绒服", 15],
+						["yongzhuang", "泳装", 8]
+					]
+					this.setState({ 
+						appointment: res.body,
+						kinds: kinds
+					})
 				} else {
 					alert("获取信息失败")
 				}
@@ -48,22 +91,13 @@ export class WareHouse extends Component {
 
 	// 设置衣服种类
 	setKinds() {
-		let kinds = [
-			["shangyi", "上衣"],
-			["lianyiqun", "连衣裙"],
-			["kuzhuang", "裤装"],
-			["banqun", "半裙"],
-			["waitao", "外套"],
-			["yurongfu", "羽绒服"],
-			["yongzhuang", "泳装"]
-		]
 		let array = []
 
-		kinds.forEach((item, index, obj) => {
+		this.state.kinds.forEach((item, index, obj) => {
 			let active = this.state.kind === item[1] ? css.active : null
 			array.push(
 				<Col span={6} key={index}>
-					<Button onClick={this.showPopWindow.bind(this, item[1])} className={active}>
+					<Button onClick={this.showPopWindow.bind(this, item)} className={active}>
 						<img src={`src/images/${item[0]}.png`} alt={`${item[1]}`}/>
 						<p>{item[1]}</p>
 					</Button>
@@ -78,21 +112,36 @@ export class WareHouse extends Component {
 		console.log(`季节改变:${e.target.value}`);
 		this.setState({ season: e.target.value })
 	}
+
 	// 对话框关闭执行的事件，点击蒙层事件
 	hidePopWindow() {
 		this.setState({ pop: false })
 		console.log("弹出框关闭了")
 	}
+
 	// 显示popWindow
-	showPopWindow(kind) {
-		this.setState({ pop: true, kind: kind })
-		console.log(`弹出框显示了, 选中${kind}`)
+	showPopWindow(item) {
+		this.setState({ 
+			pop: true, 
+			kind: item[1],
+			price_cache: item[2],
+			length: 3,
+			count: 10,
+			event: 'add'
+		})
+		console.log(`弹出框显示了, 选中${item[1]}`)
 	}
+
 	// 改变仓储时长
 	onLengthChange(e) {
-		formData.length = e.target.value
+		let length = parseInt(e.target.value)
+		this.setState({
+			length: length
+		})
+		console.log("选择的时长：")
 		console.log(e.target.value)
 	}
+
 	// 减少数量
 	reduceCount() {
 		let _count = this.state.count
@@ -101,34 +150,134 @@ export class WareHouse extends Component {
 			this.setState({count: _count})
 		}
 	} 
+
 	// 增加数量
 	addCount() {
 		let _count = this.state.count
 		_count += 1
 		this.setState({count: _count})
 	}
+
 	// 添加衣服到列表
 	addClotheEvent() {
-		let { appointment, season, kind, nurse, count, data } = this.state
-		let _data = data
-		_data.push({
+		let { season, kind, count, length, price_cache, clothes } = this.state
+		let time_length = parseLength.get(length)
+		// 总衣服对象
+		let _clothes = clothes
+		// 单类衣服的总价
+		let total_price = length * count * price_cache
+		// 入库衣服总价格(无运费、服务费)
+		let _total = clothes.total + total_price
+
+		console.log(length)
+		console.log(time_length)
+
+		let item = {
 			kind: kind,
 			season: season,
-			time_length: formData.length,
+			length: time_length,
 			count: count,
-			price: 38.0,
-			total_price: 684.0
+			price: price_cache,
+			total_price: total_price
+		}
+
+		_clothes.data.push(item)
+		_clothes.total = _total
+
+		this.setState({ 
+			pop: false,
+			clothes: _clothes
 		})
-		this.setState({ data: _data, pop: false })
 	}
+
+	// 更新列表中的衣服信息
+	updateClotheEvent() {
+		let { season, kind, count, length, price_cache, clothes } = this.state
+		let item = clothes.data[editItem.index]
+		let time_length = parseLength.get(length)
+		// 单类总价
+		let total_price = length * count * price_cache
+
+		item.kind = kind
+		item.count = count
+		item.length = time_length
+		item.total_price = total_price
+
+		this.setState({ 
+			clothes: clothes, 
+			pop: false
+		})
+
+		this.getTotalPrice()
+	}
+
+	// 获取总价格
+	getTotalPrice() {
+		let { clothes } = this.state
+		// 入库衣服总价格(无运费、服务费)
+		let total = 0
+		clothes.data.forEach((item, i, obj) => {
+			total = total + item.total_price
+		})
+		clothes.total = total
+		this.setState({ clothes: clothes })
+		return total
+	}
+
+	// 衣服数量列表的点击事件
+	onTableClickEvent(index, item) {
+		console.log(index)
+		console.log(item)
+
+		editItem.item = item
+		editItem.index = index
+
+		this.setState({
+			kind: item.kind,
+			count: item.count,
+			price_cache: item.price,
+			pop: true,
+			event: 'update'
+		})
+	}
+
 	// 选择护理方式
 	handleNurseChange(value) {
 	  console.log(`selected ${value}`);
 	  this.setState({ nurse: value })
 	}
 
+	// 入库逻辑
+	handleWarehouse() {
+		let clothes_str =JSON.stringify(this.state.clothes);
+		let appointment_str = JSON.stringify(this.state.appointment)
+		//存入storage
+		localStorage.clothes = clothes_str;
+		localStorage.appointment = appointment_str;
+		console.log("把存衣数量列表、预约对象 存入localStorage")
+		// 读取
+		let str = localStorage.clothes
+		let appo = localStorage.appointment
+		console.dir(JSON.parse(str))
+		console.dir(JSON.parse(appo))
+		location.href = `order?appointment_id=${this.appointment_id}`;
+	}
+
 	render() {
-		let { appointment, season, kind, nurse, count } = this.state
+		let { 
+			appointment, 
+			season, 
+			kind,  
+			count, 
+			length, 
+			clothes,
+			pop,
+			event
+		} = this.state
+
+		let pop_ok_event = event === 'add' ? 
+												this.addClotheEvent.bind(this) :
+												this.updateClotheEvent.bind(this)
 
 		return (
 			<div className={css.container}>
@@ -158,7 +307,7 @@ export class WareHouse extends Component {
 				<div className={css.pane}>
 					<div className={css.pane_header}>存衣数量</div>
 					<div className={css.pane_body}>
-						<ClothesTable data={this.state.data} />
+						<ClothesTable data={clothes.data} itemClickEvent={this.onTableClickEvent.bind(this)} />
 					</div>
 				</div>
 
@@ -167,39 +316,39 @@ export class WareHouse extends Component {
 					<Row className={css.tips}>
 						<Col span={12}>
 							护理要求：
-							<Select defaultValue={nurse} style={{ width: 90 }} 
+							<Select defaultValue={clothes.nurse} style={{ width: 90 }} 
 											onChange={this.handleNurseChange.bind(this)}>
 					      <Option value="every">每次护理</Option>
 					      <Option value="one">一次护理</Option>
 					      <Option value="no">不护理</Option>
 					    </Select>
 						</Col>
-						<Col span={12} className="text-right">运费：xxx</Col>
+						<Col span={12} className="text-right">运费：{clothes.freight}</Col>
 					</Row>
-					<p className="text-right">服务费：xxx</p>
-					<p className={css.total_price}>合计：<span>884.0</span></p>
+					<p className="text-right">服务费：{clothes.service_charge}</p>
+					<p className={css.total_price}>合计：<span>{clothes.total + clothes.service_charge + clothes.freight}</span></p>
 				</div>
 
 				{/* 入库 */}
 				<div className={css.btn_container}>
-					<Link to="/work_appoint_order" className={css.tab_btn}>入库</Link>
+					<button className={css.tab_btn} onClick={this.handleWarehouse.bind(this)}>入库</button>
 				</div>
 
 				{/* popwindow */}
-				<PopWindow show={this.state.pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
+				<PopWindow show={pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
 					<div className={css.form}>
 						<div className={css.content}>
 							<div className={css.title}>{kind}</div>
 							<div className={css.warehouse_length}>
 								<p>仓储时长</p>
 								<div className={css.radio_container}>
-									<RadioGroup onChange={this.onLengthChange.bind(this)} defaultValue="三个月">
-							      <RadioButton value="三个月">三个月</RadioButton>
-							      <RadioButton value="六个月">六个月</RadioButton>
-							      <RadioButton value="九个月">九个月</RadioButton>
+									<RadioGroup onChange={this.onLengthChange.bind(this)} defaultValue={`${length}`}>
+							      <RadioButton value="3">三个月</RadioButton>
+							      <RadioButton value="6">六个月</RadioButton>
+							      <RadioButton value="9">九个月</RadioButton>
 							      <div style={{height: 10}}></div>
-							      <RadioButton value="一年">一年</RadioButton>
-							      <RadioButton value="两年">两年</RadioButton>
+							      <RadioButton value="12">一年</RadioButton>
+							      <RadioButton value="24">两年</RadioButton>
 							    </RadioGroup>
 								</div>
 							</div>
@@ -208,7 +357,7 @@ export class WareHouse extends Component {
 								<p>存衣数量</p>
 								<div className={css.count_input}>
 									<img src="src/images/reduce_icon.svg" alt="" onClick={this.reduceCount.bind(this)}/>
-									<Input defaultValue="10" type="number" value={count} />
+									<Input defaultValue="10" type="number" disabled={true} value={count} />
 									<img src="src/images/add_icon.svg" alt="" onClick={this.addCount.bind(this)}/>
 								</div>
 							</div>
@@ -218,7 +367,7 @@ export class WareHouse extends Component {
 									<button onClick={this.hidePopWindow.bind(this)}>取消</button>
 								</div>
 								<div className={css.btn}>
-									<button onClick={this.addClotheEvent.bind(this)}>确定</button>
+									<button onClick={pop_ok_event}>确定</button>
 								</div>
 							</div>
 						</div>

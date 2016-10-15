@@ -13,9 +13,9 @@ import { Appointment } from '../components/appointments/Appointment'
 {/* 预约入库 */}
 import { WareHouse } from '../components/warehouse/WareHouse'
 {/* 展示订单 */}
-import { AppointOrder } from '../components/appointments/AppointOrder'
+import { Order } from '../components/orders/Order'
 {/* 订单完成-成功 */}
-import { AppointSuccess } from '../components/appointments/AppointSuccess'
+import { Success } from '../components/orders/Success'
 
 export class Routes extends Component {
   checkout(){
@@ -44,9 +44,9 @@ export class Routes extends Component {
         {/* 预约入库 */}
         <Route path="/warehouse" component={WareHouse}/>
         {/* 预约清单 - 生成订单 */}
-        <Route path="/appoint_order" component={AppointOrder}/>
+        <Route path="/order" component={Order}/>
         {/* 预约清单 - 入库成功 */}
-        <Route path="/appoint_success" component={AppointSuccess}/>
+        <Route path="/success" component={Success}/>
 		  </Router>
 		)
 	}

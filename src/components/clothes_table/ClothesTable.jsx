@@ -4,6 +4,10 @@ import { Row, Col } from 'antd'
 
 export class ClothesTable extends Component {
 
+	handleClick(index,item) {
+		this.props.itemClickEvent(index,item)
+	}
+
 	getOrderList() {
 		let img_map = new Map([
 			['上衣', 'src/images/shangyi.png'],
@@ -16,9 +20,10 @@ export class ClothesTable extends Component {
 		])
 
 		let _data = []
+
 		this.props.data.forEach((item, index, obj) => {
 			_data.push(
-				<Row key={index} className={css.order_item}>
+				<Row key={index} className={css.order_item} onClick={this.handleClick.bind(this,index,item)}>
 					<Col span={7} style={{textAlign: 'left'}}>
 						<div className={css.img_div}>
 							<img src={img_map.get(item.kind)} alt="icon"/>
@@ -28,7 +33,7 @@ export class ClothesTable extends Component {
 							<div className={css.tag}>{item.season}</div>
 						</div>
 					</Col>
-					<Col span={5}>{item.time_length}</Col>
+					<Col span={5}>{item.length}</Col>
 					<Col span={4}>{item.count}</Col>
 					<Col span={4}>{item.price}</Col>
 					<Col span={4}>{item.total_price}</Col>
@@ -61,9 +66,11 @@ export class ClothesTable extends Component {
 }
 
 ClothesTable.defaultProps = {
-	data: []
+	data: [],
+	onTableClickEvent: () => {}
 }
 
 ClothesTable.PropTypes = {
-	data: PropTypes.array
+	data: PropTypes.array,
+	onTableClickEvent: PropTypes.func
 }
