@@ -11,7 +11,14 @@ import SuperAgent from 'superagent'
 export class Appointment extends Component {
 	id = this.props.location.query.id
 	state = {
-		appointment: null
+		appointment: null,
+		clothes: {
+			data: [],
+			nurse: 'every',
+			total: 0,
+			freight: 10,
+			service_charge: 50
+		}
 	}
 
 	componentDidMount() {
@@ -23,13 +30,25 @@ export class Appointment extends Component {
 			.end((err, res) => {
 				if (!err || err === null) {
 					this.setState({ appointment: res.body })
-					console.log("获取的预约信息 =>")
-					console.dir(res.body)
 				} else {
 					this.setState({ appointment: -1 })
 					alert("获取预约详情失败")
 				}
 			})
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		// 缓存appointment
+		this.saveAppointmentToLocal();
+	}
+
+	/**
+	 * [saveAppointmentToLocal 缓存数据]
+	 */
+	saveAppointmentToLocal() {
+		let appointment_str = JSON.stringify(this.state.appointment)
+		console.log("开始缓存数据 ===> " + appointment_str)
+		localStorage.setItem('appointment', appointment_str)
 	}
 
 	setDetail() {

@@ -3,9 +3,21 @@ import css from './clothes_table.less'
 import { Row, Col } from 'antd'
 
 export class ClothesTable extends Component {
+	parseStoreMonth = new Map([
+		[3, '三个月'],[6, '六个月'],[9, '九个月'],
+		[12, '一年'],[24, '两年']
+	]);
 
 	handleClick(index,item) {
 		this.props.itemClickEvent(index,item)
+	}
+
+	/**
+	 * 单类衣服总价
+	 */
+	getTotalPrice(item) {
+		let { store_month, count, price } = item
+		return store_month * count * price
 	}
 
 	getOrderList() {
@@ -19,10 +31,10 @@ export class ClothesTable extends Component {
 			['泳装', 'src/images/yongzhuang.png']
 		])
 
-		let _data = []
+		let _groups = []
 
-		this.props.data.forEach((item, index, obj) => {
-			_data.push(
+		this.props.groups.forEach((item, index, obj) => {
+			_groups.push(
 				<Row key={index} className={css.order_item} onClick={this.handleClick.bind(this,index,item)}>
 					<Col span={7} style={{textAlign: 'left'}}>
 						<div className={css.img_div}>
@@ -33,14 +45,14 @@ export class ClothesTable extends Component {
 							<div className={css.tag}>{item.season}</div>
 						</div>
 					</Col>
-					<Col span={5}>{item.length}</Col>
+					<Col span={5}>{this.parseStoreMonth.get(item.store_month)}</Col>
 					<Col span={4}>{item.count}</Col>
 					<Col span={4}>{item.price}</Col>
-					<Col span={4}>{item.total_price}</Col>
+					<Col span={4}>{this.getTotalPrice(item)}</Col>
 				</Row>
 			)
 		})
-		return _data
+		return _groups
 	}
 
 	render() {
@@ -54,7 +66,7 @@ export class ClothesTable extends Component {
 					<Col span={4}>总价</Col>
 				</Row>
 				{ 
-					this.props.data.length > 0 ? 
+					this.props.groups.length > 0 ? 
 						this.getOrderList() :
 						<Row>
 							<Col span={24} className={css.empty_table}>未添加任何衣服</Col>
@@ -66,11 +78,19 @@ export class ClothesTable extends Component {
 }
 
 ClothesTable.defaultProps = {
-	data: [],
+	groups: [],
 	onTableClickEvent: () => {}
 }
 
 ClothesTable.PropTypes = {
-	data: PropTypes.array,
+	groups: PropTypes.arrayOf(
+		PropTypes.shape({
+			count: PropTypes.number,
+			store_month: PropTypes.number,
+			price: PropTypes.number,
+			kind: PropTypes.string,
+			season: PropTypes.string
+		})
+	),
 	onTableClickEvent: PropTypes.func
 }
