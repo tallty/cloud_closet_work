@@ -4,30 +4,17 @@
 import React, { Component } from 'react'
 import css from './appoint.less'
 import { Toolbar } from '../common/Toolbar'
-import { Spiner } from '../common/Spiner'
 import { DateAppointments } from './DateAppointments'
 import SuperAgent from 'superagent'
 
 export class Appointments extends Component {
 	state = {
-		appointments: null
+		appointments: []
 	}
 
-	componentDidMount() {
-		SuperAgent
-			.get('http://closet-api.tallty.com/work/appointments')
-			.set('Accept', 'application/json')
-			.set('X-User-Token', localStorage.token)
-			.set('X-User-Phone', localStorage.phone)
-			.end((err, res) => {
-				if (!err || err === null) {
-					let appointments = res.body.appointments
-					this.setState({ appointments: appointments })	
-				} else {
-					alert("获取信息失败")
-					this.setState({ appointments: [] })
-				}
-			})
+	componentWillMount() {
+		let appointments = JSON.parse(localStorage.appointments)
+		this.setState({ appointments: appointments })	
 	}
 	
 	initList() {
@@ -56,7 +43,7 @@ export class Appointments extends Component {
 								style={toolbar_style} 
 								back_style={back_style} />
 				<div className={css.appointments}>
-					{ this.state.appointments ? this.initList() : <Spiner/> }
+					{ this.initList() }
 				</div>
 			</div>
 		)

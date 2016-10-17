@@ -59,10 +59,11 @@ export class Appointment extends Component {
 		} else if (appointment === -1) {
 			return null
 		} else {
+			let photo_path = appointment.photo ? appointment.photo : "src/images/default_photo.png"
 			return (
 				<div>
 					<div className={css.div_two}>
-						<img src="src/images/photo.png" alt="" className={css.photo}/>
+						<img src={photo_path} alt="" className={css.photo}/>
 						<p className={css.name}>{appointment.name}</p>
 						<a href={`tel:${appointment.phone}`} className={css.phone}>
 							<img src="src/images/phone_icon.svg" alt=""/>

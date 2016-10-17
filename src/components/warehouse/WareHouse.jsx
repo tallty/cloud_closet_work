@@ -25,8 +25,8 @@
  * 			id: 条目id,
  * 			count: 衣服数量,
  * 			store_month: 仓储时长（月）,
- * 			price: 总价格（接口需改成单价）,
- * 			_total_price: 单条入库记录总价,
+ * 			price: 单价价格（接口显示的总价，需自行计算）,
+ * 			total_price: 单条入库记录总价,
  * 			【======以下为接口欠缺数据字段，使用假数据====】
  * 			kind: 衣服类别,
  * 			season: 季别
@@ -114,13 +114,15 @@ export class WareHouse extends Component {
 		}
 		// 入库记录
 		appointment_item_groups.forEach((item, index, obj) => {
+			let _price = item.price / item.count / item.store_month
 			groups.push({
 				id: item.id,
 				kind: '上衣',
 				season: '春夏',
 				count: item.count,
 				store_month: item.store_month,
-				price: item.price
+				price: Math.round10(_price, -1),
+				total_price: item.price
 			})
 		})
 		appointment.appointment_item_groups = groups
@@ -192,6 +194,7 @@ export class WareHouse extends Component {
 		let { _season, _kind, _count, _store_month, _price, appointment } = this.state
 		// 预约对象
 		let _appointment = appointment
+		let _total_price = _count * _store_month * _price
 
 		// 增加一条入库记录
 		_appointment.appointment_item_groups.push({
@@ -200,7 +203,8 @@ export class WareHouse extends Component {
 			season: _season,
 			store_month: _store_month,
 			count: _count,
-			price: _price
+			price: _price,
+			total_price: _total_price
 		})
 
 		this.setState({ 
@@ -219,6 +223,7 @@ export class WareHouse extends Component {
 		let _appointment = appointment
 		// 更新的条目
 		let item = _appointment.appointment_item_groups[editItem.index]
+		let _total_price = _count * _store_month * _price
 
 		// 如果更新后的数量为0， 则删除条目
 		if (_count === 0) {
@@ -227,6 +232,7 @@ export class WareHouse extends Component {
 			item.kind = _kind
 			item.count = _count
 			item.store_month = _store_month
+			item.total_price = _total_price
 		}
 
 		this.setState({ 

@@ -19,19 +19,35 @@ export class Desk extends Component {
 
 	componentDidMount() {
 		SuperAgent
-			.get('http://closet-api.tallty.com/appointments')
+			.get('http://closet-api.tallty.com/work/appointments')
 			.set('Accept', 'application/json')
 			.set('X-User-Token', localStorage.token)
 			.set('X-User-Phone', localStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					let appointments = res.body.appointments
+					console.dir(appointments)
 					this.setState({ appointments: appointments })	
 				} else {
 					alert("获取信息失败")
 					this.setState({ appointments: [] })
 				}
 			})
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		// 缓存入库清单 appointments
+		let appointments_str = JSON.stringify(this.state.appointments)
+		localStorage.setItem('appointments', appointments_str)
+	}
+
+	// 获取入库清单数量
+	getAppointmentsCount() {
+		let count = 0
+		for(let obj of this.state.appointments) {
+			count += obj.items.length
+		}
+		return count
 	}
 
 	render() {
@@ -61,19 +77,19 @@ export class Desk extends Component {
 					<div className={css.grid_container}>
 						<Link to="/appointments">
 							<div>
-								<h1>{this.state.appointments.length}</h1>
+								<h1>{this.getAppointmentsCount()}</h1>
 								<p>预约入库</p>
 							</div>
 						</Link>
 						<Link to="/">
 							<div>
-								<h1>12</h1>
+								<h1>0</h1>
 								<p>配送管理</p>
 							</div>
 						</Link>
 						<Link to="/">
 							<div>
-								<h1>2</h1>
+								<h1>0</h1>
 								<p>历史订单</p>
 							</div>
 						</Link>

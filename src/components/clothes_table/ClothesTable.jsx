@@ -12,14 +12,6 @@ export class ClothesTable extends Component {
 		this.props.itemClickEvent(index,item)
 	}
 
-	/**
-	 * 单类衣服总价
-	 */
-	getTotalPrice(item) {
-		let { store_month, count, price } = item
-		return store_month * count * price
-	}
-
 	getOrderList() {
 		let img_map = new Map([
 			['上衣', 'src/images/shangyi.png'],
@@ -48,7 +40,7 @@ export class ClothesTable extends Component {
 					<Col span={5}>{this.parseStoreMonth.get(item.store_month)}</Col>
 					<Col span={4}>{item.count}</Col>
 					<Col span={4}>{item.price}</Col>
-					<Col span={4}>{this.getTotalPrice(item)}</Col>
+					<Col span={4}>{item.total_price}</Col>
 				</Row>
 			)
 		})

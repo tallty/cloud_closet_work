@@ -9,6 +9,7 @@ import { Link } from 'react-router'
 import { UserInfo } from '../user_info/UserInfo'
 import { ClothesTable } from '../clothes_table/ClothesTable'
 import { Row, Col } from 'antd'
+import SuperAgent from 'superagent'
 
 const nurseWay = new Map([
 	['every', '每次护理'],
@@ -38,10 +39,45 @@ export class Order extends Component {
 		// 入库衣服总价格(无运费、服务费)
 		let total = 0
 		appointment_item_groups.forEach((item, i, obj) => {
-			total = total + item.count * item.store_month * item.price
+			total = total + item.total_price
 		})
 
 		return total + freight + service_charge
+	}
+
+	/**
+	 * 完成按钮点击逻辑
+	 */
+	handleClick() {
+		// 封装更新的数据包
+		let appointment = this.state.appointment
+
+		let cache = ""
+		appointment.appointment_item_groups.forEach((item, index, obj) => {
+			cache += `appointment_item[groups][][count]=${item.count}
+								 &appointment_item[groups][][price]=${item.total_price}
+								 &appointment_item[groups][][store_month]=${item.store_month}&`
+		})
+		let params = cache.substring(0, cache.length -1)
+
+		console.log(params)
+		SuperAgent
+			.put(`http://closet-api.tallty.com/work/appointments/${appointment.id}`)
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.token)
+			.set('X-User-Phone', localStorage.phone)
+			.send(params)
+			.end((err, res) => {
+				if (!err || err === null) {
+					console.log(res)
+					console.log("成功了")
+					location.href = "/"
+				} else {
+					console.dir(err)
+					console.log("失败了")
+					alert("提交订单失败")
+				}
+			})
 	}
 
 	render() {
@@ -78,7 +114,7 @@ export class Order extends Component {
 				<hr/>
 
 				<Link to={`/warehouse?appointment_id=${appointment.id}`} className={css.modify_order_btn}>修改订单</Link>
-				<Link to="/success" className={css.submit_order_btn}>完成</Link>
+				<button className={css.submit_order_btn} onClick={this.handleClick.bind(this)}>完成</button>
 			</div>
 		)
 	}
