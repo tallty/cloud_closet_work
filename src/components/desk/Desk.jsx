@@ -13,8 +13,8 @@ export class Desk extends Component {
 
 	componentWillMount() {
     localStorage.setItem('state', '200')
-    localStorage.setItem('phone', '18516591232')
-    localStorage.setItem('token', 'H55BZoPXHU8W4c1J3zCB')
+    localStorage.setItem('phone', '18516512221')
+    localStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
 	}
 
 	componentDidMount() {

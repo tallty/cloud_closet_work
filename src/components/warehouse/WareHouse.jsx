@@ -42,7 +42,7 @@ export class WareHouse extends Component {
 			nurse: 'every',
 			total: 0,
 			freight: 10,
-			service_charge: 10
+			service_charge: 50
 		},
 		pop: false,
 		event: null
@@ -65,7 +65,7 @@ export class WareHouse extends Component {
 
 	componentDidMount() {
 		SuperAgent
-			.get(`http://closet-api.tallty.com/appointments/${this.appointment_id}`)
+			.get(`http://closet-api.tallty.com/work/appointments/${this.appointment_id}`)
 			.set('Accept', 'application/json')
 			.set('X-User-Token', localStorage.token)
 			.set('X-User-Phone', localStorage.phone)
