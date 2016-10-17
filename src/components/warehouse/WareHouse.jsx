@@ -14,6 +14,7 @@ import { PopWindow } from '../common/PopWindow'
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
+// 点击表格条目的对象
 const editItem = {
 	index: null,
 	item: null
@@ -33,7 +34,7 @@ export class WareHouse extends Component {
 		season: '春夏',
 		kinds: [],
 		kind: null,
-		count: 10,
+		count: 1,
 		length: 3,
 		price_cache: 0,
 		clothes: {
@@ -41,7 +42,7 @@ export class WareHouse extends Component {
 			nurse: 'every',
 			total: 0,
 			freight: 10,
-			service_charge: 50
+			service_charge: 10
 		},
 		pop: false,
 		event: null
@@ -126,11 +127,9 @@ export class WareHouse extends Component {
 			pop: true, 
 			kind: item[1],
 			price_cache: item[2],
-			length: 3,
-			count: 10,
 			event: 'add'
 		})
-		console.log(`弹出框显示了, 选中${item[1]}`)
+		console.log(`弹出框显示了, 选中: ${item[1]}`)
 	}
 
 	// 改变仓储时长
@@ -139,14 +138,13 @@ export class WareHouse extends Component {
 		this.setState({
 			length: length
 		})
-		console.log("选择的时长：")
-		console.log(e.target.value)
+		console.log("选择的时长：" + e.target.value)
 	}
 
 	// 减少数量
 	reduceCount() {
 		let _count = this.state.count
-		if (_count > 1) {
+		if (_count > 0) {
 			_count -= 1
 			this.setState({count: _count})
 		}
@@ -170,9 +168,6 @@ export class WareHouse extends Component {
 		// 入库衣服总价格(无运费、服务费)
 		let _total = clothes.total + total_price
 
-		console.log(length)
-		console.log(time_length)
-
 		let item = {
 			kind: kind,
 			season: season,
@@ -189,6 +184,9 @@ export class WareHouse extends Component {
 			pop: false,
 			clothes: _clothes
 		})
+
+		console.log("添加一类衣服条目 =>")
+		console.dir(item)
 	}
 
 	// 更新列表中的衣服信息
@@ -199,13 +197,21 @@ export class WareHouse extends Component {
 		// 单类总价
 		let total_price = length * count * price_cache
 
-		item.kind = kind
-		item.count = count
-		item.length = time_length
-		item.total_price = total_price
+		// 如果更新后的数量为0， 则删除条目
+		if (count === 0) {
+			clothes.data.splice(editItem.index, 1)
+		} else {
+			item.kind = kind
+			item.count = count
+			item.length = time_length
+			item.total_price = total_price
+		}
+		console.log("更新后的clothes对象 =>")
+		console.dir(clothes)
 
 		this.setState({ 
 			clothes: clothes, 
+			count: 1,
 			pop: false
 		})
 
@@ -227,7 +233,7 @@ export class WareHouse extends Component {
 
 	// 衣服数量列表的点击事件
 	onTableClickEvent(index, item) {
-		console.log(index)
+		console.log("你点击了第"+index+"个条目，=>")
 		console.log(item)
 
 		editItem.item = item
@@ -244,7 +250,7 @@ export class WareHouse extends Component {
 
 	// 选择护理方式
 	handleNurseChange(value) {
-	  console.log(`selected ${value}`);
+	  console.log(`选择的护理方式： ${value}`);
 	  this.setState({ nurse: value })
 	}
 
@@ -370,7 +376,7 @@ export class WareHouse extends Component {
 								<p>存衣数量</p>
 								<div className={css.count_input}>
 									<img src="src/images/reduce_icon.svg" alt="" onClick={this.reduceCount.bind(this)}/>
-									<Input defaultValue="10" type="number" disabled={true} value={count} />
+									<Input defaultValue="1" type="number" disabled={true} value={count} />
 									<img src="src/images/add_icon.svg" alt="" onClick={this.addCount.bind(this)}/>
 								</div>
 							</div>
