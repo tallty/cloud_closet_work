@@ -18,6 +18,7 @@
     "rc-tween-one": "^0.8.5",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
+    "react-dropzone": "^3.6.0",
     "react-mobile-picker": "^0.1.10",
     "react-router": "^2.0.1",
     "react-weui": "^0.4.0",

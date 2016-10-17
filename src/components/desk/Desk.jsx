@@ -4,12 +4,34 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import css from './desk.less'
+import SuperAgent from 'superagent'
 
 export class Desk extends Component {
+	state = {
+		appointments: []
+	}
+
 	componentWillMount() {
     localStorage.setItem('state', '200')
     localStorage.setItem('phone', '18516591232')
     localStorage.setItem('token', 'H55BZoPXHU8W4c1J3zCB')
+	}
+
+	componentDidMount() {
+		SuperAgent
+			.get('http://closet-api.tallty.com/appointments')
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					let appointments = res.body.appointments
+					this.setState({ appointments: appointments })	
+				} else {
+					alert("获取信息失败")
+					this.setState({ appointments: [] })
+				}
+			})
 	}
 
 	render() {
@@ -39,7 +61,7 @@ export class Desk extends Component {
 					<div className={css.grid_container}>
 						<Link to="/appointments">
 							<div>
-								<h1>6</h1>
+								<h1>{this.state.appointments.length}</h1>
 								<p>预约入库</p>
 							</div>
 						</Link>

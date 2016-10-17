@@ -70,7 +70,7 @@ export class Order extends Component {
 				<hr/>
 
 				<Link to={`/warehouse?appointment_id=${appointment.id}&event=edit`} className={css.modify_order_btn}>修改订单</Link>
-				<Link to="/" className={css.submit_order_btn}>完成</Link>
+				<Link to="/success" className={css.submit_order_btn}>完成</Link>
 			</div>
 		)
 	}

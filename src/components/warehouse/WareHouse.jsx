@@ -6,6 +6,7 @@ import css from './ware_house.less';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { Spiner } from '../common/Spiner'
+import { Toolbar } from '../common/Toolbar'
 import { Row, Col, Button, Radio, Select, Input } from 'antd';
 import SuperAgent from 'superagent'
 import { PopWindow } from '../common/PopWindow'
@@ -264,6 +265,14 @@ export class WareHouse extends Component {
 	}
 
 	render() {
+		let toolbar_style = {
+			background: '#FF9241', 
+			color: '#fff'
+		}
+		let back_style = {
+			color: '#fff'
+		}
+
 		let { 
 			appointment, 
 			season, 
@@ -281,6 +290,10 @@ export class WareHouse extends Component {
 
 		return (
 			<div className={css.container}>
+				<Toolbar title="预约入库" 
+									url={`/appointment?id=${this.appointment_id}`}
+									style={toolbar_style} 
+									back_style={back_style} />
 				{/* 用户信息 */}
 				{
 					appointment ? 
