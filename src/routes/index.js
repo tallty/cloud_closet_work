@@ -11,7 +11,7 @@ import { Appointments } from '../components/appointments/Appointments'
 {/* 预约详情 */}
 import { Appointment } from '../components/appointments/Appointment'
 {/* 预约入库 */}
-import { WareHouse } from '../components/warehouse/WareHouse'
+import WareHouse from '../components/warehouse/WareHouse'
 {/* 展示订单 */}
 import { Order } from '../components/orders/Order'
 {/* 订单完成-成功 */}

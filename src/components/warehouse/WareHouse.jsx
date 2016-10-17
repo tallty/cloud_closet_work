@@ -37,14 +37,15 @@
  */
 import React, { Component, PropTypes } from 'react';
 import css from './ware_house.less';
+import { withRouter } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { ClotheKinds } from './ClotheKinds'
 import { Spiner } from '../common/Spiner'
 import { Toolbar } from '../common/Toolbar'
 import { Row, Col, Button, Radio, Select, Input } from 'antd';
-import SuperAgent from 'superagent'
 import { PopWindow } from '../common/PopWindow'
+import SuperAgent from 'superagent'
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -58,7 +59,7 @@ const editItem = {
 const NEW = 'new';
 const EDIT = 'edit';
 
-export class WareHouse extends Component {
+class WareHouse extends Component {
 	appointment_id = this.props.location.query.appointment_id
 	state = {
 		appointment: null,
@@ -121,7 +122,7 @@ export class WareHouse extends Component {
 				season: '春夏',
 				count: item.count,
 				store_month: item.store_month,
-				price: Math.round10(_price, -1),
+				price: Math.round(_price, -1),
 				total_price: item.price
 			})
 		})
@@ -282,7 +283,7 @@ export class WareHouse extends Component {
 		// 读取
 		let appo = localStorage.appointment
 		console.dir(JSON.parse(appo))
-		location.href = `order?appointment_id=${this.appointment_id}`;
+		this.props.router.replace(`order?appointment_id=${this.appointment_id}`)
 	}
 
 	/**
@@ -436,3 +437,5 @@ WareHouse.defaultProps = {
 WareHouse.propTypes = {
 
 }
+
+export default withRouter(WareHouse);
