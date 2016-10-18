@@ -12,9 +12,9 @@ export class Desk extends Component {
 	}
 
 	componentWillMount() {
-    // sessionStorage.setItem('state', '200')
-    // sessionStorage.setItem('phone', '18516512221')
-    // sessionStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
+    localStorage.setItem('state', 'true')
+    localStorage.setItem('phone', '18516512221')
+    localStorage.setItem('authentication_token', 'Swg7p31sUsYGbYsxAR8w')
 	}
 
 	componentDidMount() {

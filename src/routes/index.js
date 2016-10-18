@@ -32,7 +32,7 @@ export class Routes extends Component {
         {/* 获取用户openid */}
         <Route path="/get_open_id" component={GetOpenId} />
         {/* 工作台 */}
-        <Route path="/" component={Desk} onEnter={this.requireAuth}/>
+        <Route path="/" component={Desk}/>
         {/* 预约清单 */}
         <Route path="/appointments" component={Appointments}/>
         {/* 预约详情 */}
