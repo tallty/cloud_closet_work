@@ -12,17 +12,17 @@ export class Desk extends Component {
 	}
 
 	componentWillMount() {
-    localStorage.setItem('state', '200')
-    localStorage.setItem('phone', '18516512221')
-    localStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
+    sessionStorage.setItem('state', '200')
+    sessionStorage.setItem('phone', '18516512221')
+    sessionStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
 	}
 
 	componentDidMount() {
 		SuperAgent
 			.get('http://closet-api.tallty.com/work/appointments')
 			.set('Accept', 'application/json')
-			.set('X-User-Token', localStorage.token)
-			.set('X-User-Phone', localStorage.phone)
+			.set('X-User-Token', sessionStorage.token)
+			.set('X-User-Phone', sessionStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					let appointments = res.body.appointments
@@ -38,7 +38,7 @@ export class Desk extends Component {
 	componentDidUpdate(prevProps, prevState) {
 		// 缓存入库清单 appointments
 		let appointments_str = JSON.stringify(this.state.appointments)
-		localStorage.setItem('appointments', appointments_str)
+		sessionStorage.setItem('appointments', appointments_str)
 	}
 
 	// 获取入库清单数量

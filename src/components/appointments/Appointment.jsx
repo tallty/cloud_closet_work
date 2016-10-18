@@ -25,8 +25,8 @@ export class Appointment extends Component {
 		SuperAgent
 			.get(`http://closet-api.tallty.com/work/appointments/${this.id}`)
 			.set('Accept', 'application/json')
-			.set('X-User-Token', localStorage.token)
-			.set('X-User-Phone', localStorage.phone)
+			.set('X-User-Token', sessionStorage.token)
+			.set('X-User-Phone', sessionStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					this.setState({ appointment: res.body })
@@ -48,7 +48,7 @@ export class Appointment extends Component {
 	saveAppointmentToLocal() {
 		let appointment_str = JSON.stringify(this.state.appointment)
 		console.log("开始缓存数据 ===> " + appointment_str)
-		localStorage.setItem('appointment', appointment_str)
+		sessionStorage.setItem('appointment', appointment_str)
 	}
 
 	setDetail() {

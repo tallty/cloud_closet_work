@@ -1,7 +1,7 @@
 /**
  * 预约入库
- * 进入时：读取 localStorage.appointment
- * 点击入库时：更新 localStorage.appointment
+ * 进入时：读取 sessionStorage.appointment
+ * 点击入库时：更新 sessionStorage.appointment
  */
 
 /**
@@ -75,7 +75,7 @@ class WareHouse extends Component {
 
 	componentWillMount() {
 		// 取得缓存本地的 appointment 清单
-		let local_appointment = localStorage.appointment
+		let local_appointment = sessionStorage.appointment
 		let data = JSON.parse(local_appointment)
 		let appointment = this.parseAppointment(data)
 		console.log("========local appointment===========")
@@ -277,11 +277,11 @@ class WareHouse extends Component {
 	handleWarehouse() {
 		let appointment_str = JSON.stringify(this.state.appointment);
 		//存入storage
-		localStorage.appointment = appointment_str;
-		localStorage.setItem('appointment', appointment_str);
-		console.log("把【appointment】存入localStorage")
+		sessionStorage.appointment = appointment_str;
+		sessionStorage.setItem('appointment', appointment_str);
+		console.log("把【appointment】存入sessionStorage")
 		// 读取
-		let appo = localStorage.appointment
+		let appo = sessionStorage.appointment
 		console.dir(JSON.parse(appo))
 		this.props.router.replace(`order?appointment_id=${this.appointment_id}`)
 	}
@@ -360,7 +360,7 @@ class WareHouse extends Component {
 				{/* price */}
 				<div className={css.tips_container}>
 					<Row className={css.tips}>
-						<Col span={12}>
+						<Col span={18}>
 							护理要求：
 							<Select defaultValue={appointment.nurse} style={{ width: 90 }} 
 											onChange={this.handleNurseChange.bind(this)}>
@@ -369,7 +369,7 @@ class WareHouse extends Component {
 					      <Option value="no">不护理</Option>
 					    </Select>
 						</Col>
-						<Col span={12} className="text-right">运费：{appointment.freight}</Col>
+						<Col span={6} className="text-right">运费：{appointment.freight}</Col>
 					</Row>
 					<p className="text-right">服务费：{appointment.service_charge}</p>
 					<p className={css.total_price}>合计：<span>{ this.getTotalPrice() }</span></p>

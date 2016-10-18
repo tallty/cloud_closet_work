@@ -13,7 +13,7 @@ export class Appointments extends Component {
 	}
 
 	componentWillMount() {
-		let appointments = JSON.parse(localStorage.appointments)
+		let appointments = JSON.parse(sessionStorage.appointments)
 		this.setState({ appointments: appointments })	
 	}
 	
