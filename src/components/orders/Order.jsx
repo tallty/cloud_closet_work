@@ -64,7 +64,7 @@ export class Order extends Component {
 		SuperAgent
 			.put(`http://closet-api.tallty.com/work/appointments/${appointment.id}`)
 			.set('Accept', 'application/json')
-			.set('X-User-Token', sessionStorage.token)
+			.set('X-User-Token', sessionStorage.authentication_token)
 			.set('X-User-Phone', sessionStorage.phone)
 			.send(params)
 			.end((err, res) => {

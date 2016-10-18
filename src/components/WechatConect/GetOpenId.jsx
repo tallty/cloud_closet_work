@@ -41,7 +41,7 @@ class GetOpenId extends Component {
       .send({'user': {'openid': sessionStorage.openid} })
       .end( (err, res) => {
         if (res.ok){
-          sessionStorage.state = 'true'
+          sessionStorage.setItem('state', res.ok)
           this.props.router.replace('/')
         }else{
           this.props.router.replace('/login')

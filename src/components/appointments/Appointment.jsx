@@ -25,7 +25,7 @@ export class Appointment extends Component {
 		SuperAgent
 			.get(`http://closet-api.tallty.com/work/appointments/${this.id}`)
 			.set('Accept', 'application/json')
-			.set('X-User-Token', sessionStorage.token)
+			.set('X-User-Token', sessionStorage.authentication_token)
 			.set('X-User-Phone', sessionStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {

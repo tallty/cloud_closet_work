@@ -12,24 +12,24 @@ export class Desk extends Component {
 	}
 
 	componentWillMount() {
-    sessionStorage.setItem('state', '200')
-    sessionStorage.setItem('phone', '18516512221')
-    sessionStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
+    // sessionStorage.setItem('state', '200')
+    // sessionStorage.setItem('phone', '18516512221')
+    // sessionStorage.setItem('token', 'Swg7p31sUsYGbYsxAR8w')
 	}
 
 	componentDidMount() {
 		SuperAgent
 			.get('http://closet-api.tallty.com/work/appointments')
 			.set('Accept', 'application/json')
-			.set('X-User-Token', sessionStorage.token)
-			.set('X-User-Phone', sessionStorage.phone)
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
 			.end((err, res) => {
 				if (!err || err === null) {
 					let appointments = res.body.appointments
 					console.dir(appointments)
 					this.setState({ appointments: appointments })	
 				} else {
-					alert("获取信息失败")
+					console.log("获取信息失败")
 					this.setState({ appointments: [] })
 				}
 			})
