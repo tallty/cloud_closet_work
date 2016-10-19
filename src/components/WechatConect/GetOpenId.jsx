@@ -21,7 +21,7 @@ class GetOpenId extends Component {
       .end( (err, res) => {
         if (res.ok) {
           if (res.body.openid) {
-            sessionStorage.setItem('openid', res.body.openid)
+            localStorage.setItem('openid', res.body.openid)
             console.log("获取到的openid: "+ res.body.openid)
             this.checkOpenid()
           }else{
@@ -38,10 +38,10 @@ class GetOpenId extends Component {
     SuperAgent
       .post("http://closet-api.tallty.com/user_info/check_openid")
       .set('Accept', 'application/json')
-      .send({'user': {'openid': sessionStorage.openid} })
+      .send({'user': {'openid': localStorage.openid} })
       .end( (err, res) => {
         if (res.ok){
-          sessionStorage.setItem('state', res.ok)
+          localStorage.setItem('state', res.ok)
           this.props.router.replace('/')
         }else{
           this.props.router.replace('/login')

@@ -24,7 +24,7 @@ export class UserInfo extends Component {
 							{phone}
 						</span>
 					</p>
-					<p className={css.count}>预约件数：{clothe_count}件</p>
+					<p className={css.count}>预约件数：{clothe_count} 件</p>
 				</div>
 			)
 		} else {
