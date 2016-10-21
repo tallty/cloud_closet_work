@@ -59,8 +59,7 @@ export class Desk extends Component {
 					</div>
 					<p className={css.name}>乐存好衣</p>
 					<p className={css.company}>
-						<img src="src/images/logo_icon.svg" alt=""/>
-						<span>&nbsp;上海市乐存好衣互联公司</span>
+						<span><img src="src/images/logo_icon.svg" alt=""/>&nbsp;上海市乐存好衣互联公司</span>
 					</p>
 					<div className={css.number}>
 						<div className={css.new}>

@@ -1,5 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, Link, Redirect } from 'react-router'
+
+// ********* 投机倒把三十年：供智慧社区项目使用的页面 **********
+import { SmartLifeBanner } from '../smart_life_web/banner/SmartLifeBanner'
+// *****************************************************
+
 // 微信api相关功能
 import auth from '../components/WechatConect/auth'
 import GetOpenId from '../components/WechatConect/GetOpenId'
@@ -43,6 +48,9 @@ export class Routes extends Component {
         <Route path="/order" component={Order}/>
         {/* 预约清单 - 入库成功 */}
         <Route path="/success" component={Success}/>
+
+        {/********************************************************/}
+        <Route path="/smart_life_banner" component={SmartLifeBanner}/>
 		  </Router>
 		)
 	}
