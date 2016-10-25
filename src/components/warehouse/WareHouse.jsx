@@ -146,7 +146,9 @@ class WareHouse extends Component {
 			pop: true, 
 			event: NEW,
 			_kind: item.name,
-			_price: item.price
+			_price: item.price,
+			_count: 1,
+			_store_month: 3
 		})
 	}
 
@@ -316,12 +318,12 @@ class WareHouse extends Component {
 		let toolbar_style = {
 			background: '#FF9241', 
 			color: '#fff'
-		}
+		};
 		let back_style = {
 			color: '#fff'
-		}
+		};
 		// 状态
-		let { appointment, kinds, _season, _kind, _count, _store_month, pop, event } = this.state
+		let { appointment, kinds, _season, _kind, _count, _store_month, pop, event } = this.state;
 
 		return (
 			<div className={css.container}>
@@ -382,45 +384,49 @@ class WareHouse extends Component {
 
 				{/* popwindow */}
 				<PopWindow show={pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
-					<div className={css.form}>
-						<div className={css.content}>
-							<div className={css.title}>{_kind}</div>
-							<div className={css.warehouse_length}>
-								<p>仓储时长{_store_month}</p>
-								<div className={css.radio_container}>
-									<RadioGroup onChange={this.onLengthChange.bind(this)} 
-															value={`${this.state._store_month}`}
-															defaultValue="3">
-								    <RadioButton value="3">三个月</RadioButton>
-								    <RadioButton value="6">六个月</RadioButton>
-								    <RadioButton value="9">九个月</RadioButton>
-								    <div style={{height: 10}}></div>
-								    <RadioButton value="12">一年</RadioButton>
-								    <RadioButton value="24">两年</RadioButton>
-								  </RadioGroup>
-								</div>
+					<div className={css.pop_content}>
+						<div className={css.title}>{_kind}</div>
+						{/* 仓储时长 */}
+						<div className={css.warehouse_length}>
+							<p>仓储时长</p>
+							<div className={css.radio_container}>
+								<RadioGroup onChange={this.onLengthChange.bind(this)} 
+														value={`${this.state._store_month}`}
+														defaultValue="3">
+							    <RadioButton value="3">三个月</RadioButton>
+							    <RadioButton value="6">六个月</RadioButton>
+							    <RadioButton value="9">九个月</RadioButton>
+							    <div style={{height: 10}}></div>
+							    <RadioButton value="12">一年</RadioButton>
+							    <RadioButton value="24">两年</RadioButton>
+							  </RadioGroup>
 							</div>
+						</div>
 
-							<div className={css.form_count}>
-								<p>存衣数量</p>
-								<div className={css.count_input}>
-									<img src="src/images/reduce_icon.svg" onClick={this.reduceCount.bind(this)} alt="-"/>
-									<Input defaultValue="1" type="number" disabled={true} value={_count} />
-									<img src="src/images/add_icon.svg" onClick={this.addCount.bind(this)} alt="+"/>
-								</div>
+						{/* 存衣数量 */}
+						<div className={css.form_count}>
+							<p>存衣数量</p>
+							<div className={css.count_input}>
+								<Button className={css.count_button} onClick={this.reduceCount.bind(this)}>
+									<img src="src/images/reduce_icon.svg" alt="-"/>
+								</Button>
+			          <Input type="number" disabled={true} value={`${_count}`} />
+			          <Button className={css.count_button} onClick={this.addCount.bind(this)}>
+			          	<img src="src/images/add_icon.svg" alt="+"/>
+			          </Button>
 							</div>
-
-							<div className={css.actions}>
-								<div className={css.btn}>
-									<button onClick={this.hidePopWindow.bind(this)}>取消</button>
-								</div>
-								<div className={css.btn}>
-									{
-										event === NEW ? 
-											<button onClick={this.addClotheEvent.bind(this)}>确定</button> : 
-											<button onClick={this.updateClotheEvent.bind(this)}>更新</button>
-									}
-								</div>
+						</div>
+						{/* 操作 */}
+						<div className={css.actions}>
+							<div className={css.btn}>
+								<button onClick={this.hidePopWindow.bind(this)}>取消</button>
+							</div>
+							<div className={css.btn}>
+								{
+									event === NEW ? 
+										<button onClick={this.addClotheEvent.bind(this)}>确定</button> : 
+										<button onClick={this.updateClotheEvent.bind(this)}>更新</button>
+								}
 							</div>
 						</div>
 					</div>

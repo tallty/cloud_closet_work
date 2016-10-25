@@ -77,83 +77,85 @@
 	}
 
 	// 添加衣服PopWindow
-	.form {
-		background: #EFEFF4;
-		.content {
-			padding: 0 16px;
-			background: #fff;
-			.title {
-				height: 58px;
-				line-height: 58px;
-				text-align: center;
-				color: @primary;
-				font-size: 20px;
-				font-weight: normal;
-				border-bottom: 1px solid #CCCCCC;
+	.pop_content {
+		padding: 0 16px;
+		background: #fff;
+		.title {
+			height: 58px;
+			line-height: 58px;
+			text-align: center;
+			color: @primary;
+			font-size: 20px;
+			font-weight: normal;
+			border-bottom: 1px solid #CCCCCC;
+		}
+		.warehouse_length {
+			padding: 15px;
+			border-bottom: 1px solid #CCCCCC;
+			text-align: center;
+			color: #4A4A4A;
+			font-size: 14px;
+			p {
+				margin-bottom: 10px;
 			}
-			.warehouse_length {
-				padding: 15px;
-				border-bottom: 1px solid #CCCCCC;
-				text-align: center;
-				color: #4A4A4A;
-				font-size: 14px;
-				p {
-					margin-bottom: 10px;
-				}
-				.radio_container {
-					width: 225px;
-					text-align: left;
-					margin: 0 auto;
-				}
+			.radio_container {
+				width: 225px;
+				text-align: left;
+				margin: 0 auto;
 			}
-			.form_count {
-				padding: 15px;
-				text-align: center;
-				color: #4A4A4A;
-				font-size: 14px;
-				p {
-					margin-bottom: 10px;
-				}
-				.count_input {
-					width: 150px;
-					height: 40px;
-					line-height: 40px;
-					margin: 0 auto;
+		}
+		.form_count {
+			padding: 15px;
+			text-align: center;
+			color: #4A4A4A;
+			font-size: 14px;
+			p {
+				margin-bottom: 10px;
+			}
+			.count_input {
+				width: 160px;
+				height: 40px;
+				line-height: 40px;
+				margin: 0 auto;
+				.count_button {
+					border-color: transparent;
+					padding: 0;
+					border-radius: 50%;
 					img {
 						display: inline-block;
 						height: 40px;
 						width: 40px;
 						vertical-align: middle;
 					}
-					span {
-						vertical-align: middle;
-					}
-					input {
-						width: 50px;
-						margin: 0 10px;
-						display: inline-block;
-						vertical-align: middle;
-						text-align: center;
-					}
+				}
+				span {
+					vertical-align: middle;
+				}
+				input {
+					width: 50px;
+					margin: 0 10px;
+					display: inline-block;
+					vertical-align: middle;
+					text-align: center;
 				}
 			}
-			.actions {
-				height: 110px;
-				padding: 42px 0 24px;
-				width: 100%;
-				.btn {
-					width: 50%;
-					float: left;
-					text-align: center;
-					button {
-						color: #4A4A4A;
-						font-size: 19px;
-						border: 1px solid @primary;
-						border-radius: 22px; 
-						width: 90%;
-						height: 44px;
-						background: #fff;
-					}
+		}
+		.actions {
+			height: 110px;
+			padding: 42px 0 24px;
+			width: 100%;
+			.btn {
+				width: 50%;
+				float: left;
+				text-align: center;
+				button {
+					color: #4A4A4A;
+					font-size: 19px;
+					border: 1px solid @primary;
+					border-radius: 22px; 
+					width: 90%;
+					height: 44px;
+					background: #fff;
 				}
 			}
 		}

@@ -5,7 +5,6 @@ export class SmartLifeBanner extends Component {
 	getImg() {
 		let style = {
 			width: '100%',
-			height: '100%',
 			display: 'block'
 		}
 		let action = this.props.location.query.action
