@@ -43,6 +43,15 @@
 				vertical-align: middle;
 			}
 		}
+		.tag {
+			height: 50px;
+			width: 50px;
+			border-radius: 50%;
+			background-color: #FD924B;
+			color: #fff;
+			text-align: center;
+			line-height: 50px;
+		}
 	}
 }
 
@@ -50,7 +59,10 @@
 .appointment {
 	height: 100%;
 	padding-top: 50px;
+	padding-bottom:50px;
 	background: #fff;
+	overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 	z-index: 1;
 	.div_one {
 		height: 68px;
@@ -114,10 +126,17 @@
 			color: #000;
 			font-size: 13px;
 		}
+		.timeline {
+			width: 80px;
+			margin: 10px auto;
+			text-align: left;
+			line-height: 1.5;
+		}
 	}
 	.warehouse {
 		width: 270px;
 		height: 44px;
+		border: none;
 		text-align: center;
 		line-height: 44px;
 		background-color: #FF9241;
@@ -129,6 +148,7 @@
 		position: fixed;
 		bottom: 24px;
 		left: 50%;
+		padding: 0;
 		margin-left: -135px;
 		&:active {
 			background-color: darken(#FF9241, 10%);

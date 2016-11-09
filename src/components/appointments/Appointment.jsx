@@ -5,20 +5,16 @@ import React, { Component } from 'react';
 import css from './appoint.less'
 import { Toolbar } from '../common/Toolbar'
 import { Spiner } from '../common/Spiner'
-import { Link } from 'react-router'
+import { Link, withRouter } from 'react-router'
 import SuperAgent from 'superagent'
+import { Button, Timeline, Icon } from 'antd'
 
-export class Appointment extends Component {
+class Appointment extends Component {
 	id = this.props.location.query.id
 	state = {
 		appointment: null,
-		clothes: {
-			data: [],
-			nurse: 'every',
-			total: 0,
-			freight: 10,
-			service_charge: 50
-		}
+		loading: false,
+		error_text: null
 	}
 
 	componentDidMount() {
@@ -51,9 +47,160 @@ export class Appointment extends Component {
 		sessionStorage.setItem('appointment', appointment_str)
 	}
 
-	setDetail() {
-		let { appointment } = this.state
+	/**
+	 * 获取物流信息
+	 */
+	getLogistics() {
+		let state = this.state.appointment.state;
+		let states = ["用户预约","待确认","服务中","待付款","已支付","入库中","已上架"];
+		let logistics = []
+		
+		if (state != "已取消") {
+			for (let item of states) {
+				if (state === item) break;
+				logistics.push( <Timeline.Item key={item}>{item}</Timeline.Item> );
+			}
+		}
 
+		logistics.push( 
+			<Timeline.Item key={"active"}>
+				<span style={{color: '#FD924B'}}>{state}</span>
+			</Timeline.Item> 
+		);
+
+		return logistics;
+	}
+
+	/**
+	 * 接单
+	 */
+	handleAccept() {
+		this.setState({ loading: true });
+		SuperAgent
+			.post(`http://closet-api.tallty.com/work/appointments/${this.id}/accept`)
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					this.setState({appointment: res.body, loading: false});
+				} else {
+					this.setState({ error_text: "重新接单", loading: false });
+				}
+			})
+	}
+
+	/**
+	 * 取消订单
+	 */
+	handleCancel() {
+		SuperAgent
+			.post(`http://closet-api.tallty.com/work/appointments/${this.id}/cancel`)
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					console.log("已取消");
+					this.setState({ appointment: res.body });
+				} else {
+					this.setState({ error_text: "重新取消", loading: false });
+				}
+			})
+	}
+
+	/**
+	 * 开始录入
+	 */
+	handleRecord() {
+		this.props.router.replace(`/warehouse?appointment_id=${this.id}`);
+	}
+
+	/**
+	 * 工作人员代付
+	 */
+	handleWorkerPay() {
+		alert("POS机支付");
+	}
+
+	/**
+	 * 工作人员送入仓库后，开始入库登记时确认
+	 */
+	handleConfirmStoring() {
+		SuperAgent
+			.post(`http://closet-api.tallty.com/work/appointments/${this.id}/storing`)
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					console.log("工作人员送入仓库后，确认入库登记");
+					this.setState({ appointment: res.body });
+				} else {
+					this.setState({ error_text: "重新确认", loading: false });
+				}
+			})
+	}
+
+	/**
+	 * 返回首页
+	 */
+	handleBackHome() {
+		this.props.router.replace('/');
+	}
+
+	/**
+	 * 不同状态的按钮事件
+	 */
+	handleEvent() {
+		switch(this.state.appointment.state) {
+			case "待确认":
+				return this.handleAccept();
+				break;
+			case "服务中":
+				return this.handleRecord();
+				break;
+			case "待付款":
+				return this.handleWorkerPay();
+				break;
+			case "已支付":
+				return this.handleConfirmStoring();
+				break;
+			default:
+				return this.handleBackHome();
+				break;
+		}
+	}
+
+	/**
+	 * 显示不同状态下的按钮文字
+	 */
+	getBtnText() {
+		if (this.state.error_text){
+			return this.state.error_text; 
+		} 
+		switch(this.state.appointment.state) {
+			case "待确认":
+				return "确认接单";
+				break;
+			case "服务中":
+				return "开始录入";
+				break;
+			case "待付款":
+				return "POS机支付";
+				break;
+			case "已支付":
+				return "确认入库";
+				break;
+			default:
+				return "返回首页";
+				break;
+		}
+	}
+
+
+	setDetail() {
+		let { appointment } = this.state;
 		if (appointment === null) {
 			return <Spiner />
 		} else if (appointment === -1) {
@@ -61,7 +208,7 @@ export class Appointment extends Component {
 		} else {
 			let photo_path = appointment.photo ? appointment.photo : "src/images/default_photo.png"
 			return (
-				<div>
+				<div >
 					<div className={css.div_two}>
 						<img src={photo_path} alt="" className={css.photo}/>
 						<p className={css.name}>{appointment.name}</p>
@@ -77,8 +224,17 @@ export class Appointment extends Component {
 						</p>
 						<p className={css.time_count}>预约时间：{appointment.date}</p>
 						<p className={css.time_count}>预约件数：{appointment.number} 件</p>
+
+						<div className={css.timeline}>
+							<Timeline>
+								{this.getLogistics()}
+					    </Timeline>
+						</div>
 					</div>
-					<Link to={`/warehouse?appointment_id=${this.id}`} className={css.warehouse}>添加入库清单</Link>
+					
+					<Button className={css.warehouse} 
+									loading={this.state.loading}
+									onClick={this.handleEvent.bind(this)}>{this.getBtnText()}</Button>
 				</div> 
 			)
 		}
@@ -105,3 +261,5 @@ export class Appointment extends Component {
 		);
 	}
 }
+
+export default withRouter(Appointment);

@@ -50,15 +50,15 @@ export class Order extends Component {
 	 */
 	handleClick() {
 		// 封装更新的数据包
-		let appointment = this.state.appointment
+		let appointment = this.state.appointment;
 
-		let cache = ""
+		let cache = "";
 		appointment.appointment_item_groups.forEach((item, index, obj) => {
 			cache += `appointment_item[groups][][count]=${item.count}
 								 &appointment_item[groups][][price]=${item.total_price}
 								 &appointment_item[groups][][store_month]=${item.store_month}&`
-		})
-		let params = cache.substring(0, cache.length -1)
+		});
+		let params = cache.substring(0, cache.length -1);
 
 		console.log(params)
 		SuperAgent

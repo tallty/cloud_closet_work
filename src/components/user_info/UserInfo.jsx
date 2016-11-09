@@ -42,7 +42,9 @@ export class UserInfo extends Component {
 			<div className={css.item_content}>
 				{this.getItem()}
 				<div className={css.content_right}>
-					<img src={this.getPhoto()} alt="头像"/>
+				{
+					this.props.photo ? <img src={this.getPhoto()} alt="头像"/> : this.props.children
+				}
 				</div>
 			</div>
 		)
@@ -52,7 +54,7 @@ export class UserInfo extends Component {
 UserInfo.defaultProps = {
 	name: '',
 	phone: '',
-	photo: '',
+	photo: null,
 	clothe_count: -1
 }
 

@@ -37,14 +37,12 @@ export class Appointments extends Component {
 		}
 
 		return (
-			<div>
-				<Toolbar title="预约清单" 
+			<div className={css.appointments} id="appointments">
+				<Toolbar title="预约清单"
 								url="/" 
 								style={toolbar_style} 
 								back_style={back_style} />
-				<div className={css.appointments}>
-					{ this.initList() }
-				</div>
+				{ this.initList() }
 			</div>
 		)
 	}

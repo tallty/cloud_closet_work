@@ -81,19 +81,26 @@ class WareHouse extends Component {
 		console.log("========local appointment===========")
 		console.dir(appointment)
 
-		let kinds = [
-			{ id: 1, name: "上衣", price: 8 },
-			{ id: 2, name: "连衣裙", price: 12},
-			{ id: 3, name: "裤装", price: 8 },
-			{ id: 4, name: "半裙", price: 5 },
-			{ id: 5, name: "外套", price: 10 },
-			{ id: 6, name: "羽绒服", price: 15 },
-			{ id: 7, name: "泳装", price: 8 }
-		]
-		this.setState({
-			appointment: appointment,
-			kinds: kinds
-		})
+		this.setState({ appointment: appointment });
+		this.getKinds();
+	}
+
+	getKinds() {
+		SuperAgent
+			.get('http://closet-api.tallty.com/work/price_systems')
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					let kinds = res.body.price_systems;
+					console.dir(kinds);
+					this.setState({kinds: kinds});
+				} else {
+					console.log("获取衣服种类失败")
+					this.setState({kinds: []});
+				}
+			})
 	}
 
 	// 解析【appointment】数据

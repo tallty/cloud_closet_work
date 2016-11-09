@@ -49,7 +49,9 @@ export class DateAppointments extends Component {
 		this.props.items.forEach((item, index, obj) => {
 			list.push(
 				<Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
-					<UserInfo name={item.name} photo={item.photo} phone={item.phone} clothe_count={item.number} />
+					<UserInfo name={item.name} clothe_count={item.number} phone={item.phone}>
+						<div className={css.tag}>{item.state}</div>
+					</UserInfo>
 					<div className={css.item_footer}>
 						<img src="src/images/address_icon.svg" alt="icon"/>
 						<span>{item.address}</span>
@@ -63,7 +65,7 @@ export class DateAppointments extends Component {
 	// 初始化列表头
 	initHeader() {
 		return this.props.date ? 
-						<Affix offsetTop={50}>
+						<Affix offsetTop={50} target={() => document.getElementById('appointments')}>
 							<div className={css.item_header}>{ this.parseTime(this.props.date) }</div>
 						</Affix> : null
 	}
