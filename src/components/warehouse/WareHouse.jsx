@@ -13,7 +13,7 @@
  * 	address: 地址,
  * 	number: 预约入库数量,
  * 	date: 预约日期,
- * 	_total: 衣服总计,
+ * 	price: 衣服总计,
  * 	【====以下为接口欠缺数据字段，使用假数据===】
  * 	nurse: 护理方式[every|one|no],
  *	freight: 运费,
@@ -25,6 +25,7 @@
  * 			id: 条目id,
  * 			count: 衣服数量,
  * 			store_month: 仓储时长（月）,
+ * 			type_name: 衣服类别,
  * 			price: 单价价格（接口显示的总价，需自行计算）,
  * 			total_price: 单条入库记录总价,
  * 			【======以下为接口欠缺数据字段，使用假数据====】
@@ -106,8 +107,8 @@ class WareHouse extends Component {
 	// 解析【appointment】数据
 	parseAppointment(data) {
 		// 整理成需要的对象（因为接口字段还不完整）
-		let { id, name, phone, address, number, date, appointment_item_groups } = data
-		let groups = []
+		let { id, name, phone, address, number, date, appointment_item_groups } = data;
+		let groups = [];
 		// 用户信息
 		let appointment = {
 			id: id,
@@ -122,7 +123,7 @@ class WareHouse extends Component {
 		}
 		// 入库记录
 		appointment_item_groups.forEach((item, index, obj) => {
-			let _price = item.price / item.count / item.store_month
+			let _price = item.price / item.count / item.store_month;
 			groups.push({
 				id: item.id,
 				kind: '上衣',

@@ -118,8 +118,7 @@ class Desk extends Component {
 			let appointments_str = JSON.stringify(commited_appointments);
 			sessionStorage.setItem('appointments', appointments_str);
 		} else if (kind === "配送管理") {
-			let array = accepted_appointments.concat(unpaid_appointments);
-			array.concat(paid_appointments);
+			let array = accepted_appointments.concat(unpaid_appointments).concat(paid_appointments);
 			console.dir(array);
 			let appointments_str = JSON.stringify(array);
 			sessionStorage.setItem('appointments', JSON.stringify(array));
