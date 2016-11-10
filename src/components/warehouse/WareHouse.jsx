@@ -43,17 +43,17 @@ import css from './ware_house.less';
 import { withRouter } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
-import { ClotheKinds } from './ClotheKinds'
-import { Spiner } from '../common/Spiner'
-import { Toolbar } from '../common/Toolbar'
+import { ClotheKinds } from './ClotheKinds';
+import { Spiner } from '../common/Spiner';
+import { Toolbar } from '../common/Toolbar';
 import { Row, Col, Button, Radio, Select, Input } from 'antd';
-import { PopWindow } from '../common/PopWindow'
-import SuperAgent from 'superagent'
+import { PopWindow } from '../common/PopWindow';
+import SuperAgent from 'superagent';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
-// 点击表格条目的对象
+// 记录点击表格条目的对象
 const editItem = {
 	index: null,
 	item: null
@@ -65,15 +65,15 @@ const EDIT = 'edit';
 class WareHouse extends Component {
 	appointment_id = this.props.location.query.appointment_id
 	state = {
-		appointment: null,
-		kinds: [],
-		pop: false,
-		event: null,
-		_season: '春夏',
-		_kind: null,
-		_count: 1,
-		_store_month: 3,
-		_price: 0
+		appointment: null,	// 服务的订单对象
+		types: [],					// 所有衣服类型
+		pop: false,					// 弹框控制
+		event: null,				// 事件：【新增 | 编辑】
+		_type_name: null, 	// 选择的类型
+		_count: 1,					// 存衣数量
+		_store_month: 3,		// 存储时长
+		_price: 0, 					// 衣服类型的单价
+		_season: '春夏',			// 季别
 	}
 
 	componentWillMount() {
@@ -85,31 +85,13 @@ class WareHouse extends Component {
 		console.dir(appointment)
 
 		this.setState({ appointment: appointment });
-		this.getKinds();
-	}
-
-	getKinds() {
-		SuperAgent
-			.get('http://closet-api.tallty.com/work/price_systems')
-			.set('Accept', 'application/json')
-			.set('X-User-Token', localStorage.authentication_token)
-			.set('X-User-Phone', localStorage.phone)
-			.end((err, res) => {
-				if (!err || err === null) {
-					let kinds = res.body.price_systems;
-					console.dir(kinds);
-					this.setState({kinds: kinds});
-				} else {
-					console.log("获取衣服种类失败")
-					this.setState({kinds: []});
-				}
-			})
+		this.getTypes();
 	}
 
 	// 解析【appointment】数据
 	parseAppointment(data) {
 		// 整理成需要的对象（因为接口字段还不完整）
-		let { id, name, phone, address, number, date, appointment_item_groups } = data;
+		let { id, name, phone, address, number, date, price, seq, state, detail, created_at, appointment_item_groups } = data;
 		let groups = [];
 		// 用户信息
 		let appointment = {
@@ -119,25 +101,51 @@ class WareHouse extends Component {
 			address: address,
 			number: number,
 			date: date,
-			nurse: 'every',
-			freight: 10,
- 			service_charge: 50
-		}
+			price: price,
+	 		seq: seq,
+	  	state: state,
+			detail: detail,
+			created_at: created_at,
+			nurse: 'every', // 欠缺
+			freight: 10, // 欠缺
+ 			service_charge: 50 // 欠缺
+		};
 		// 入库记录
 		appointment_item_groups.forEach((item, index, obj) => {
 			let _price = item.price / item.count / item.store_month;
 			groups.push({
 				id: item.id,
-				kind: '上衣',
-				season: '春夏',
 				count: item.count,
 				store_month: item.store_month,
-				price: Math.round(_price, -1),
-				total_price: item.price
+				price: item.price,
+				type_name: item.type_name,
+				season: '春夏', // 欠缺
+				_per_price: Math.round(_price, -1)
+			});
+		});
+		appointment.appointment_item_groups = groups;
+		return appointment;
+	}
+
+	/**
+	 * [getTypes 获取衣服种类的列表]
+	 */
+	getTypes() {
+		SuperAgent
+			.get('http://closet-api.tallty.com/work/price_systems')
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.end((err, res) => {
+				if (!err || err === null) {
+					let types = res.body.price_systems;
+					console.dir(types);
+					this.setState({types: types});
+				} else {
+					console.log("获取衣服种类失败")
+					this.setState({types: []});
+				}
 			})
-		})
-		appointment.appointment_item_groups = groups
-		return appointment
 	}
 
 	// 选择季节
@@ -147,15 +155,15 @@ class WareHouse extends Component {
 	}
 
 	/**
-	 * [showPopWindow 显示弹出窗]
+	 * [selectClotheType 显示弹出窗]
 	 * @param  {[object]} item [选择的衣服种类、价格]
 	 */
-	showPopWindow(item) {
+	selectClotheType(item) {
 		console.log(`弹出框显示了, 选中: ${item.name}`)
 		this.setState({ 
 			pop: true, 
 			event: NEW,
-			_kind: item.name,
+			_type_name: item.name,
 			_price: item.price,
 			_count: 1,
 			_store_month: 3
@@ -204,59 +212,77 @@ class WareHouse extends Component {
 
 	// 添加衣服到列表
 	addClotheEvent() {
-		let { _season, _kind, _count, _store_month, _price, appointment } = this.state
+		let { _season, _type_name, _count, _store_month, _price, appointment } = this.state;
 		// 预约对象
-		let _appointment = appointment
-		let _total_price = _count * _store_month * _price
+		let _appointment = appointment;
+		let _total_price = _count * _store_month * _price;
 
 		// 增加一条入库记录
 		_appointment.appointment_item_groups.push({
 			id: null,
-			kind: _kind,
+			type_name: _type_name,
 			season: _season,
 			store_month: _store_month,
 			count: _count,
-			price: _price,
-			total_price: _total_price
-		})
+			price: _total_price,
+			_per_price: _price
+		});
+		// 更新订单合计
+		_appointment.price = this.getTotalPrice(_appointment);
 
 		this.setState({ 
 			appointment: _appointment,
-			pop: false,
-		})
+			pop: false
+		});
 
-		console.log("添加一类衣服条目 =>")
-		console.dir(_appointment)
+		console.log("添加一类衣服条目 =>");
+		console.dir(_appointment);
 	}
 
 	// 更新列表中的衣服信息
 	updateClotheEvent() {
-		let { _season, _kind, _count, _store_month, _price, appointment } = this.state
+		let { _season, _type_name, _count, _store_month, _price, appointment } = this.state;
 		// 预约对象
-		let _appointment = appointment
+		let _appointment = appointment;
 		// 更新的条目
-		let item = _appointment.appointment_item_groups[editItem.index]
-		let _total_price = _count * _store_month * _price
+		let item = _appointment.appointment_item_groups[editItem.index];
+		let _total_price = _count * _store_month * _price;
 
 		// 如果更新后的数量为0， 则删除条目
 		if (_count === 0) {
 			_appointment.appointment_item_groups.splice(editItem.index, 1)
 		} else {
-			item.kind = _kind
-			item.count = _count
-			item.store_month = _store_month
-			item.total_price = _total_price
+			item.kind = _type_name;
+			item.count = _count;
+			item.store_month = _store_month;
+			item.price = _total_price;
 		}
+		// 更新订单合计
+		_appointment.price = this.getTotalPrice(_appointment);
 
 		this.setState({ 
 			appointment: _appointment,
 			_count: 1,
 			pop: false
-		})
+		});
 
-		console.log("更新后的appointment对象 =>")
-		console.dir(appointment)
+		console.log("更新后的appointment对象 =>");
+		console.dir(appointment);
 	}
+
+	/**
+	 * [getTotalPrice 计算本次入库的总价格]
+	 */
+	getTotalPrice(appointment) {
+		let { freight, service_charge, appointment_item_groups } = appointment;
+		// 入库衣服总价格(无运费、服务费)
+		let total = 0;
+		appointment_item_groups.forEach((item, i, obj) => {
+			total = total + item.price;
+		});
+		return total + freight + service_charge;
+	}
+
 
 	/**
 	 * [handleGroupClick 【存衣数量】列表的点击事件]
@@ -264,22 +290,22 @@ class WareHouse extends Component {
 	 * @param  {[type]} item  [点击的条目对象]
 	 */
 	handleGroupClick(index, item) {
-		console.log("你点击了第"+index+"个条目，=>")
-		console.log(item)
+		console.log("你点击了第"+index+"个条目，=>");
+		console.log(item);
 
-		editItem.item = item
-		editItem.index = index
+		editItem.item = item;
+		editItem.index = index;
 
 		this.setState({
-			_kind: item.kind,
+			_type_name: item.type_name,
 			_store_month: item.store_month,
 			_count: item.count,
-			_price: item.price,
+			_price: item._per_price,
 			pop: true,
 			event: EDIT
-		})
+		});
 
-		console.log("点击的更新时长"+item.store_month)
+		console.log("点击的更新时长"+item.store_month);
 	}
 
 	/**
@@ -291,10 +317,10 @@ class WareHouse extends Component {
 		//存入storage
 		sessionStorage.appointment = appointment_str;
 		sessionStorage.setItem('appointment', appointment_str);
-		console.log("把【appointment】存入sessionStorage")
+		console.log("把【appointment】存入sessionStorage");
 		// 读取
-		let appo = sessionStorage.appointment
-		console.dir(JSON.parse(appo))
+		let appo = sessionStorage.appointment;
+		console.dir(JSON.parse(appo));
 		this.props.router.replace(`order?appointment_id=${this.appointment_id}`)
 	}
 
@@ -304,22 +330,9 @@ class WareHouse extends Component {
 	 */
 	handleNurseChange(value) {
 	  console.log(`选择的护理方式： ${value}`);
-	  let _appointment = this.state.appointment
-		_appointment.nurse = value
-	  this.setState({ appointment: _appointment })
-	}
-
-	/**
-	 * [getTotalPrice 计算本次入库的总价格]
-	 */
-	getTotalPrice() {
-		let { freight, service_charge, appointment_item_groups } = this.state.appointment
-		// 入库衣服总价格(无运费、服务费)
-		let total = 0
-		appointment_item_groups.forEach((item, i, obj) => {
-			total = total + item.count * item.store_month * item.price
-		})
-		return total + freight + service_charge;
+	  let _appointment = this.state.appointment;
+		_appointment.nurse = value;
+	  this.setState({ appointment: _appointment });
 	}
 
 	render() {
@@ -332,7 +345,9 @@ class WareHouse extends Component {
 			color: '#fff'
 		};
 		// 状态
-		let { appointment, kinds, _season, _kind, _count, _store_month, pop, event } = this.state;
+		let { appointment, types, pop, event, _season, _type_name, _count, _store_month } = this.state;
+		// 按钮点击性
+		let disabled = appointment.appointment_item_groups.length <= 0;
 
 		return (
 			<div className={css.container}>
@@ -358,7 +373,7 @@ class WareHouse extends Component {
 				</div>
 
 				{/* 衣服种类 */}
-				<ClotheKinds kinds={kinds} handleClick={this.showPopWindow.bind(this)}/>
+				<ClotheKinds kinds={types} handleClick={this.selectClotheType.bind(this)}/>
 
 				{/* 存衣数量 */}
 				<div className={css.pane}>
@@ -383,18 +398,22 @@ class WareHouse extends Component {
 						<Col span={6} className="text-right">运费：{appointment.freight}</Col>
 					</Row>
 					<p className="text-right">服务费：{appointment.service_charge}</p>
-					<p className={css.total_price}>合计：<span>{ this.getTotalPrice() }</span></p>
+					<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
 				</div>
 
 				{/* 入库 */}
 				<div className={css.btn_container}>
-					<button className={css.tab_btn} onClick={this.handleWarehouse.bind(this)}>入库</button>
+					<Button disabled={disabled}
+									className={css.tab_btn} 
+									onClick={this.handleWarehouse.bind(this)}>
+									入库
+					</Button>
 				</div>
 
 				{/* popwindow */}
 				<PopWindow show={pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
 					<div className={css.pop_content}>
-						<div className={css.title}>{_kind}</div>
+						<div className={css.title}>{_type_name}</div>
 						{/* 仓储时长 */}
 						<div className={css.warehouse_length}>
 							<p>仓储时长</p>

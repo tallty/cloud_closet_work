@@ -27,8 +27,8 @@ class Appointment extends Component {
 				if (!err || err === null) {
 					this.setState({ appointment: res.body })
 				} else {
-					this.setState({ appointment: -1 })
-					alert("获取预约详情失败")
+					this.setState({ appointment: {} })
+					alert("获取预约详情失败");
 				}
 			})
 	}

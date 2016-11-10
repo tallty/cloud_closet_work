@@ -23,8 +23,8 @@ export class Order extends Component {
 	}
 
 	componentWillMount() {
-		let appointment_str = sessionStorage.appointment
-		let appointment = JSON.parse(appointment_str)
+		let appointment_str = sessionStorage.appointment;
+		let appointment = JSON.parse(appointment_str);
 
 		this.setState({
 			appointment: appointment
@@ -56,6 +56,8 @@ export class Order extends Component {
 		appointment.appointment_item_groups.forEach((item, index, obj) => {
 			cache += `appointment_item[groups][][count]=${item.count}
 								 &appointment_item[groups][][price]=${item.total_price}
+								 &appointment_item[groups][][type_name]=${item.type_name}
+								 &appointment_item[groups][][tag_list]=${item.season}
 								 &appointment_item[groups][][store_month]=${item.store_month}&`
 		});
 		let params = cache.substring(0, cache.length -1);
@@ -105,7 +107,7 @@ export class Order extends Component {
 						<Col span={12} className="text-right">运费：{appointment.freight}</Col>
 					</Row>
 					<p className="text-right">服务费：{appointment.service_charge}</p>
-					<p className={css.total_price}>合计：<span>{ this.getTotalPrice() }</span></p>
+					<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
 					<p>配送时间：2016-5-28 12:00～13:00</p>
 				</div>
 

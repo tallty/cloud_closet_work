@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import css from './clothes_table.less'
 import { Row, Col } from 'antd'
 
+const { number, string, arrayOf, shape, func } = PropTypes;
+
 export class ClothesTable extends Component {
 	parseStoreMonth = new Map([
 		[3, '三个月'],[6, '六个月'],[9, '九个月'],
@@ -9,7 +11,7 @@ export class ClothesTable extends Component {
 	]);
 
 	handleClick(index,item) {
-		this.props.itemClickEvent(index,item)
+		this.props.itemClickEvent(index,item);
 	}
 
 	getOrderList() {
@@ -27,20 +29,21 @@ export class ClothesTable extends Component {
 
 		this.props.groups.forEach((item, index, obj) => {
 			_groups.push(
-				<Row key={index} className={css.order_item} onClick={this.handleClick.bind(this,index,item)}>
+				<Row key={index} className={css.order_item} 
+												 onClick={this.handleClick.bind(this,index,item)}>
 					<Col span={7} style={{textAlign: 'left'}}>
 						<div className={css.img_div}>
-							<img src={img_map.get(item.kind)} alt="icon"/>
+							<img src={img_map.get(item.type_name)} alt="icon"/>
 						</div>
 						<div className={css.kind}>
-							<p>{item.kind}</p>
+							<p>{item.type_name}</p>
 							<div className={css.tag}>{item.season}</div>
 						</div>
 					</Col>
 					<Col span={5}>{this.parseStoreMonth.get(item.store_month)}</Col>
 					<Col span={4}>{item.count}</Col>
+					<Col span={4}>{item._per_price}</Col>
 					<Col span={4}>{item.price}</Col>
-					<Col span={4}>{item.total_price}</Col>
 				</Row>
 			)
 		})
@@ -75,14 +78,15 @@ ClothesTable.defaultProps = {
 }
 
 ClothesTable.PropTypes = {
-	groups: PropTypes.arrayOf(
-		PropTypes.shape({
-			count: PropTypes.number,
-			store_month: PropTypes.number,
-			price: PropTypes.number,
-			kind: PropTypes.string,
-			season: PropTypes.string
+	groups: arrayOf(
+		shape({
+			count: number,
+			store_month: number,
+			price: number,
+			type_name: string,
+			season: string,
+			_per_price: number
 		})
 	),
-	onTableClickEvent: PropTypes.func
+	onTableClickEvent: func
 }

@@ -62,6 +62,7 @@
 			display: block;
 			height: 44px;
 			width: 270px;
+			padding: 0;
 			line-height: 44px;
 			border-radius: 22px;
 			margin: 0 auto;
@@ -73,6 +74,10 @@
 			&:active {
 				background: darken(@primary, 10%);
 			}
+		}
+		.tab_btn[disabled] {
+			color: lighten(#fff, 10%);
+			background-color: lighten(@primary, 10%);
 		}
 	}
 
