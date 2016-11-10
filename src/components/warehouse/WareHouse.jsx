@@ -156,15 +156,15 @@ class WareHouse extends Component {
 
 	/**
 	 * [selectClotheType 显示弹出窗]
-	 * @param  {[object]} item [选择的衣服种类、价格]
+	 * @param  {[object]} type [选择的衣服种类、价格]
 	 */
-	selectClotheType(item) {
-		console.log(`弹出框显示了, 选中: ${item.name}`)
+	selectClotheType(type) {
+		console.log(`弹出框显示了, 选中: ${type.name}`);
 		this.setState({ 
 			pop: true, 
 			event: NEW,
-			_type_name: item.name,
-			_price: item.price,
+			_type_name: type.name,
+			_price: type.price,
 			_count: 1,
 			_store_month: 3
 		})

@@ -18,9 +18,9 @@ export class ClotheKinds extends Component {
 			['外套', 'src/images/waitao.png'],
 			['羽绒服', 'src/images/yurongfu.png'],
 			['泳装', 'src/images/yongzhuang.png']
-		])
+		]);
 
-		let array = []
+		let array = [];
 
 		this.props.kinds.forEach((kind, index, obj) => {
 			// let active = this.state._kind === kind[1] ? css.active : null
