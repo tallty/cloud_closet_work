@@ -55,9 +55,9 @@ export class Order extends Component {
 		let cache = "";
 		appointment.appointment_item_groups.forEach((item, index, obj) => {
 			cache += `appointment_item[groups][][count]=${item.count}
-								 &appointment_item[groups][][price]=${item.total_price}
+								 &appointment_item[groups][][price]=${item.price}
 								 &appointment_item[groups][][type_name]=${item.type_name}
-								 &appointment_item[groups][][tag_list]=${item.season}
+								 &appointment_item[groups][][season]=${item.season}
 								 &appointment_item[groups][][store_month]=${item.store_month}&`
 		});
 		let params = cache.substring(0, cache.length -1);

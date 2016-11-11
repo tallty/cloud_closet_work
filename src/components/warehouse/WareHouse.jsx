@@ -31,9 +31,7 @@
  * 			store_month: 仓储时长（月）,
  * 			price: 单条记录的总价,
  * 			type_name: 衣服类别,
- * 			【===============欠缺================】
  * 			season: 季别
- * 			【==================================】
  * 	  }
  * 	]
  * }
@@ -119,7 +117,7 @@ class WareHouse extends Component {
 				store_month: item.store_month,
 				price: item.price,
 				type_name: item.type_name,
-				season: '春夏', // 欠缺
+				season: item.season,
 				_per_price: Math.round(_price, -1)
 			});
 		});
@@ -160,10 +158,11 @@ class WareHouse extends Component {
 	 */
 	selectClotheType(type) {
 		console.log(`弹出框显示了, 选中: ${type.name}`);
+
 		this.setState({ 
 			pop: true, 
 			event: NEW,
-			_type_name: type.name,
+			_type_name: type.name.trim(),
 			_price: type.price,
 			_count: 1,
 			_store_month: 3
