@@ -162,7 +162,7 @@ class WareHouse extends Component {
 		this.setState({ 
 			pop: true, 
 			event: NEW,
-			_type_name: type.name.trim(),
+			_type_name: type.name,
 			_price: type.price,
 			_count: 1,
 			_store_month: 3

@@ -54,11 +54,11 @@ export class Order extends Component {
 
 		let cache = "";
 		appointment.appointment_item_groups.forEach((item, index, obj) => {
-			cache += `appointment_item[groups][][count]=${item.count}
-								 &appointment_item[groups][][price]=${item.price}
-								 &appointment_item[groups][][type_name]=${item.type_name}
-								 &appointment_item[groups][][season]=${item.season}
-								 &appointment_item[groups][][store_month]=${item.store_month}&`
+			cache += `appointment_item[groups][][count]=${item.count}`;
+			cache += `&appointment_item[groups][][price]=${item.price}`;
+			cache += `&appointment_item[groups][][type_name]=${item.type_name}`;
+			cache += `&appointment_item[groups][][season]=${item.season}`;
+			cache += `&appointment_item[groups][][store_month]=${item.store_month}&`;
 		});
 		let params = cache.substring(0, cache.length -1);
 
@@ -71,8 +71,8 @@ export class Order extends Component {
 			.send(params)
 			.end((err, res) => {
 				if (!err || err === null) {
-					console.log(res)
-					console.log("成功了")
+					console.log(res);
+					console.log("成功了");
 					location.href = "/"
 				} else {
 					console.dir(err)

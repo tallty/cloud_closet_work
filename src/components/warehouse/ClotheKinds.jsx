@@ -23,7 +23,6 @@ export class ClotheKinds extends Component {
 		let array = [];
 
 		this.props.kinds.forEach((kind, index, obj) => {
-			// let active = this.state._kind === kind[1] ? css.active : null
 			let active = null;
 			let icon_path = kind.icon_image ? kind.icon_image : img_map.get(kind.name);
 
