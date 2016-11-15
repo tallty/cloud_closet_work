@@ -40,7 +40,7 @@ export class DateAppointments extends Component {
 					break;
 			}
 		}
-		return return_time
+		return return_time;
 	}
 
 	// 初始化列表
@@ -49,7 +49,7 @@ export class DateAppointments extends Component {
 		this.props.items.forEach((item, index, obj) => {
 			list.push(
 				<Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
-					<UserInfo name={item.name} clothe_count={item.number} phone={item.phone}>
+					<UserInfo name={item.name} clothe_count={item.number} phone={item.phone} created_at={item.created_at}>
 						<div className={css.tag}>{item.state}</div>
 					</UserInfo>
 					<div className={css.item_footer}>

@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react'
-import css from './user_info.less'
+import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
+import css from './user_info.less';
 
 export class UserInfo extends Component {
 	
@@ -11,8 +12,12 @@ export class UserInfo extends Component {
 		}
 	}
 
+	formatDate(date) {
+		return moment(date).format("YYYY-MM-DD HH:mm:ss");
+	}
+
 	getItem() {
-		const { name, phone, clothe_count } = this.props
+		const { name, phone, clothe_count, created_at } = this.props
 
 		if (this.props.clothe_count != -1) {
 			return (
@@ -25,6 +30,7 @@ export class UserInfo extends Component {
 						</span>
 					</p>
 					<p className={css.count}>预约件数：{clothe_count} 件</p>
+					<p className={css.count}>下单时间：{this.formatDate(created_at)}</p>
 				</div>
 			)
 		} else {
@@ -55,12 +61,14 @@ UserInfo.defaultProps = {
 	name: '',
 	phone: '',
 	photo: null,
-	clothe_count: -1
+	clothe_count: -1,
+	created_at: ''
 }
 
 UserInfo.PropTypes = {
 	name: PropTypes.string,
 	phone: PropTypes.string,
 	photo: PropTypes.string,
-	clothe_count: PropTypes.number
+	clothe_count: PropTypes.number,
+	created_at: PropTypes.string
 }
