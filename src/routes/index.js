@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, Link, Redirect } from 'react-router'
 
-// ********* 投机倒把三十年：供智慧社区项目使用的页面 **********
-import { SmartLifeBanner } from '../smart_life_web/banner/SmartLifeBanner'
-// *****************************************************
-
 // 微信api相关功能
 import auth from '../components/WechatConect/auth'
 import GetOpenId from '../components/WechatConect/GetOpenId'
@@ -29,6 +25,12 @@ export class Routes extends Component {
     auth.loggedIn();
   }
 
+  // 重定向老版本APP的页面访问
+  handleAppRequest() {
+    const action = location.search.split('=')[1];
+    window.location.href = `http://elive.clfsj.com:8989/${action}`;
+  }
+
 	render() {
 		return (
 			<Router history={this.props.history}>
@@ -49,8 +51,8 @@ export class Routes extends Component {
         {/* 预约清单 - 入库成功 */}
         <Route path="/success" component={Success}/>
 
-        {/********************************************************/}
-        <Route path="/smart_life_banner" component={SmartLifeBanner}/>
+        {/***********************暂时供慧生活APP重定向使用，未来可删除*********************************/}
+        <Route path="/smart_life_banner" onEnter={this.handleAppRequest.bind(this)}/>
 		  </Router>
 		)
 	}
