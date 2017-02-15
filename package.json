@@ -54,9 +54,9 @@
     "test": "atool-test-mocha ./src/**/__tests__/*-test.js"
   },
   "theme": {
-    "primary-color": "#FF9241",
-    "link-color": "#FF9241",
-    "info-color": "#FF9241",
+    "primary-color": "#ECC17D",
+    "link-color": "#ECC17D",
+    "info-color": "#ECC17D",
     "body-background": "#F8F8F8",
     "text-color": "#7F7F7F"
   }

@@ -25,12 +25,6 @@ export class Routes extends Component {
     auth.loggedIn();
   }
 
-  // 重定向老版本APP的页面访问
-  handleAppRequest() {
-    const action = location.search.split('=')[1];
-    window.location.href = `http://elive.clfsj.com:8989/${action}`;
-  }
-
 	render() {
 		return (
 			<Router history={this.props.history}>
@@ -50,9 +44,6 @@ export class Routes extends Component {
         <Route path="/order" component={Order}/>
         {/* 预约清单 - 入库成功 */}
         <Route path="/success" component={Success}/>
-
-        {/***********************暂时供慧生活APP重定向使用，未来可删除*********************************/}
-        <Route path="/smart_life_banner" onEnter={this.handleAppRequest.bind(this)}/>
 		  </Router>
 		)
 	}

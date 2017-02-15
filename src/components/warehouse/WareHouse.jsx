@@ -337,7 +337,7 @@ class WareHouse extends Component {
 	render() {
 		// toolbar 样式
 		let toolbar_style = {
-			background: '#FF9241', 
+			background: '#ECC17D', 
 			color: '#fff'
 		};
 		let back_style = {

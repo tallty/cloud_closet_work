@@ -9,7 +9,7 @@ export class Toolbar extends Component {
 		return (
 			<div className={css.toolbar} style={this.props.style}>
 				<Link to={this.props.url} className={css.back} style={this.props.back_style}>
-					<Icon type="left" />
+					<img src="/src/images/toolbar_back.svg" alt="返回"/>
 				</Link>
 				<span>{ this.props.title }</span>
 				{

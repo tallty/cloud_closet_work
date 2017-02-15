@@ -84,7 +84,7 @@ export class Order extends Component {
 
 	render() {
 		let toolbar_style = {
-			background: '#FF9241', 
+			background: '#ECC17D', 
 			color: '#fff'
 		}
 		let back_style = {
@@ -116,7 +116,7 @@ export class Order extends Component {
 				<hr/>
 
 				<Link to={`/warehouse?appointment_id=${appointment.id}`} className={css.modify_order_btn}>修改订单</Link>
-				<button className={css.submit_order_btn} onClick={this.handleClick.bind(this)}>完成</button>
+				<button className={css.submit_order_btn} onClick={this.handleClick.bind(this)}>确认订单</button>
 			</div>
 		)
 	}

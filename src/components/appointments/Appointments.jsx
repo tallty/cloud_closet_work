@@ -29,7 +29,7 @@ export class Appointments extends Component {
 
 	render() {
 		let toolbar_style = {
-			background: '#FF9241', 
+			background: '#ECC17D', 
 			color: '#fff'
 		}
 		let back_style = {

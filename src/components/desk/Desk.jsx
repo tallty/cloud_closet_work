@@ -148,7 +148,6 @@ class Desk extends Component {
 					<div className={css.logo}>
 						<img src="src/images/logo.svg" alt="logo"/>
 					</div>
-					<p className={css.name}>乐存好衣</p>
 					<p className={css.company}>
 						<span><img src="src/images/logo_icon.svg" alt=""/>&nbsp;上海市乐存好衣互联公司</span>
 					</p>
