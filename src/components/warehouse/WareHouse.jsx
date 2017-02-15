@@ -30,8 +30,7 @@
  * 			count: 衣服数量,
  * 			store_month: 仓储时长（月）,
  * 			price: 单条记录的总价,
- * 			type_name: 衣服类别,
- * 			season: 季别
+ * 			type_name: 衣服类别
  * 	  }
  * 	]
  * }
@@ -41,7 +40,7 @@ import css from './ware_house.less';
 import { withRouter } from 'react-router';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
-import { ClotheKinds } from './ClotheKinds';
+import { ClosetKinds } from './ClosetKinds';
 import { Spiner } from '../common/Spiner';
 import { Toolbar } from '../common/Toolbar';
 import { Row, Col, Button, Radio, Select, Input } from 'antd';
@@ -71,7 +70,6 @@ class WareHouse extends Component {
 		_count: 1,					// 存衣数量
 		_store_month: 3,		// 存储时长
 		_price: 0, 					// 衣服类型的单价
-		_season: '春夏',			// 季别
 	}
 
 	componentWillMount() {
@@ -117,7 +115,6 @@ class WareHouse extends Component {
 				store_month: item.store_month,
 				price: item.price,
 				type_name: item.type_name,
-				season: item.season,
 				_per_price: Math.round(_price, -1)
 			});
 		});
@@ -144,12 +141,6 @@ class WareHouse extends Component {
 					this.setState({types: []});
 				}
 			})
-	}
-
-	// 选择季节
-	onSeasonChange(e) {
-		console.log(`季节改变:${e.target.value}`);
-		this.setState({ _season: e.target.value })
 	}
 
 	/**
@@ -211,7 +202,7 @@ class WareHouse extends Component {
 
 	// 添加衣服到列表
 	addClotheEvent() {
-		let { _season, _type_name, _count, _store_month, _price, appointment } = this.state;
+		let { _type_name, _count, _store_month, _price, appointment } = this.state;
 		// 预约对象
 		let _appointment = appointment;
 		let _total_price = _count * _store_month * _price;
@@ -220,7 +211,6 @@ class WareHouse extends Component {
 		_appointment.appointment_item_groups.push({
 			id: null,
 			type_name: _type_name,
-			season: _season,
 			store_month: _store_month,
 			count: _count,
 			price: _total_price,
@@ -240,7 +230,7 @@ class WareHouse extends Component {
 
 	// 更新列表中的衣服信息
 	updateClotheEvent() {
-		let { _season, _type_name, _count, _store_month, _price, appointment } = this.state;
+		let { _type_name, _count, _store_month, _price, appointment } = this.state;
 		// 预约对象
 		let _appointment = appointment;
 		// 更新的条目
@@ -344,7 +334,7 @@ class WareHouse extends Component {
 			color: '#fff'
 		};
 		// 状态
-		let { appointment, types, pop, event, _season, _type_name, _count, _store_month } = this.state;
+		let { appointment, types, pop, event, _type_name, _count, _store_month } = this.state;
 		// 按钮点击性
 		let disabled = appointment.appointment_item_groups.length <= 0;
 
@@ -358,21 +348,9 @@ class WareHouse extends Component {
 				<UserInfo name={appointment.name} 
 									photo={appointment.photo} 
 									phone={appointment.phone} />
-				
-				{/* 季款 */}
-				<div className={css.season}>
-					<span>季款：&nbsp;&nbsp;</span>
-					<RadioGroup onChange={this.onSeasonChange.bind(this)} 
-											defaultValue="春夏"
-											value={_season}>
-			      <RadioButton value="春夏">春夏</RadioButton>
-			      <RadioButton value="秋冬">秋冬</RadioButton>
-			      <RadioButton value="冬">冬</RadioButton>
-			    </RadioGroup>
-				</div>
-
-				{/* 衣服种类 */}
-				<ClotheKinds kinds={types} handleClick={this.selectClotheType.bind(this)}/>
+			
+				{/* 仓储类型 */}
+				<ClosetKinds kinds={types} active={_type_name} handleClick={this.selectClotheType.bind(this)}/>
 
 				{/* 存衣数量 */}
 				<div className={css.pane}>
@@ -384,19 +362,19 @@ class WareHouse extends Component {
 
 				{/* price */}
 				<div className={css.tips_container}>
-					<Row className={css.tips}>
-						<Col span={18}>
-							护理要求：
-							<Select defaultValue={appointment.nurse} style={{ width: 90 }} 
-											onChange={this.handleNurseChange.bind(this)}>
-					      <Option value="every">每次护理</Option>
-					      <Option value="one">一次护理</Option>
-					      <Option value="no">不护理</Option>
-					    </Select>
-						</Col>
-						<Col span={6} className="text-right">运费：{appointment.freight}</Col>
-					</Row>
-					<p className="text-right">服务费：{appointment.service_charge}</p>
+					<div className={css.tips}>
+						护理要求：
+						<Input type="number" style={{ width: 90 }}/>  元 &nbsp;&nbsp;
+						<Select defaultValue={appointment.nurse} style={{ width: 90, marginBootom: 1 }} 
+										onChange={this.handleNurseChange.bind(this)}>
+				      <Option value="every">每次护理</Option>
+				      <Option value="one">一次护理</Option>
+				      <Option value="no">不护理</Option>
+				    </Select>
+					</div>
+					<div className={css.tips}>
+						服务费用：<Input type="number" style={{ width: 90 }} defaultValue={appointment.service_charge}/>  元
+					</div>
 					<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
 				</div>
 
@@ -404,9 +382,7 @@ class WareHouse extends Component {
 				<div className={css.btn_container}>
 					<Button disabled={disabled}
 									className={css.tab_btn} 
-									onClick={this.handleWarehouse.bind(this)}>
-									入库
-					</Button>
+									onClick={this.handleWarehouse.bind(this)}>入库</Button>
 				</div>
 
 				{/* popwindow */}
