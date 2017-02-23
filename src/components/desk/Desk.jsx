@@ -1,10 +1,7 @@
-/**
- * 工作台
- */
-import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router'
-import css from './desk.less'
-import SuperAgent from 'superagent'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+import css from './desk.less';
+import SuperAgent from 'superagent';
 
 class Desk extends Component {
 	state = {
@@ -17,7 +14,7 @@ class Desk extends Component {
 		storing_appointments: [],
 		canceled_appointments: [],
 		one_success: false,
-		two_success: false
+		two_success: false,
 	}
 
 	componentWillMount() {
@@ -42,7 +39,7 @@ class Desk extends Component {
 					let obj = res.body;
 					console.log("获取【待确认】列表成功：");
 					console.dir(obj);
-					this.setState({ 
+					this.setState({
 						commited_appointments: obj.appointments,
 						new_people: obj.new_user_count_today,
 						total_people: obj.user_count,
@@ -65,7 +62,7 @@ class Desk extends Component {
 					let obj = res.body;
 					console.log("获取不同状态列表成功：");
 					console.dir(obj);
-					this.setState({ 
+					this.setState({
 						accepted_appointments: obj.accepted_appointments,
 						unpaid_appointments: obj.unpaid_appointments,
 						paid_appointments: obj.paid_appointments,
@@ -101,12 +98,12 @@ class Desk extends Component {
 	 * 处理点击
 	 */
 	handleClick(kind) {
-		const { 
-			commited_appointments, 
-			accepted_appointments, 
-			unpaid_appointments, 
-			paid_appointments, 
-			storing_appointments, 
+		const {
+			commited_appointments,
+			accepted_appointments,
+			unpaid_appointments,
+			paid_appointments,
+			storing_appointments,
 			canceled_appointments,
 			one_success,
 			two_success
@@ -132,14 +129,14 @@ class Desk extends Component {
 	}
 
 	render() {
-		const { 
-			new_people, total_people, 
-			commited_appointments, 
-			accepted_appointments, 
-			unpaid_appointments, 
-			paid_appointments, 
-			storing_appointments, 
-			canceled_appointments 
+		const {
+			new_people, total_people,
+			commited_appointments,
+			accepted_appointments,
+			unpaid_appointments,
+			paid_appointments,
+			storing_appointments,
+			canceled_appointments,
 		} = this.state;
 
 		return (
@@ -173,7 +170,7 @@ class Desk extends Component {
 
 						<div className={css.grid_item} onClick={this.handleClick.bind(this, '配送管理')}>
 							<div>
-								<h1>{this.getAppointmentsCount([accepted_appointments,unpaid_appointments,paid_appointments])}</h1>
+								<h1>{this.getAppointmentsCount([accepted_appointments, unpaid_appointments, paid_appointments])}</h1>
 								<p>配送管理</p>
 							</div>
 						</div>
@@ -210,7 +207,7 @@ class Desk extends Component {
 					</div>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 

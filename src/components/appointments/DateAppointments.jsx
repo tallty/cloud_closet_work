@@ -5,38 +5,37 @@ import { Link } from 'react-router'
 import { UserInfo } from '../user_info/UserInfo'
 
 export class DateAppointments extends Component {
-
 	// 预约时间解析
 	parseTime(time) {
 		// 清单预约时间
-		let _time = new Date(time)
-		let _time_year = _time.getFullYear()
-		let _time_month = _time.getMonth() + 1
-		let _time_day = _time.getDate()
+		let _time = new Date(time);
+		let _time_year = _time.getFullYear();
+		let _time_month = _time.getMonth() + 1;
+		let _time_day = _time.getDate();
 		// 当期时间
-		let now_time = new Date()
-		let now_year = now_time.getFullYear()
-		let now_month = now_time.getMonth() + 1
-		let now_day = now_time.getDate()
+		let now_time = new Date();
+		let now_year = now_time.getFullYear();
+		let now_month = now_time.getMonth() + 1;
+		let now_day = now_time.getDate();
 		// 返回值
 		let return_time = `${_time_year}-${_time_month}-${_time_day}`
 		// 优化相邻几天的显示情况
 		if (now_year === _time_year && now_month === _time_month) {
 			switch (now_day - _time_day) {
 				case 0:
-					return_time = `今天 (${return_time})`
+					return_time = `今天 (${return_time})`;
 					break;
 				case 1:
-					return_time = `昨天 (${return_time})`
+					return_time = `昨天 (${return_time})`;
 					break;
 				case 2:
-					return_time = `前天 (${return_time})`
+					return_time = `前天 (${return_time})`;
 					break;
 				case -1:
-					return_time = `明天 (${return_time})`
+					return_time = `明天 (${return_time})`;
 					break;
 				case -2:
-					return_time = `后天 (${return_time})`
+					return_time = `后天 (${return_time})`;
 					break;
 			}
 		}
@@ -64,7 +63,7 @@ export class DateAppointments extends Component {
 
 	// 初始化列表头
 	initHeader() {
-		return this.props.date ? 
+		return this.props.date ?
 						<Affix offsetTop={50} target={() => document.getElementById('appointments')}>
 							<div className={css.item_header}>{ this.parseTime(this.props.date) }</div>
 						</Affix> : null
@@ -82,7 +81,7 @@ export class DateAppointments extends Component {
 
 DateAppointments.defaultProps = {
 	date: null,
-	items: []
+	items: [],
 }
 
 DateAppointments.PropTypes = {
@@ -95,7 +94,7 @@ DateAppointments.PropTypes = {
 			phone: PropTypes.string,
 			number: PropTypes.number,
 			date: PropTypes.string,
-			created_at: PropTypes.string
-		})
-	)
+			created_at: PropTypes.string,
+		}),
+	),
 }

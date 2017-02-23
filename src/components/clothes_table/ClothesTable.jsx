@@ -37,13 +37,12 @@ export class ClothesTable extends Component {
 						</div>
 						<div className={css.kind}>
 							<p>{item.type_name}</p>
-							<div className={css.tag}>{item.season}</div>
 						</div>
 					</Col>
 					<Col span={5}>{this.parseStoreMonth.get(item.store_month)}</Col>
 					<Col span={4}>{item.count}</Col>
-					<Col span={4}>{item._per_price}</Col>
 					<Col span={4}>{item.price}</Col>
+					<Col span={4}>{item.price * item.store_month}</Col>
 				</Row>
 			)
 		})
@@ -56,8 +55,8 @@ export class ClothesTable extends Component {
 				<Row className={css.order_table_header}>
 					<Col span={7} style={{textAlign: 'left'}}>种类</Col>
 					<Col span={5}>仓储时长</Col>
-					<Col span={4}>数量</Col>
-					<Col span={4}>单价</Col>
+					<Col span={4}>存衣数量</Col>
+					<Col span={4}>衣柜单价</Col>
 					<Col span={4}>总价</Col>
 				</Row>
 				{ 
@@ -84,7 +83,6 @@ ClothesTable.PropTypes = {
 			store_month: number,
 			price: number,
 			type_name: string,
-			season: string,
 			_per_price: number
 		})
 	),

@@ -16,21 +16,19 @@
  * 	price: 订单的合计总价,
  * 	seq: 预约的订单号,
  * 	state: 订单的状态【服务中, ...】
- * 	detail: "[["上衣", "5"], ["裤装", "2"], ["裙装", "3"]]",
  * 	created_at: 订单的创建时间,
  * 	【=============欠缺=================】
  * 	nurse: 护理方式[every|one|no],
- *	freight: 运费,
  *	service_charge: 服务费,
- *	photo: 头像,
+ *	nurse_charge: 护理费用,
  * 	【==================================】
  * 	appointment_item_groups: [
  * 	  {
  * 			id: 条目id,
  * 			count: 衣服数量,
  * 			store_month: 仓储时长（月）,
- * 			price: 单条记录的总价,
- * 			type_name: 衣服类别
+ * 			price: 选择的衣柜的单价（元/月）,
+ * 			type_name: 柜子的类别,
  * 	  }
  * 	]
  * }
@@ -60,65 +58,59 @@ const NEW = 'new';
 const EDIT = 'edit';
 
 class WareHouse extends Component {
-	appointment_id = this.props.location.query.appointment_id
+	appointment_id = this.props.location.query.appointment_id;
 	state = {
-		appointment: null,	// 服务的订单对象
-		types: [],					// 所有衣服类型
-		pop: false,					// 弹框控制
-		event: null,				// 事件：【新增 | 编辑】
-		_type_name: null, 	// 选择的类型
-		_count: 1,					// 存衣数量
-		_store_month: 3,		// 存储时长
-		_price: 0, 					// 衣服类型的单价
+		appointment: null,			// 【Data】服务的订单对象
+		types: [],							// 【Data】所有衣服类型
+		pop: false,							// 【Logic】弹框控制
+		event: null,						// 【Logic】事件：【新增 | 编辑】
+		_type_name: null, 			// 【Logic】选择的类型
+		_count: 1,							// 【Logic】存衣数量
+		_store_month: 3,				// 【Logic】存储时长
+		_price: 0, 							// 【Logic】衣柜的单价,
+		_total: 0,              // 【Logic】订单的总价,
+		_nurse_charge: 0,       // 【Logic】订单的护理费,
+		_service_charge: 0,     // 【Logic】订单的服务费,
 	}
 
 	componentWillMount() {
 		// 取得缓存本地的 appointment 清单
-		let local_appointment = sessionStorage.appointment
-		let data = JSON.parse(local_appointment)
-		let appointment = this.parseAppointment(data)
-		console.log("========local appointment===========")
-		console.dir(appointment)
-
-		this.setState({ appointment: appointment });
+		let local_appointment = sessionStorage.appointment;
+		let data = JSON.parse(local_appointment);
+		let appointment = this.parseAppointment(data);
+		let total_price = this.getTotalPrice(appointment);
+		this.setState({ 
+			appointment: appointment,
+			_total: total_price,
+			_nurse_charge: appointment.nurse_charge,
+			_service_charge: appointment.service_charge,
+		});
 		this.getTypes();
 	}
 
 	// 解析【appointment】数据
 	parseAppointment(data) {
+		console.log(data);		
 		// 整理成需要的对象（因为接口字段还不完整）
-		let { id, name, phone, address, number, date, price, seq, state, detail, created_at, appointment_item_groups } = data;
-		let groups = [];
+		let { appointment_item_groups, nurse_charge, nurse } = data;
+		let groups = appointment_item_groups;
 		// 用户信息
-		let appointment = {
-			id: id,
-			name: name,
-			phone: phone,
-			address: address,
-			number: number,
-			date: date,
-			price: price,
-	 		seq: seq,
-	  	state: state,
-			detail: detail,
-			created_at: created_at,
-			nurse: 'every', // 欠缺
-			freight: 10, // 欠缺
- 			service_charge: 50 // 欠缺
+		let appointment = { 
+			...data,  
+			nurse: nurse || 'every', // 欠缺
+ 			service_charge: 50, // 欠缺
+ 			nurse_charge: nurse_charge || 0, // 欠缺
 		};
 		// 入库记录
-		appointment_item_groups.forEach((item, index, obj) => {
+		groups.map((item) => {
 			let _price = item.price / item.count / item.store_month;
-			groups.push({
-				id: item.id,
-				count: item.count,
-				store_month: item.store_month,
-				price: item.price,
-				type_name: item.type_name,
-				_per_price: Math.round(_price, -1)
-			});
+			return {
+				...item,
+				_per_price: Math.round(_price, -1),
+			}
 		});
 		appointment.appointment_item_groups = groups;
+		console.log(appointment);
 		return appointment;
 	}
 
@@ -137,7 +129,7 @@ class WareHouse extends Component {
 					console.dir(types);
 					this.setState({types: types});
 				} else {
-					console.log("获取衣服种类失败")
+					console.log("获取衣服种类失败");
 					this.setState({types: []});
 				}
 			})
@@ -164,7 +156,6 @@ class WareHouse extends Component {
 	 * [hidePopWindow 弹出窗关闭执行的事件]
 	 */
 	hidePopWindow() {
-		console.log("弹出框关闭了")
 		this.setState({ pop: false })
 	}
 
@@ -202,76 +193,58 @@ class WareHouse extends Component {
 
 	// 添加衣服到列表
 	addClotheEvent() {
-		let { _type_name, _count, _store_month, _price, appointment } = this.state;
-		// 预约对象
-		let _appointment = appointment;
-		let _total_price = _count * _store_month * _price;
-
+		let { _type_name, _count, _store_month, _price, _total, appointment } = this.state;
+		_total += _store_month * _price;
 		// 增加一条入库记录
-		_appointment.appointment_item_groups.push({
+		appointment.appointment_item_groups.push({
 			id: null,
 			type_name: _type_name,
 			store_month: _store_month,
 			count: _count,
-			price: _total_price,
-			_per_price: _price
+			price: _price,
 		});
 		// 更新订单合计
-		_appointment.price = this.getTotalPrice(_appointment);
-
 		this.setState({ 
-			appointment: _appointment,
-			pop: false
+			appointment: appointment,
+			pop: false,
+			_total: _total,
 		});
-
-		console.log("添加一类衣服条目 =>");
-		console.dir(_appointment);
 	}
 
 	// 更新列表中的衣服信息
 	updateClotheEvent() {
 		let { _type_name, _count, _store_month, _price, appointment } = this.state;
-		// 预约对象
-		let _appointment = appointment;
 		// 更新的条目
-		let item = _appointment.appointment_item_groups[editItem.index];
-		let _total_price = _count * _store_month * _price;
-
+		let item = appointment.appointment_item_groups[editItem.index];
 		// 如果更新后的数量为0， 则删除条目
 		if (_count === 0) {
-			_appointment.appointment_item_groups.splice(editItem.index, 1)
+			appointment.appointment_item_groups.splice(editItem.index, 1)
 		} else {
 			item.kind = _type_name;
 			item.count = _count;
 			item.store_month = _store_month;
-			item.price = _total_price;
 		}
 		// 更新订单合计
-		_appointment.price = this.getTotalPrice(_appointment);
-
+		let total = this.getTotalPrice(appointment);
 		this.setState({ 
-			appointment: _appointment,
-			_count: 1,
-			pop: false
+			appointment: appointment,
+			pop: false,
+			_total: total,
 		});
-
-		console.log("更新后的appointment对象 =>");
-		console.dir(appointment);
 	}
 
 	/**
 	 * [getTotalPrice 计算本次入库的总价格]
 	 */
 	getTotalPrice(appointment) {
-		let { freight, service_charge, appointment_item_groups } = appointment;
+		let { appointment_item_groups } = appointment;
 		// 入库衣服总价格(无运费、服务费)
 		let total = 0;
 		appointment_item_groups.forEach((item, i, obj) => {
-			total = total + item.price;
+			total = total + item.price * item.store_month;
 		});
-		return total + freight + service_charge;
+		return total;
 	}
-
 
 	/**
 	 * [handleGroupClick 【存衣数量】列表的点击事件]
@@ -279,22 +252,16 @@ class WareHouse extends Component {
 	 * @param  {[type]} item  [点击的条目对象]
 	 */
 	handleGroupClick(index, item) {
-		console.log("你点击了第"+index+"个条目，=>");
-		console.log(item);
-
 		editItem.item = item;
 		editItem.index = index;
-
 		this.setState({
 			_type_name: item.type_name,
 			_store_month: item.store_month,
 			_count: item.count,
-			_price: item._per_price,
+			_price: item.price,
 			pop: true,
 			event: EDIT
 		});
-
-		console.log("点击的更新时长"+item.store_month);
 	}
 
 	/**
@@ -302,15 +269,16 @@ class WareHouse extends Component {
 	 * @return {[type]} [description]
 	 */
 	handleWarehouse() {
-		let appointment_str = JSON.stringify(this.state.appointment);
+		let { appointment, _nurse_charge, _service_charge } = this.state; 
+		appointment.price = this.getAppointmentTotal();
+		appointment.nurse_charge = _nurse_charge;
+		appointment.service_charge = _service_charge;
+		let appointment_str = JSON.stringify(appointment);
 		//存入storage
 		sessionStorage.appointment = appointment_str;
 		sessionStorage.setItem('appointment', appointment_str);
-		console.log("把【appointment】存入sessionStorage");
-		// 读取
-		let appo = sessionStorage.appointment;
-		console.dir(JSON.parse(appo));
-		this.props.router.replace(`order?appointment_id=${this.appointment_id}`)
+		console.log(sessionStorage.getItem('appointment'));
+		// this.props.router.replace(`order?appointment_id=${this.appointment_id}`);
 	}
 
 	/**
@@ -318,10 +286,33 @@ class WareHouse extends Component {
 	 * @param  {[string]} value [选择的护理方式]
 	 */
 	handleNurseChange(value) {
-	  console.log(`选择的护理方式： ${value}`);
 	  let _appointment = this.state.appointment;
 		_appointment.nurse = value;
 	  this.setState({ appointment: _appointment });
+	}
+
+	/**
+	 * [handleNurseChargeInputChange 护理费输入处理]
+	 * @param  {[type]} e [节点]
+	 */
+	handleNurseChargeInputChange(e) {
+		this.setState({ _nurse_charge: e.target.value || '' });
+	}
+
+	/**
+	 * [handleServiceChargeInput 服务费输入处理]
+	 * @param  {[type]} e [节点]
+	 */
+	handleServiceChargeInputChange(e) {
+		this.setState({ _service_charge: e.target.value || '' });
+	}
+
+	getAppointmentTotal() {
+		let { _total, _nurse_charge, _service_charge } = this.state;
+		_total = parseInt(_total) || 0;
+		_nurse_charge = parseInt(_nurse_charge) || 0;
+		_service_charge = parseInt(_service_charge) || 0;
+		return _total + _nurse_charge + _service_charge;
 	}
 
 	render() {
@@ -334,7 +325,7 @@ class WareHouse extends Component {
 			color: '#fff'
 		};
 		// 状态
-		let { appointment, types, pop, event, _type_name, _count, _store_month } = this.state;
+		let { appointment, types, pop, event, _type_name, _count, _store_month, _nurse_charge, _service_charge } = this.state;
 		// 按钮点击性
 		let disabled = appointment.appointment_item_groups.length <= 0;
 
@@ -348,10 +339,8 @@ class WareHouse extends Component {
 				<UserInfo name={appointment.name} 
 									photo={appointment.photo} 
 									phone={appointment.phone} />
-			
 				{/* 仓储类型 */}
 				<ClosetKinds kinds={types} active={_type_name} handleClick={this.selectClotheType.bind(this)}/>
-
 				{/* 存衣数量 */}
 				<div className={css.pane}>
 					<div className={css.pane_header}>存衣数量</div>
@@ -359,12 +348,16 @@ class WareHouse extends Component {
 						<ClothesTable groups={appointment.appointment_item_groups} itemClickEvent={this.handleGroupClick.bind(this)} />
 					</div>
 				</div>
-
 				{/* price */}
 				<div className={css.tips_container}>
 					<div className={css.tips}>
-						护理要求：
-						<Input type="number" style={{ width: 90 }}/>  元 &nbsp;&nbsp;
+						<span>护理要求：</span>
+						<Input 
+							type="number" 
+							style={{ width: 90 }} 
+							onChange={this.handleNurseChargeInputChange.bind(this)}
+							value={_nurse_charge}/>
+						<span> 元 &nbsp;&nbsp;</span>
 						<Select defaultValue={appointment.nurse} style={{ width: 90, marginBootom: 1 }} 
 										onChange={this.handleNurseChange.bind(this)}>
 				      <Option value="every">每次护理</Option>
@@ -373,20 +366,24 @@ class WareHouse extends Component {
 				    </Select>
 					</div>
 					<div className={css.tips}>
-						服务费用：<Input type="number" style={{ width: 90 }} defaultValue={appointment.service_charge}/>  元
+						<span>服务费用：</span>
+						<Input 
+							type="number" 
+							style={{ width: 90 }} 
+							onChange={ this.handleServiceChargeInputChange.bind(this) }
+							value={_service_charge}/>
+						<span> 元</span>
 					</div>
-					<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
+					<p className={css.total_price}>合计：<span>{ this.getAppointmentTotal() }</span></p>
 				</div>
-
 				{/* 入库 */}
 				<div className={css.btn_container}>
 					<Button disabled={disabled}
 									className={css.tab_btn} 
 									onClick={this.handleWarehouse.bind(this)}>入库</Button>
 				</div>
-
 				{/* popwindow */}
-				<PopWindow show={pop} direction='bottom' onCancel={this.hidePopWindow.bind(this)}>
+				<PopWindow show={pop} direction='bottom' onCancel={ this.hidePopWindow.bind(this) }>
 					<div className={css.pop_content}>
 						<div className={css.title}>{_type_name}</div>
 						{/* 仓储时长 */}
@@ -405,7 +402,6 @@ class WareHouse extends Component {
 							  </RadioGroup>
 							</div>
 						</div>
-
 						{/* 存衣数量 */}
 						<div className={css.form_count}>
 							<p>存衣数量</p>

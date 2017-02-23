@@ -42,9 +42,8 @@ class Appointment extends Component {
 	 * [saveAppointmentToLocal 缓存数据]
 	 */
 	saveAppointmentToLocal() {
-		let appointment_str = JSON.stringify(this.state.appointment)
-		console.log("开始缓存数据 ===> " + appointment_str)
-		sessionStorage.setItem('appointment', appointment_str)
+		let appointment_str = JSON.stringify(this.state.appointment);
+		sessionStorage.setItem('appointment', appointment_str);
 	}
 
 	/**

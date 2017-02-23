@@ -35,14 +35,14 @@ export class Order extends Component {
 	 * [getTotalPrice 计算本次入库的总价格]
 	 */
 	getTotalPrice() {
-		let { freight, service_charge, appointment_item_groups } = this.state.appointment
+		let {service_charge, nurse_charge, appointment_item_groups } = this.state.appointment
 		// 入库衣服总价格(无运费、服务费)
 		let total = 0
 		appointment_item_groups.forEach((item, i, obj) => {
 			total = total + item.total_price
 		})
 
-		return total + freight + service_charge
+		return total + service_charge + nurse_charge;
 	}
 
 	/**
@@ -104,7 +104,7 @@ export class Order extends Component {
 					<ClothesTable groups={appointment.appointment_item_groups} />
 					<Row className={css.tips}>
 						<Col span={12}>护理要求：&nbsp;&nbsp;<span>{nurseWay.get(appointment.nurse)}</span></Col>
-						<Col span={12} className="text-right">运费：{appointment.freight}</Col>
+						<Col span={12} className="text-right">护理费：{appointment.nurse_charge}</Col>
 					</Row>
 					<p className="text-right">服务费：{appointment.service_charge}</p>
 					<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
