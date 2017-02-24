@@ -17,7 +17,7 @@ import WareHouse from '../components/warehouse/WareHouse'
 {/* 展示订单 */}
 import { Order } from '../components/orders/Order'
 {/* 订单完成-成功 */}
-import { Success } from '../components/orders/Success'
+import Success from '../components/orders/Success'
 
 export class Routes extends Component {
   // 接收鉴权

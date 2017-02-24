@@ -4,31 +4,32 @@
 	padding-top: 50px;
 	background: #fff;
 	overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  .order {
-  	padding: 15px 15px 0;
-  	.tips {
-  		margin-top: 30px;
-  		span {
-  			color: #ECC17D;
-  		}
-  	}
-  	.total_price {
-  		color: #757575;
-  		font-size: 14px;
-  		margin-bottom: 23px;
-  		span {
-  			color: #ECC17D;
-  			font-size: 24px;
-  		}
-  	}
-  }
+	-webkit-overflow-scrolling: touch;
+	.order {
+		padding: 15px 15px 0;
+		.tips {
+			margin-top: 30px;
+			span {
+				color: #ECC17D;
+			}
+		}
+		.total_price {
+			color: #757575;
+			font-size: 14px;
+			margin-bottom: 23px;
+			span {
+				color: #ECC17D;
+				font-size: 24px;
+			}
+		}
+	}
 	hr {
 		border: none;
 		border-top: 1px dashed #D1C8C0;
 		margin: 10px 15px;
 	}
 }
+
 .submit_order_btn {
 	width: 85%;
 	height: 44px;
@@ -45,6 +46,7 @@
 		background-color: darken(#ECC17D, 10%);
 	}
 }
+
 .modify_order_btn {
 	width: 85%;
 	height: 44px;
@@ -63,40 +65,58 @@
 
 // 成功申请
 .appoint_success {
-	.title {
-		font-size: 19px;
-		text-align: center;
-		color: #ECC17D;
-		border-bottom: 1px solid #D1C8C0;
-		padding: 16px 0;
-		margin-top: 74px;
-		margin-bottom: 34px;
-		line-height: 1;
+	.top_part {
+		height: 50vh;
+		position: relative;
+		.tips {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			margin-top: -92px;
+			width: 100%;
+			img {
+				width: 25%;
+				margin: 0 auto;
+				display: block;
+			}
+			h2 {
+				color: #919191;
+				font-size: 21px;
+				text-align: center;
+				margin-top: 22px;
+			}
+			p {
+				text-align: center;
+				font-size: 12px;
+				color: #ECC17D;
+				line-height: 28px;
+			}
+		}
 	}
-	.tips {
-		color: #757575;
-		font-size: 14px;
-		text-align: center;
-	}
-	.help {
-		padding-top: 85px;
-		text-align: center;
-		.border_div {
-			display: inline-block;
-			height: 40px;
-			width: 150px;
-			border: 1px solid #ECC17D;
-			border-radius: 4px;
-			color: #ADADAD;
-			font-size: 12px;
-			text-align: center;
-			line-height: 1.2;
-			vertical-align: middle;
-			a {
-				margin-top: 6px;
-				color: #ADADAD;
-				text-decoration: none;
-				display: inline-block;
+	.bottom_part {
+		height: 50vh;
+		position: relative;
+		.success_btns {
+			display: block;
+			position: absolute;
+			width: 100%;
+			top: 50%;
+			left: 0;
+			margin-top: -80px;
+			.btn_back {
+				.submit_order_btn;
+				border-radius: 25px;
+				height: 50px;
+				line-height: 50px;
+				margin-top: 0;
+			}
+			.btn_detail {
+				.submit_order_btn;
+				height: 50px;
+				border-radius: 25px;
+				line-height: 50px;
+				background-color: #B8E986;
+				margin-top: 20px;
 			}
 		}
 	}

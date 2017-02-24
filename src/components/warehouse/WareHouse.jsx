@@ -17,6 +17,7 @@
  * 	seq: 预约的订单号,
  * 	state: 订单的状态【服务中, ...】
  * 	created_at: 订单的创建时间,
+ * 	photo: 用户的头像
  * 	【=============欠缺=================】
  * 	nurse: 护理方式[every|one|no],
  *	service_charge: 服务费,
@@ -95,8 +96,8 @@ class WareHouse extends Component {
 		let { appointment_item_groups, nurse_charge, nurse } = data;
 		let groups = appointment_item_groups;
 		// 用户信息
-		let appointment = { 
-			...data,  
+		let appointment = {
+			...data,
 			nurse: nurse || 'every', // 欠缺
  			service_charge: 50, // 欠缺
  			nurse_charge: nurse_charge || 0, // 欠缺
@@ -269,16 +270,43 @@ class WareHouse extends Component {
 	 * @return {[type]} [description]
 	 */
 	handleWarehouse() {
+		// 缓存数据
 		let { appointment, _nurse_charge, _service_charge } = this.state; 
 		appointment.price = this.getAppointmentTotal();
 		appointment.nurse_charge = _nurse_charge;
 		appointment.service_charge = _service_charge;
-		let appointment_str = JSON.stringify(appointment);
 		//存入storage
-		sessionStorage.appointment = appointment_str;
+		let appointment_str = JSON.stringify(appointment);
 		sessionStorage.setItem('appointment', appointment_str);
-		console.log(sessionStorage.getItem('appointment'));
-		// this.props.router.replace(`order?appointment_id=${this.appointment_id}`);
+		// 开始提交，封装更新的数据包
+		let cache = "";
+		appointment.appointment_item_groups.forEach((item, index, obj) => {
+			cache += `appointment_item[groups][][count]=${item.count}`;
+			cache += `&appointment_item[groups][][price]=${item.price}`;
+			cache += `&appointment_item[groups][][type_name]=${item.type_name}`;
+			cache += `&appointment_item[groups][][season]=${item.season}`;
+			cache += `&appointment_item[groups][][store_month]=${item.store_month}&`;
+		});
+		let params = cache.substring(0, cache.length -1);
+
+		console.log(params)
+		SuperAgent
+			.put(`http://closet-api.tallty.com/work/appointments/${appointment.id}`)
+			.set('Accept', 'application/json')
+			.set('X-User-Token', localStorage.authentication_token)
+			.set('X-User-Phone', localStorage.phone)
+			.send(params)
+			.end((err, res) => {
+				if (!err || err === null) {
+					console.log(res);
+					console.log("成功了");
+					this.props.router.replace(`success?appointment_id=${this.appointment_id}`);
+				} else {
+					console.dir(err)
+					console.log("失败了")
+					alert("提交订单失败")
+				}
+			})
 	}
 
 	/**

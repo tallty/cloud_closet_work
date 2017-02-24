@@ -1,8 +1,11 @@
-import React, { Component, PropTypes } from 'react'
-import css from './appoint.less'
-import { Affix } from 'antd'
-import { Link } from 'react-router'
-import { UserInfo } from '../user_info/UserInfo'
+import React, { Component, PropTypes } from 'react';
+import css from './appoint.less';
+import { Affix } from 'antd';
+import { Link } from 'react-router';
+import { UserInfo } from '../user_info/UserInfo';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(css);
 
 export class DateAppointments extends Component {
 	// 预约时间解析
@@ -46,10 +49,18 @@ export class DateAppointments extends Component {
 	initList() {
 		let list = []
 		this.props.items.forEach((item, index, obj) => {
+			let tag_css = cx({
+				tag: true,
+				tag_storing: item.state === '入库中',
+				tag_service: item.state === '服务中',
+				tag_payment: item.state === '待付款',
+				tag_canceled: item.state === '已取消',
+				tag_paied: item.state === '已支付',
+			});
 			list.push(
 				<Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
 					<UserInfo name={item.name} clothe_count={item.number} phone={item.phone} created_at={item.created_at}>
-						<div className={css.tag}>{item.state}</div>
+						<div className={tag_css}>{item.state}</div>
 					</UserInfo>
 					<div className={css.item_footer}>
 						<img src="src/images/address_icon.svg" alt="icon"/>

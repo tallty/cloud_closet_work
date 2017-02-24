@@ -48,38 +48,8 @@ export class Order extends Component {
 	/**
 	 * 完成按钮点击逻辑
 	 */
-	handleClick() {
-		// 封装更新的数据包
-		let appointment = this.state.appointment;
-
-		let cache = "";
-		appointment.appointment_item_groups.forEach((item, index, obj) => {
-			cache += `appointment_item[groups][][count]=${item.count}`;
-			cache += `&appointment_item[groups][][price]=${item.price}`;
-			cache += `&appointment_item[groups][][type_name]=${item.type_name}`;
-			cache += `&appointment_item[groups][][season]=${item.season}`;
-			cache += `&appointment_item[groups][][store_month]=${item.store_month}&`;
-		});
-		let params = cache.substring(0, cache.length -1);
-
-		console.log(params)
-		SuperAgent
-			.put(`http://closet-api.tallty.com/work/appointments/${appointment.id}`)
-			.set('Accept', 'application/json')
-			.set('X-User-Token', localStorage.authentication_token)
-			.set('X-User-Phone', localStorage.phone)
-			.send(params)
-			.end((err, res) => {
-				if (!err || err === null) {
-					console.log(res);
-					console.log("成功了");
-					location.href = "/"
-				} else {
-					console.dir(err)
-					console.log("失败了")
-					alert("提交订单失败")
-				}
-			})
+	handleCancelClick() {
+		// TODO 取消订单
 	}
 
 	render() {
@@ -112,11 +82,15 @@ export class Order extends Component {
 				</div>
 
 				<hr/>
-				<UserInfo name={appointment.name} photo={appointment.photo} phone={appointment.phone} />
+				<UserInfo 
+					name={appointment.name} 
+					photo={appointment.photo} 
+					phone={appointment.phone} />
 				<hr/>
 
+				<Link to={`/warehouse?appointment_id=${appointment.id}`} className={css.modify_order_btn}>在线充值</Link>
 				<Link to={`/warehouse?appointment_id=${appointment.id}`} className={css.modify_order_btn}>修改订单</Link>
-				<button className={css.submit_order_btn} onClick={this.handleClick.bind(this)}>确认订单</button>
+				<button className={css.submit_order_btn} onClick={this.handleCancelClick.bind(this)}>取消订单</button>
 			</div>
 		)
 	}

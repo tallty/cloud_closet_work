@@ -18,7 +18,6 @@ export class UserInfo extends Component {
 
 	getItem() {
 		const { name, phone, clothe_count, created_at } = this.props
-
 		if (this.props.clothe_count != -1) {
 			return (
 				<div className={css.content_left}>

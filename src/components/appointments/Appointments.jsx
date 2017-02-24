@@ -16,16 +16,6 @@ export class Appointments extends Component {
 		let appointments = JSON.parse(sessionStorage.appointments)
 		this.setState({ appointments: appointments })	
 	}
-	
-	initList() {
-		let list = []
-		this.state.appointments.forEach((dateItems, index, obj) => {
-			list.push(
-				<DateAppointments date={dateItems.date} items={dateItems.items} key={index} />
-			)
-		})
-		return list
-	}
 
 	render() {
 		let toolbar_style = {
@@ -42,7 +32,7 @@ export class Appointments extends Component {
 								url="/" 
 								style={toolbar_style} 
 								back_style={back_style} />
-				{ this.initList() }
+				{ this.state.appointments.map((item, i) => (<DateAppointments date={item.date} items={item.items} key={i} />)) }
 			</div>
 		)
 	}
