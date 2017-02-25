@@ -28,11 +28,11 @@ Toolbar.defaultProps = {
 	url: "/",
 	menuUrl: "/",
 	style: {
-		color: '#7F7F7F',
-		background: '#ffffff'
+		color: '#fff',
+		background: '#ECC17D'
 	},
 	back_style: {
-		color: '#7f7f7f'
+		color: '#fff'
 	}
 }
 
