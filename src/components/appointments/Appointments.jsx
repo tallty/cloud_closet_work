@@ -18,20 +18,9 @@ export class Appointments extends Component {
 	}
 
 	render() {
-		let toolbar_style = {
-			background: '#ECC17D', 
-			color: '#fff'
-		}
-		let back_style = {
-			color: '#fff'
-		}
-
 		return (
 			<div className={css.appointments} id="appointments">
-				<Toolbar title="预约清单"
-								url="/" 
-								style={toolbar_style} 
-								back_style={back_style} />
+				<Toolbar title="预约清单" url="/" />
 				{ this.state.appointments.map((item, i) => (<DateAppointments date={item.date} items={item.items} key={i} />)) }
 			</div>
 		)

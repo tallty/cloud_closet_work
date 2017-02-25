@@ -19,7 +19,7 @@
  * 	created_at: 订单的创建时间,
  * 	photo: 用户的头像
  * 	【=============欠缺=================】
- * 	nurse: 护理方式[every|one|no],
+ * 	nurse: 护理方式[normal | senior],
  *	service_charge: 服务费,
  *	nurse_charge: 护理费用,
  * 	【==================================】
@@ -63,6 +63,7 @@ class WareHouse extends Component {
 	state = {
 		appointment: null,			// 【Data】服务的订单对象
 		types: [],							// 【Data】所有衣服类型
+		loading: false,         // 【Logic】载入状态
 		pop: false,							// 【Logic】弹框控制
 		event: null,						// 【Logic】事件：【新增 | 编辑】
 		_type_name: null, 			// 【Logic】选择的类型
@@ -98,7 +99,7 @@ class WareHouse extends Component {
 		// 用户信息
 		let appointment = {
 			...data,
-			nurse: nurse || 'every', // 欠缺
+			nurse: nurse || 'normal', // 欠缺
  			service_charge: 50, // 欠缺
  			nurse_charge: nurse_charge || 0, // 欠缺
 		};
@@ -270,6 +271,7 @@ class WareHouse extends Component {
 	 * @return {[type]} [description]
 	 */
 	handleWarehouse() {
+		this.setState({ loading: true });
 		// 缓存数据
 		let { appointment, _nurse_charge, _service_charge } = this.state; 
 		appointment.price = this.getAppointmentTotal();
@@ -297,13 +299,10 @@ class WareHouse extends Component {
 			.set('X-User-Phone', localStorage.phone)
 			.send(params)
 			.end((err, res) => {
+				this.setState({ loading: false });
 				if (!err || err === null) {
-					console.log(res);
-					console.log("成功了");
 					this.props.router.replace(`success?appointment_id=${this.appointment_id}`);
 				} else {
-					console.dir(err)
-					console.log("失败了")
 					alert("提交订单失败")
 				}
 			})
@@ -353,9 +352,9 @@ class WareHouse extends Component {
 			color: '#fff'
 		};
 		// 状态
-		let { appointment, types, pop, event, _type_name, _count, _store_month, _nurse_charge, _service_charge } = this.state;
+		const { appointment, types, pop, loading, event, _type_name, _count, _store_month, _nurse_charge, _service_charge } = this.state;
 		// 按钮点击性
-		let disabled = appointment.appointment_item_groups.length <= 0;
+		const disabled = appointment.appointment_item_groups.length <= 0;
 
 		return (
 			<div className={css.container}>
@@ -388,9 +387,8 @@ class WareHouse extends Component {
 						<span> 元 &nbsp;&nbsp;</span>
 						<Select defaultValue={appointment.nurse} style={{ width: 90, marginBootom: 1 }} 
 										onChange={this.handleNurseChange.bind(this)}>
-				      <Option value="every">每次护理</Option>
-				      <Option value="one">一次护理</Option>
-				      <Option value="no">不护理</Option>
+				      <Option value="normal">普通护理</Option>
+				      <Option value="senior">高级护理</Option>
 				    </Select>
 					</div>
 					<div className={css.tips}>
@@ -408,6 +406,7 @@ class WareHouse extends Component {
 				<div className={css.btn_container}>
 					<Button disabled={disabled}
 									className={css.tab_btn} 
+									loading={loading}
 									onClick={this.handleWarehouse.bind(this)}>入库</Button>
 				</div>
 				{/* popwindow */}

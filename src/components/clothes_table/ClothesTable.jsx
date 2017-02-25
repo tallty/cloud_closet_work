@@ -53,7 +53,7 @@ export class ClothesTable extends Component {
 		return (
 			<div>
 				<Row className={css.order_table_header}>
-					<Col span={7} style={{textAlign: 'left'}}>种类</Col>
+					<Col span={7} style={{textAlign: 'left', paddingLeft: 4}}>种类</Col>
 					<Col span={5}>仓储时长</Col>
 					<Col span={4}>存衣数量</Col>
 					<Col span={4}>衣柜单价</Col>

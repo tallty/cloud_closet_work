@@ -73,99 +73,71 @@
 .appointment {
 	height: 100%;
 	padding-top: 50px;
-	padding-bottom: 50px;
+	padding-bottom: 64px;
 	background: #fff;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 	z-index: 1;
-	.div_one {
-		height: 68px;
-		border-bottom: 1px solid #EBEBEB;
-	}
-	.div_two {
-		height: 111px;
-		border-bottom: 1px solid #EBEBEB;
-		position: relative;
-		.photo {
-			height: 70px;
-			width: 70px;
-			border-radius: 35px;
-			position: absolute;
-			top: -35px;
-			left: 50%;
-			margin-left: -35px;
-		}
-		.name {
-			color: #919191;
-			padding-top: 40px;
-			font-size: 16px;
-			text-align: center;
-			font-weight: normal;
-		}
-		.phone {
-			font-size: 16px;
-			color: #000;
-			text-align: center;
-			display: block;
-			img {
-				height: 16px;
-				margin-right: 8px;
-				vertical-align: middle;
-			}
-			span {
-				vertical-align: middle;
-				font-weight: normal;
-			}
-		}
-	}
-	.div_three {
-		padding-top: 28px;
+	.appoint_info {
+		padding-top: 20px;
 		text-align: center;
 		line-height: 28px;
-		.address {
-			font-size: 14px;
-			color: #757575;
-			margin-bottom: 18px;
-			display: block;
-			img {
-				height: 15px;
-				margin-right: 8px;
-				vertical-align: middle;
-			}
-			span {
-				vertical-align: middle;
-			}
-		}
 		.time_count {
-			color: #000;
+			color: #EBBA6C;
 			font-size: 13px;
 		}
-		.timeline {
-			width: 80px;
-			margin: 10px auto;
-			text-align: left;
-			line-height: 1.5;
+	}
+	.order {
+		padding: 15px 15px 0;
+		.tips {
+			margin-top: 30px;
+			span {
+				color: #ECC17D;
+			}
+		}
+		.total_price {
+			color: #757575;
+			font-size: 14px;
+			margin-bottom: 23px;
+			span {
+				color: #ECC17D;
+				font-size: 24px;
+			}
 		}
 	}
-	.warehouse {
-		width: 270px;
+	.affix_bottom {
+		position: fixed;
+		left: 0;
+		bottom: 10px;
+		width: 100%;
+		display: block;
+	}
+	.common_btn(@bg, @color, @border, @active) {
+		width: 85%;
 		height: 44px;
-		border: none;
+		border: 1px solid @border;
 		text-align: center;
 		line-height: 44px;
-		background-color: #ECC17D;
-		color: #fff;
+		background-color: @bg;
+		color: @color;
 		font-size: 16px;
 		border-radius: 22px;
-		margin: 48px auto 0;
+		margin: 10px auto;
 		display: block;
-		position: fixed;
-		bottom: 24px;
-		left: 50%;
 		padding: 0;
-		margin-left: -135px;
 		&:active {
-			background-color: darken(#ECC17D, 10%);
+			background-color: darken(@active, 10%);
 		}
+	}
+	.main_btn {
+		.common_btn(#ECC17D, #fff, #ECC17D, #ECC17D);
+	}
+	.change_btn {
+		.common_btn(#757575, #fff, #757575, #757575);
+	}
+	.recharge_btn{
+		.common_btn(#fff, #757575, #ECC17D, #eee);
+		margin-bottom: 20px;
+		margin-top: 26px;
 	}
 }

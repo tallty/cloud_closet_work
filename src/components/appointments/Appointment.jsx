@@ -7,17 +7,24 @@ import { Toolbar } from '../common/Toolbar'
 import { Spiner } from '../common/Spiner'
 import { Link, withRouter } from 'react-router'
 import SuperAgent from 'superagent'
-import { Button, Timeline, Icon } from 'antd'
+import { Button, Row, Col } from 'antd';
+import StateUserInfo from '../user_info/StateUserInfo';
+import { ClothesTable } from '../clothes_table/ClothesTable';
+
+const nurseWay = new Map([
+	['normal', '普通护理'],
+	['senior', '高级护理'],
+]);
 
 class Appointment extends Component {
-	id = this.props.location.query.id
+	id = this.props.location.query.id;
 	state = {
 		appointment: null,
 		loading: false,
 		error_text: null
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		SuperAgent
 			.get(`http://closet-api.tallty.com/work/appointments/${this.id}`)
 			.set('Accept', 'application/json')
@@ -35,39 +42,24 @@ class Appointment extends Component {
 
 	componentDidUpdate(prevProps, prevState) {
 		// 缓存appointment
-		this.saveAppointmentToLocal();
-	}
-
-	/**
-	 * [saveAppointmentToLocal 缓存数据]
-	 */
-	saveAppointmentToLocal() {
 		let appointment_str = JSON.stringify(this.state.appointment);
 		sessionStorage.setItem('appointment', appointment_str);
 	}
 
 	/**
-	 * 获取物流信息
+	 * 获取当期订单的状态
 	 */
-	getLogistics() {
+	getStates() {
+		const nextStates = {
+			'待确认': '录入',
+			'服务中': '付款',
+			'待付款': '入库',
+			'已支付': '入库',
+			'入库中': '上架',
+			'已上架': '',
+		};
 		let state = this.state.appointment.state;
-		let states = ["用户预约","待确认","服务中","待付款","已支付","入库中","已上架"];
-		let logistics = []
-		
-		if (state != "已取消") {
-			for (let item of states) {
-				if (state === item) break;
-				logistics.push( <Timeline.Item key={item}>{item}</Timeline.Item> );
-			}
-		}
-
-		logistics.push( 
-			<Timeline.Item key={"active"}>
-				<span style={{color: '#FD924B'}}>{state}</span>
-			</Timeline.Item> 
-		);
-
-		return logistics;
+		return [state, nextStates[state]];
 	}
 
 	/**
@@ -116,13 +108,6 @@ class Appointment extends Component {
 	}
 
 	/**
-	 * 工作人员代付
-	 */
-	handleWorkerPay() {
-		alert("POS机支付");
-	}
-
-	/**
 	 * 工作人员送入仓库后，开始入库登记时确认
 	 */
 	handleConfirmStoring() {
@@ -142,11 +127,12 @@ class Appointment extends Component {
 	}
 
 	/**
-	 * 返回首页
+	 * 在线充值
 	 */
-	handleBackHome() {
-		this.props.router.replace('/');
+	handleRecharge() {
+		alert('在线充值');
 	}
+	
 
 	/**
 	 * 不同状态的按钮事件
@@ -155,18 +141,14 @@ class Appointment extends Component {
 		switch(this.state.appointment.state) {
 			case "待确认":
 				return this.handleAccept();
-				break;
 			case "服务中":
 				return this.handleRecord();
-				break;
 			case "待付款":
-				return this.handleWorkerPay();
-				break;
+				return this.handleCancel();
 			case "已支付":
 				return this.handleConfirmStoring();
-				break;
 			default:
-				return this.handleBackHome();
+				this.props.router.replace('/');
 				break;
 		}
 	}
@@ -181,81 +163,109 @@ class Appointment extends Component {
 		switch(this.state.appointment.state) {
 			case "待确认":
 				return "确认接单";
-				break;
 			case "服务中":
-				return "开始录入";
-				break;
+				return "添加入库清单";
 			case "待付款":
-				return "POS机支付";
-				break;
+				return "取消订单";
 			case "已支付":
 				return "确认入库";
-				break;
 			default:
 				return "返回首页";
-				break;
 		}
 	}
 
+	/**
+	 * 显示订单信息：
+	 * 1、预约信息
+	 * 2、入库衣服信息
+	 */
+	showAppointmentInfo(appointment) {
+		return appointment.appointment_item_groups.length === 0 ? 
+			<div className={css.appoint_info}>
+				<p className={css.time_count}>预约时间：{appointment.date}</p>
+				<p className={css.time_count}>预约件数：{appointment.number} 件</p>
+			</div> : 
+			<div className={css.order}>
+				<ClothesTable groups={appointment.appointment_item_groups} />
+				<Row className={css.tips}>
+					<Col span={12}>护理要求：&nbsp;&nbsp;<span>{nurseWay.get(appointment.nurse)}</span></Col>
+					<Col span={12} className="text-right">护理费：{appointment.nurse_charge}</Col>
+				</Row>
+				<p className="text-right">服务费：{appointment.service_charge}</p>
+				<p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
+			</div>;
+	}
 
-	setDetail() {
-		let { appointment } = this.state;
+	/**
+	 * 根据状态显示不同的操作按钮
+	 * 1、待确认 —— 确认接单
+	 * 2、服务中 —— 添加入库清单
+	 * 3、待付款 —— 【线下充值 | 修改订单 | 取消订单】
+	 * 4、已支付 —— 确认入库
+	 * 5、已入库 —— 返回首页
+	 * 6、已上架 —— 返回首页
+	 */
+	showStateBtns(state) {
+		const btns = (
+			<div>
+				<Button 
+					className={css.recharge_btn}
+					onClick={this.handleRecharge.bind(this)}>
+					在线充值
+				</Button>
+				<Button 
+					className={css.change_btn}
+					onClick={this.handleRecord.bind(this)}>
+					修改订单
+				</Button>
+				<Button 
+					className={css.main_btn} 
+					loading={ this.state.loading }
+					onClick={ this.handleEvent.bind(this) }>
+					{this.getBtnText()}
+				</Button>
+			</div>
+		);
+		const btn = (
+			<div className={css.affix_bottom}>
+				<Button 
+					className={css.main_btn} 
+					loading={ this.state.loading }
+					onClick={ this.handleEvent.bind(this) }>
+					{this.getBtnText()}
+				</Button>
+			</div>
+		);
+		return state === '待付款' ? btns : btn;
+	}
+	
+	showAppointmentDetail() {
+		const { appointment } = this.state;
+
 		if (appointment === null) {
-			return <Spiner />
-		} else if (appointment === -1) {
-			return null
+			return <Spiner />;
 		} else {
+			const states = this.getStates();
 			let photo_path = appointment.photo ? appointment.photo : "src/images/default_photo.svg"
 			return (
 				<div >
-					<div className={css.div_two}>
-						<img src={photo_path} alt="" className={css.photo}/>
-						<p className={css.name}>{appointment.name}</p>
-						<a href={`tel:${appointment.phone}`} className={css.phone}>
-							<img src="src/images/phone_icon.svg" alt=""/>
-							<span>{appointment.phone}</span>
-						</a>
-					</div>
-					<div className={css.div_three}>
-						<p className={css.address}>
-							<img src="src/images/address_icon.svg" alt=""/>
-							<span>{appointment.address}</span>
-						</p>
-						<p className={css.time_count}>预约时间：{appointment.date}</p>
-						<p className={css.time_count}>预约件数：{appointment.number} 件</p>
+					<StateUserInfo 
+						nowState={ states[0] } 
+						nextState={ states[1] }
+						user={appointment} />
 
-						<div className={css.timeline}>
-							<Timeline>
-								{this.getLogistics()}
-					    </Timeline>
-						</div>
-					</div>
-					
-					<Button className={css.warehouse} 
-									loading={this.state.loading}
-									onClick={this.handleEvent.bind(this)}>{this.getBtnText()}</Button>
+					{ this.showAppointmentInfo(appointment) }
+					{ this.showStateBtns(appointment.state) }
 				</div> 
 			)
 		}
 	}
 
 	render() {
-		let toolbar_style = {
-			background: '#ECC17D', 
-			color: '#fff'
-		}
-		let back_style = {
-			color: '#fff'
-		}
-
 		return (
 			<div className={css.appointment}>
-				<Toolbar title="预约详情" 
-								url="/appointments" 
-								style={toolbar_style} 
-								back_style={back_style} />
-				<div className={css.div_one}></div>
-				{ this.setDetail() }				
+				<Toolbar title="预约详情" url="/appointments" />
+				{ this.showAppointmentDetail() }		
 			</div>
 		);
 	}

@@ -20,7 +20,7 @@ class Success extends Component {
 				<div className={css.bottom_part}>
 					<div className={css.success_btns}>
 						<Link to="/" className={css.btn_back}>返回列表</Link>
-						<Link to={`order?appointment_id=${appointment_id}`} className={css.btn_detail}>查看详情</Link>
+						<Link to={`appointment?id=${appointment_id}`} className={css.btn_detail}>查看详情</Link>
 					</div>
 				</div>
 			</div>

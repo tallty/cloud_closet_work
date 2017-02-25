@@ -58,6 +58,7 @@
     "link-color": "#ECC17D",
     "info-color": "#ECC17D",
     "body-background": "#F8F8F8",
-    "text-color": "#7F7F7F"
+    "text-color": "#7F7F7F",
+    "font-size-base": "12px"
   }
 }

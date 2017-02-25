@@ -12,9 +12,8 @@ import { Row, Col } from 'antd'
 import SuperAgent from 'superagent'
 
 const nurseWay = new Map([
-	['every', '每次护理'],
-	['one', '一次护理'],
-	['no', '不护理']
+	['normal', '普通护理'],
+	['senior', '高级护理'],
 ]);
 
 export class Order extends Component {
