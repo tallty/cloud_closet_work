@@ -26,7 +26,7 @@
  * 	appointment_item_groups: [
  * 	  {
  * 			id: 条目id,
- * 			count: 衣服数量,
+ * 			count: 衣柜最大容量,
  * 			store_month: 仓储时长（月）,
  * 			price: 选择的衣柜的单价（元/月）,
  * 			type_name: 柜子的类别,
@@ -42,9 +42,10 @@ import { ClothesTable } from '../clothes_table/ClothesTable';
 import { ClosetKinds } from './ClosetKinds';
 import { Spiner } from '../common/Spiner';
 import { Toolbar } from '../common/Toolbar';
-import { Row, Col, Button, Radio, Select, Input } from 'antd';
+import { Row, Col, Button, Radio, Select, Input, InputNumber } from 'antd';
 import { PopWindow } from '../common/PopWindow';
 import SuperAgent from 'superagent';
+import CountEditer from './CountEditer';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -67,12 +68,15 @@ class WareHouse extends Component {
 		pop: false,							// 【Logic】弹框控制
 		event: null,						// 【Logic】事件：【新增 | 编辑】
 		_type_name: null, 			// 【Logic】选择的类型
-		_count: 1,							// 【Logic】存衣数量
+		_count: 1,							// 【Logic】衣柜容量
 		_store_month: 3,				// 【Logic】存储时长
 		_price: 0, 							// 【Logic】衣柜的单价,
 		_total: 0,              // 【Logic】订单的总价,
 		_nurse_charge: 0,       // 【Logic】订单的护理费,
 		_service_charge: 0,     // 【Logic】订单的服务费,
+		_fold_count: 0,
+		_hang_count: 0,
+		_dress_count: 0,
 	}
 
 	componentWillMount() {
@@ -91,8 +95,7 @@ class WareHouse extends Component {
 	}
 
 	// 解析【appointment】数据
-	parseAppointment(data) {
-		console.log(data);		
+	parseAppointment(data) {	
 		// 整理成需要的对象（因为接口字段还不完整）
 		let { appointment_item_groups, nurse_charge, nurse } = data;
 		let groups = appointment_item_groups;
@@ -112,7 +115,6 @@ class WareHouse extends Component {
 			}
 		});
 		appointment.appointment_item_groups = groups;
-		console.log(appointment);
 		return appointment;
 	}
 
@@ -128,7 +130,6 @@ class WareHouse extends Component {
 			.end((err, res) => {
 				if (!err || err === null) {
 					let types = res.body.price_systems;
-					console.dir(types);
 					this.setState({types: types});
 				} else {
 					console.log("获取衣服种类失败");
@@ -149,7 +150,7 @@ class WareHouse extends Component {
 			event: NEW,
 			_type_name: type.name,
 			_price: type.price,
-			_count: 1,
+			_count: 60,
 			_store_month: 3
 		})
 	}
@@ -162,6 +163,13 @@ class WareHouse extends Component {
 	}
 
 	/**
+	 * [handleCountChange] 处理数量改变
+	 */
+	handleCountChange(count) {
+		this.setState({ _count: count });
+	}
+
+	/**
 	 * [onLengthChange 改变仓储时长]
 	 * @param  {[node]} e [选择的radio按钮]
 	 */
@@ -171,26 +179,6 @@ class WareHouse extends Component {
 		this.setState({
 			_store_month: length
 		})
-	}
-	
-	/**
-	 * [reduceCount 减少衣服数量]
-	 */
-	reduceCount() {
-		let count = this.state._count
-		if (count > 0) {
-			count -= 1
-			this.setState({_count: count})
-		}
-	} 
-
-	/**
-	 * [addCount 增加衣服数量]
-	 */
-	addCount() {
-		let count = this.state._count
-		count += 1
-		this.setState({_count: count})
 	}
 
 	// 添加衣服到列表
@@ -249,7 +237,7 @@ class WareHouse extends Component {
 	}
 
 	/**
-	 * [handleGroupClick 【存衣数量】列表的点击事件]
+	 * [handleGroupClick 【衣柜记录】列表的点击事件]
 	 * @param  {[type]} index [点击的条目在appointment.appointment_item_groups中的索引]
 	 * @param  {[type]} item  [点击的条目对象]
 	 */
@@ -334,6 +322,14 @@ class WareHouse extends Component {
 		this.setState({ _service_charge: e.target.value || '' });
 	}
 
+	/**
+	 * 处理不同种类衣服的数量
+	 */
+	handleKindClothesCount(kind, value) {
+		console.log(value, kind);
+		this.setState({ [kind]: value });
+	}
+
 	getAppointmentTotal() {
 		let { _total, _nurse_charge, _service_charge } = this.state;
 		_total = parseInt(_total) || 0;
@@ -343,14 +339,6 @@ class WareHouse extends Component {
 	}
 
 	render() {
-		// toolbar 样式
-		let toolbar_style = {
-			background: '#ECC17D', 
-			color: '#fff'
-		};
-		let back_style = {
-			color: '#fff'
-		};
 		// 状态
 		const { appointment, types, pop, loading, event, _type_name, _count, _store_month, _nurse_charge, _service_charge } = this.state;
 		// 按钮点击性
@@ -358,48 +346,87 @@ class WareHouse extends Component {
 
 		return (
 			<div className={css.container}>
-				<Toolbar title="预约入库" 
-									url={`/appointment?id=${this.appointment_id}`}
-									style={toolbar_style} 
-									back_style={back_style} />
-				{/* 用户信息 */}
+				<Toolbar title="预约入库" url={`/appointment?id=${this.appointment_id}`} />
+				{/* 
 				<UserInfo name={appointment.name} 
 									photo={appointment.photo} 
-									phone={appointment.phone} />
+									phone={appointment.phone} /> */}
 				{/* 仓储类型 */}
 				<ClosetKinds kinds={types} active={_type_name} handleClick={this.selectClotheType.bind(this)}/>
-				{/* 存衣数量 */}
+				{/* 衣柜记录 */}
 				<div className={css.pane}>
-					<div className={css.pane_header}>存衣数量</div>
+					<div className={css.pane_header}>衣柜记录</div>
 					<div className={css.pane_body}>
 						<ClothesTable groups={appointment.appointment_item_groups} itemClickEvent={this.handleGroupClick.bind(this)} />
 					</div>
 				</div>
+				{/* 衣服种类数量 */}
+				<div className={css.pane}>
+					<div className={css.pane_header}>种类件数</div>
+					<div className={css.pane_body}>
+						<Row>
+							<Col xs={{span: 12}} sm={{span: 6}}>
+								<div className={css.pane_input}>
+									<span>叠放：</span>
+									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }} 
+										value={this.state._fold_count}
+										onChange={this.handleKindClothesCount.bind(this, '_fold_count')} />
+									<span> 件 </span>
+								</div>
+							</Col>
+							<Col xs={{span: 12}} sm={{span: 6}}>
+								<div className={css.pane_input}>
+									<span>挂放：</span>
+									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }}
+										value={this.state._hang_count}
+										onChange={this.handleKindClothesCount.bind(this, '_hang_count')} />
+									<span> 件 </span>
+								</div>
+							</Col>
+							<Col xs={{span: 12}} sm={{span: 6}}>
+								<div className={css.pane_input}>
+									<span>礼服：</span>
+									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }}
+										value={this.state._dress_count}
+										onChange={this.handleKindClothesCount.bind(this, '_dress_count')} />
+									<span> 件 </span>
+								</div>
+							</Col>
+						</Row>
+					</div>
+				</div>
 				{/* price */}
 				<div className={css.tips_container}>
-					<div className={css.tips}>
-						<span>护理要求：</span>
-						<Input 
-							type="number" 
-							style={{ width: 90 }} 
-							onChange={this.handleNurseChargeInputChange.bind(this)}
-							value={_nurse_charge}/>
-						<span> 元 &nbsp;&nbsp;</span>
-						<Select defaultValue={appointment.nurse} style={{ width: 90, marginBootom: 1 }} 
-										onChange={this.handleNurseChange.bind(this)}>
-				      <Option value="normal">普通护理</Option>
-				      <Option value="senior">高级护理</Option>
-				    </Select>
-					</div>
-					<div className={css.tips}>
-						<span>服务费用：</span>
-						<Input 
-							type="number" 
-							style={{ width: 90 }} 
-							onChange={ this.handleServiceChargeInputChange.bind(this) }
-							value={_service_charge}/>
-						<span> 元</span>
-					</div>
+					<Row>
+						<Col sm={{span: 12}}>
+							<div className={css.tips}>
+								<span>护理要求：</span>
+								<InputNumber 
+									min={0}
+									style={{ width: 90, borderColor: '#ECC17D' }} 
+									onChange={this.handleNurseChargeInputChange.bind(this)}
+									value={_nurse_charge}/>
+								<span> 元 &nbsp;&nbsp;</span>
+								<Select defaultValue={appointment.nurse} style={{ width: 90, marginBootom: 1 }} 
+												onChange={this.handleNurseChange.bind(this)}>
+						      <Option value="normal">普通护理</Option>
+						      <Option value="senior">高级护理</Option>
+						    </Select>
+							</div>
+						</Col>
+
+						<Col sm={{span: 12}}>
+							<div className={css.tips}>
+								<span>服务费用：</span>
+								<InputNumber 
+									min={0}
+									style={{ width: 90, borderColor: '#ECC17D' }} 
+									onChange={ this.handleServiceChargeInputChange.bind(this) }
+									value={_service_charge}/>
+								<span> 元</span>
+							</div>
+						</Col>
+					</Row>
 					<p className={css.total_price}>合计：<span>{ this.getAppointmentTotal() }</span></p>
 				</div>
 				{/* 入库 */}
@@ -417,9 +444,10 @@ class WareHouse extends Component {
 						<div className={css.warehouse_length}>
 							<p>仓储时长</p>
 							<div className={css.radio_container}>
-								<RadioGroup onChange={this.onLengthChange.bind(this)} 
-														value={`${this.state._store_month}`}
-														defaultValue="3">
+								<RadioGroup 
+									onChange={this.onLengthChange.bind(this)} 
+									value={`${this.state._store_month}`}
+									defaultValue="3">
 							    <RadioButton value="3">三个月</RadioButton>
 							    <RadioButton value="6">六个月</RadioButton>
 							    <RadioButton value="9">九个月</RadioButton>
@@ -429,19 +457,8 @@ class WareHouse extends Component {
 							  </RadioGroup>
 							</div>
 						</div>
-						{/* 存衣数量 */}
-						<div className={css.form_count}>
-							<p>存衣数量</p>
-							<div className={css.count_input}>
-								<Button className={css.count_button} onClick={this.reduceCount.bind(this)}>
-									<img src="src/images/reduce_icon.svg" alt="-"/>
-								</Button>
-			          <Input type="number" disabled={true} value={`${_count}`} />
-			          <Button className={css.count_button} onClick={this.addCount.bind(this)}>
-			          	<img src="src/images/add_icon.svg" alt="+"/>
-			          </Button>
-							</div>
-						</div>
+						{/* 衣柜数量 */}
+						<CountEditer defaultCount={1} onChange={this.handleCountChange.bind(this)} />
 						{/* 操作 */}
 						<div className={css.actions}>
 							<div className={css.btn}>

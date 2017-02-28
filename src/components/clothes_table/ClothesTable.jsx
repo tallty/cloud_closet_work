@@ -40,8 +40,8 @@ export class ClothesTable extends Component {
 						</div>
 					</Col>
 					<Col span={5}>{this.parseStoreMonth.get(item.store_month)}</Col>
-					<Col span={4}>{item.count}</Col>
-					<Col span={4}>{item.price}</Col>
+					<Col span={4}>{item.count}件</Col>
+					<Col span={4}>{item.price}/月</Col>
 					<Col span={4}>{item.price * item.store_month}</Col>
 				</Row>
 			)
@@ -55,15 +55,15 @@ export class ClothesTable extends Component {
 				<Row className={css.order_table_header}>
 					<Col span={7} style={{textAlign: 'left', paddingLeft: 4}}>种类</Col>
 					<Col span={5}>仓储时长</Col>
-					<Col span={4}>存衣数量</Col>
-					<Col span={4}>衣柜单价</Col>
+					<Col span={4}>容量</Col>
+					<Col span={4}>单价</Col>
 					<Col span={4}>总价</Col>
 				</Row>
 				{ 
 					this.props.groups.length > 0 ? 
 						this.getOrderList() :
 						<Row>
-							<Col span={24} className={css.empty_table}>未添加任何衣服</Col>
+							<Col span={24} className={css.empty_table}>未添加衣柜</Col>
 						</Row>
 				}
 			</div>

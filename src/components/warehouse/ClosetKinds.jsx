@@ -62,6 +62,7 @@ ClosetKinds.PropTypes = {
 			name: string,
 			icon_image: string,
 			price: number,
+			capacity: number,
 		})
 	),
 	active: string,

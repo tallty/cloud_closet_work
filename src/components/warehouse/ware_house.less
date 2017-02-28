@@ -8,6 +8,7 @@
 	// 存衣数量
 	.pane {
 		padding: 0px 3px;
+		margin-bottom: 10px;
 		.pane_header {
 			height: 28px;
 			line-height: 28px;
@@ -20,13 +21,16 @@
 			padding: 6px 10px;
 			border: 1px solid #CCCCCC;
 			border-top: none;
+			.pane_input {
+				margin-bottom: 10px;
+			}
 		}
 	}
 	// tips
 	.tips_container {
 		padding: 16px;
 		font-size: 12px;
-		input {
+		.ant-input-number {
 			vertical-align: middle;
 			border-color: @primary;
 		}
@@ -44,9 +48,6 @@
 	}
 	// 入库
 	.btn_container {
-		// position: fixed;
-		// bottom: 0;
-		// left: 0;
 		width: 100%;
 		background: #fff;
 		padding: 8px 0px 24px;
@@ -70,7 +71,7 @@
 		}
 		.tab_btn[disabled] {
 			color: lighten(#fff, 10%);
-			background-color: lighten(@primary, 10%);
+			background-color: lighten(@primary, 20%);
 		}
 	}
 
@@ -100,42 +101,6 @@
 				width: 225px;
 				text-align: left;
 				margin: 0 auto;
-			}
-		}
-		.form_count {
-			padding: 15px;
-			text-align: center;
-			color: #4A4A4A;
-			font-size: 14px;
-			p {
-				margin-bottom: 10px;
-			}
-			.count_input {
-				width: 160px;
-				height: 40px;
-				line-height: 40px;
-				margin: 0 auto;
-				.count_button {
-					border-color: transparent;
-					padding: 0;
-					border-radius: 50%;
-					img {
-						display: inline-block;
-						height: 40px;
-						width: 40px;
-						vertical-align: middle;
-					}
-				}
-				span {
-					vertical-align: middle;
-				}
-				input {
-					width: 50px;
-					margin: 0 10px;
-					display: inline-block;
-					vertical-align: middle;
-					text-align: center;
-				}
 			}
 		}
 		.actions {
