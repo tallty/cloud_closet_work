@@ -3,8 +3,8 @@
 	height: 100%;
 	padding-top: 50px;
 	overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  background: #fff;
+	-webkit-overflow-scrolling: touch;
+	background: #fff;
 	// 存衣数量
 	.pane {
 		padding: 0px 3px;
@@ -18,11 +18,21 @@
 			background: @primary;
 		}
 		.pane_body {
-			padding: 6px 10px;
+			padding: 6px 10px 10px;
 			border: 1px solid #CCCCCC;
 			border-top: none;
+			.title {
+				text-align: center;
+				border-bottom: 1px solid #D6D9E1;
+				line-height: 24px;
+			}
 			.pane_input {
-				margin-bottom: 10px;
+				margin-top: 10px;
+				img {
+					height: 30px;
+					vertical-align: middle;
+					margin-right: 5px;
+				}
 			}
 		}
 	}
@@ -37,7 +47,7 @@
 		.tips {
 			margin-bottom: 10px;
 		}
-	  .total_price {
+		.total_price {
 			color: #757575;
 			font-size: 14px;
 			span {
@@ -74,7 +84,6 @@
 			background-color: lighten(@primary, 20%);
 		}
 	}
-
 	// 添加衣服PopWindow
 	.pop_content {
 		padding: 0 16px;
@@ -115,7 +124,7 @@
 					color: #4A4A4A;
 					font-size: 19px;
 					border: 1px solid @primary;
-					border-radius: 22px; 
+					border-radius: 22px;
 					width: 90%;
 					height: 44px;
 					background: #fff;

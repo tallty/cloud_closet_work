@@ -358,17 +358,14 @@ class WareHouse extends Component {
 					<div className={css.pane_header}>衣柜记录</div>
 					<div className={css.pane_body}>
 						<ClothesTable groups={appointment.appointment_item_groups} itemClickEvent={this.handleGroupClick.bind(this)} />
-					</div>
-				</div>
-				{/* 衣服种类数量 */}
-				<div className={css.pane}>
-					<div className={css.pane_header}>种类件数</div>
-					<div className={css.pane_body}>
+						{/* 种类件数 */}
+						<p className={css.title}>种类件数</p>
 						<Row>
 							<Col xs={{span: 12}} sm={{span: 6}}>
 								<div className={css.pane_input}>
+									<img src="/src/images/icon_fold.svg" alt="fold"/>
 									<span>叠放：</span>
-									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }} 
+									<InputNumber type="number" min={0} style={{ width: 60, borderColor: '#ECC17D' }} 
 										value={this.state._fold_count}
 										onChange={this.handleKindClothesCount.bind(this, '_fold_count')} />
 									<span> 件 </span>
@@ -376,8 +373,9 @@ class WareHouse extends Component {
 							</Col>
 							<Col xs={{span: 12}} sm={{span: 6}}>
 								<div className={css.pane_input}>
+									<img src="/src/images/icon_hang.svg" alt="fold"/>
 									<span>挂放：</span>
-									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }}
+									<InputNumber type="number" min={0} style={{ width: 60, borderColor: '#ECC17D' }}
 										value={this.state._hang_count}
 										onChange={this.handleKindClothesCount.bind(this, '_hang_count')} />
 									<span> 件 </span>
@@ -385,8 +383,9 @@ class WareHouse extends Component {
 							</Col>
 							<Col xs={{span: 12}} sm={{span: 6}}>
 								<div className={css.pane_input}>
+									<img src="/src/images/icon_dress.svg" alt="fold"/>
 									<span>礼服：</span>
-									<InputNumber type="number" min={0} style={{ width: 90, borderColor: '#ECC17D' }}
+									<InputNumber type="number" min={0} style={{ width: 60, borderColor: '#ECC17D' }}
 										value={this.state._dress_count}
 										onChange={this.handleKindClothesCount.bind(this, '_dress_count')} />
 									<span> 件 </span>
@@ -403,7 +402,7 @@ class WareHouse extends Component {
 								<span>护理要求：</span>
 								<InputNumber 
 									min={0}
-									style={{ width: 90, borderColor: '#ECC17D' }} 
+									style={{ width: 75, borderColor: '#ECC17D' }} 
 									onChange={this.handleNurseChargeInputChange.bind(this)}
 									value={_nurse_charge}/>
 								<span> 元 &nbsp;&nbsp;</span>
@@ -420,7 +419,7 @@ class WareHouse extends Component {
 								<span>服务费用：</span>
 								<InputNumber 
 									min={0}
-									style={{ width: 90, borderColor: '#ECC17D' }} 
+									style={{ width: 75, borderColor: '#ECC17D' }} 
 									onChange={ this.handleServiceChargeInputChange.bind(this) }
 									value={_service_charge}/>
 								<span> 元</span>
