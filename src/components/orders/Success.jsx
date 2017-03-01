@@ -13,7 +13,7 @@ class Success extends Component {
 				<div className={css.top_part}>
 					<div className={css.tips}>
 						<img src="/src/images/icon_success.svg" alt="success"/>
-						<h2>入库订单完成</h2>
+						<h2>入库订单生成</h2>
 						<p>请仔细核对订单货品，确保无误。</p>
 					</div>
 				</div>

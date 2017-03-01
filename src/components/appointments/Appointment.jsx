@@ -132,7 +132,6 @@ class Appointment extends Component {
 	handleRecharge() {
 		alert('在线充值');
 	}
-	
 
 	/**
 	 * 不同状态的按钮事件
@@ -187,6 +186,20 @@ class Appointment extends Component {
 			</div> : 
 			<div className={css.order}>
 				<ClothesTable groups={appointment.appointment_item_groups} />
+				<div className={css.clothes_numebr}>
+					<p className={css.title}>种类件数</p>
+					<Row>
+						<Col span={8}>
+							<img src="/src/images/icon_fold.svg" /> 叠放 <span>100</span> 件
+						</Col>
+						<Col span={8}>
+							<img src="/src/images/icon_hang.svg" /> 挂放 <span>100</span> 件
+						</Col>
+						<Col span={8}>
+							<img src="/src/images/icon_dress.svg" /> 礼服 <span>100</span> 件
+						</Col>
+					</Row>
+				</div>
 				<Row className={css.tips}>
 					<Col span={12}>护理要求：&nbsp;&nbsp;<span>{nurseWay.get(appointment.nurse)}</span></Col>
 					<Col span={12} className="text-right">护理费：{appointment.nurse_charge}</Col>
@@ -241,7 +254,6 @@ class Appointment extends Component {
 	
 	showAppointmentDetail() {
 		const { appointment } = this.state;
-
 		if (appointment === null) {
 			return <Spiner />;
 		} else {
