@@ -3,13 +3,16 @@ import css from './count_editer.less';
 import { Button, Input } from 'antd';
 
 export default class CountEditer extends React.Component {
-
   state = {
-    count: 1,
+    count: 1
   }
 
   componentWillMount() {
     this.setState({ count: this.props.defaultCount });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ count: nextProps.count });
   }
 
   reduceCount(e) {
@@ -40,15 +43,15 @@ export default class CountEditer extends React.Component {
         <p>数量</p>
         <div className={css.count_input}>
           <Button className={css.count_button} onClick={this.reduceCount.bind(this)}>
-            <img src="src/images/reduce_icon.svg" alt="-"/>
+            <img src="src/images/reduce_icon.svg" alt="-" />
           </Button>
-          <Input 
+          <Input
             type="number"
             value={this.state.count}
             max={99}
             onChange={this.handleChange.bind(this)} />
           <Button className={css.count_button} onClick={this.addCount.bind(this)}>
-            <img src="src/images/add_icon.svg" alt="+"/>
+            <img src="src/images/add_icon.svg" alt="+" />
           </Button>
         </div>
       </div>
@@ -58,10 +61,10 @@ export default class CountEditer extends React.Component {
 
 CountEditer.defaultProps = {
   onChange: () => {},
-  defaultCount: 1,
+  count: 1
 }
 
 CountEditer.propTypes = {
   onChange: PropTypes.func,
-  defaultCount: PropTypes.number,
+  count: PropTypes.number
 }

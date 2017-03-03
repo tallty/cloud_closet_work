@@ -8,21 +8,21 @@ import { DateAppointments } from './DateAppointments'
 import SuperAgent from 'superagent'
 
 export class Appointments extends Component {
-	state = {
-		appointments: []
-	}
+  state = {
+    appointments: []
+  }
 
-	componentWillMount() {
-		let appointments = JSON.parse(sessionStorage.appointments)
-		this.setState({ appointments: appointments })	
-	}
+  componentWillMount() {
+    const apm = JSON.parse(sessionStorage.appointments)
+    this.setState({ appointments: apm })
+  }
 
-	render() {
-		return (
-			<div className={css.appointments} id="appointments">
-				<Toolbar title="预约清单" url="/" />
-				{ this.state.appointments.map((item, i) => (<DateAppointments date={item.date} items={item.items} key={i} />)) }
-			</div>
-		)
-	}
+  render() {
+    return (
+      <div className={css.appointments} id="appointments">
+        <Toolbar title="预约清单" url="/" />
+        {this.state.appointments.map((item, i) => (<DateAppointments date={item.date} items={item.items} key={i} />))}
+      </div>
+    )
+  }
 }

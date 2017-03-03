@@ -6,26 +6,26 @@ import css from './order.less'
 import { Link, withRouter } from 'react-router'
 
 class Success extends Component {
-	render() {
-		const appointment_id = this.props.location.query.appointment_id;
-		return (
-			<div className={css.appoint_success}>
-				<div className={css.top_part}>
-					<div className={css.tips}>
-						<img src="/src/images/icon_success.svg" alt="success"/>
-						<h2>入库订单生成</h2>
-						<p>请仔细核对订单货品，确保无误。</p>
-					</div>
-				</div>
-				<div className={css.bottom_part}>
-					<div className={css.success_btns}>
-						<Link to="/" className={css.btn_back}>返回列表</Link>
-						<Link to={`appointment?id=${appointment_id}`} className={css.btn_detail}>查看详情</Link>
-					</div>
-				</div>
-			</div>
-		)
-	}
+  render() {
+    const appointment_id = this.props.location.query.appointment_id;
+    return (
+      <div className={css.appoint_success}>
+        <div className={css.top_part}>
+          <div className={css.tips}>
+            <img src="/src/images/icon_success.svg" alt="success"/>
+            <h2>入库订单生成</h2>
+            <p>请仔细核对订单货品，确保无误。</p>
+          </div>
+        </div>
+        <div className={css.bottom_part}>
+          <div className={css.success_btns}>
+            <Link to="/" className={css.btn_back}>返回列表</Link>
+            <Link to={`appointment?id=${appointment_id}`} className={css.btn_detail}>查看详情</Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default withRouter(Success);

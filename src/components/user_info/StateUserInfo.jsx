@@ -6,11 +6,11 @@ const { string, shape, number } = PropTypes;
 
 export default class StateUserInfo extends React.Component {
   state = {
-  	photo: '',
+    photo: '',
   }
 
   componentWillMount() {
-    this.setState({ photo: this.props.user.photo });
+    this.setState({ photo: this.props.user.user_avatar });
   }
 
   handlePhotoLoadError() {
@@ -25,11 +25,11 @@ export default class StateUserInfo extends React.Component {
         <div className={css.content}>
           <StateBadge now={nowState} next={nextState} />
           <a href={`tel:${user.phone}`} className={css.user_info}>
-            <img 
-              src={ photo || 'error' } 
-              alt="photo" 
+            <img
+              src={ photo || 'error' }
+              alt="photo"
               className={css.photo}
-              onError={ this.handlePhotoLoadError.bind(this) } />
+              onError={this.handlePhotoLoadError.bind(this)} />
             <div className={css.name_phone}>
               <p className={css.name}>{ user.name }</p>
               <p className={css.phone}>

@@ -1,161 +1,161 @@
 // index
 .appointments {
-	background: #f8f8f8;
-	height: 100%;
-	padding-top: 50px;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	// DateAppointments.jsx
-	.item_header {
-		height: 44px;
-		line-height: 44px;
-		font-size: 18px;
-		color: #4A4A4A;
-		padding-left: 16px;
-		background: #fff;
-		border-bottom: 4px solid #f8f8f8;
-		font-weight: 300;
-	}
-	.item {
-		display: block;
-		background: #fff;
-		&:active {
-			background: #f8f8f8;
-		}
-		.item_footer {
-			height: 45px;
-			line-height: 43px;
-			display: block;
-			margin-bottom: 4px;
-			padding: 0 16px;
-			color: #757575;
-			font-size: 14px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			border-top: 1px solid #f8f8f8;
-			img {
-				height: 18px;
-				margin-right: 7px;
-				vertical-align: middle;
-			}
-			span {
-				vertical-align: middle;
-			}
-		}
-		.tag {
-			height: 50px;
-			width: 50px;
-			border-radius: 50%;
-			color: #fff;
-			text-align: center;
-			line-height: 50px;
-		}
-		.tag_service {
-			background-color: #F24F4F;
-		}
-		.tag_payment {
-			background-color: #ECC17D;
-		}
-		.tag_paied {
-			background-color: #B8E986;
-		}
-		.tag_storing {
-			background-color: #FC9421;
-		}
-		.tag_canceled {
-			background-color: #ddd;
-		}
-	}
+  background: #f8f8f8;
+  height: 100%;
+  padding-top: 50px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  // DateAppointments.jsx
+  .item_header {
+    height: 44px;
+    line-height: 44px;
+    font-size: 18px;
+    color: #4A4A4A;
+    padding-left: 16px;
+    background: #fff;
+    border-bottom: 4px solid #f8f8f8;
+    font-weight: 300;
+  }
+  .item {
+    display: block;
+    background: #fff;
+    &:active {
+      background: #f8f8f8;
+    }
+    .item_footer {
+      height: 45px;
+      line-height: 43px;
+      display: block;
+      margin-bottom: 4px;
+      padding: 0 16px;
+      color: #757575;
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border-top: 1px solid #f8f8f8;
+      img {
+        height: 18px;
+        margin-right: 7px;
+        vertical-align: middle;
+      }
+      span {
+        vertical-align: middle;
+      }
+    }
+    .tag {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 50px;
+    }
+    .tag_service {
+      background-color: #F24F4F;
+    }
+    .tag_payment {
+      background-color: #ECC17D;
+    }
+    .tag_paied {
+      background-color: #B8E986;
+    }
+    .tag_storing {
+      background-color: #FC9421;
+    }
+    .tag_canceled {
+      background-color: #ddd;
+    }
+  }
 }
 
 // show
 .appointment {
-	height: 100%;
-	padding-top: 50px;
-	padding-bottom: 64px;
-	background: #fff;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	z-index: 1;
-	.appoint_info {
-		padding-top: 20px;
-		text-align: center;
-		line-height: 28px;
-		.time_count {
-			color: #EBBA6C;
-			font-size: 13px;
-		}
-	}
-	.order {
-		padding: 15px 15px 0;
-		.clothes_numebr {
-			.title {
-				line-height: 24px;
-				text-align: center;
-				border-bottom: 1px solid #D6D9E1;
-				margin-bottom: 10px;
-			}
-			img {
-				height: 30px;
-				vertical-align: middle;
-				margin-right: 5px;
-			}
-			span {
-				color: #FC9421;
-				font-size: 12px;
-				margin: 0 5px;
-			}
-		}
-		.tips {
-			margin-top: 30px;
-			span {
-				color: #ECC17D;
-			}
-		}
-		.total_price {
-			color: #757575;
-			font-size: 14px;
-			margin-bottom: 23px;
-			span {
-				color: #ECC17D;
-				font-size: 24px;
-			}
-		}
-	}
-	.affix_bottom {
-		position: fixed;
-		left: 0;
-		bottom: 10px;
-		width: 100%;
-		display: block;
-	}
-	.common_btn(@bg, @color, @border, @active) {
-		width: 85%;
-		height: 44px;
-		border: 1px solid @border;
-		text-align: center;
-		line-height: 44px;
-		background-color: @bg;
-		color: @color;
-		font-size: 16px;
-		border-radius: 22px;
-		margin: 10px auto;
-		display: block;
-		padding: 0;
-		&:active {
-			background-color: darken(@active, 10%);
-		}
-	}
-	.main_btn {
-		.common_btn(#ECC17D, #fff, #ECC17D, #ECC17D);
-	}
-	.change_btn {
-		.common_btn(#757575, #fff, #757575, #757575);
-	}
-	.recharge_btn{
-		.common_btn(#fff, #757575, #ECC17D, #eee);
-		margin-bottom: 20px;
-		margin-top: 26px;
-	}
+  height: 100%;
+  padding-top: 50px;
+  padding-bottom: 64px;
+  background: #fff;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1;
+  .appoint_info {
+    padding-top: 20px;
+    text-align: center;
+    line-height: 28px;
+    .time_count {
+      color: #EBBA6C;
+      font-size: 13px;
+    }
+  }
+  .order {
+    padding: 15px 15px 0;
+    .clothes_numebr {
+      .title {
+        line-height: 24px;
+        text-align: center;
+        border-bottom: 1px solid #D6D9E1;
+        margin-bottom: 10px;
+      }
+      img {
+        height: 30px;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+      span {
+        color: #FC9421;
+        font-size: 12px;
+        margin: 0 5px;
+      }
+    }
+    .tips {
+      margin-top: 30px;
+      span {
+        color: #ECC17D;
+      }
+    }
+    .total_price {
+      color: #757575;
+      font-size: 14px;
+      margin-bottom: 23px;
+      span {
+        color: #ECC17D;
+        font-size: 24px;
+      }
+    }
+  }
+  .affix_bottom {
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    width: 100%;
+    display: block;
+  }
+  .common_btn(@bg, @color, @border, @active) {
+    width: 85%;
+    height: 44px;
+    border: 1px solid @border;
+    text-align: center;
+    line-height: 44px;
+    background-color: @bg;
+    color: @color;
+    font-size: 16px;
+    border-radius: 22px;
+    margin: 10px auto;
+    display: block;
+    padding: 0;
+    &:active {
+      background-color: darken(@active, 10%);
+    }
+  }
+  .main_btn {
+    .common_btn(#ECC17D, #fff, #ECC17D, #ECC17D);
+  }
+  .change_btn {
+    .common_btn(#757575, #fff, #757575, #757575);
+  }
+  .recharge_btn{
+    .common_btn(#fff, #757575, #ECC17D, #eee);
+    margin-bottom: 20px;
+    margin-top: 26px;
+  }
 }

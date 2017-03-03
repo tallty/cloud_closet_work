@@ -1,135 +1,135 @@
 @primary: #ECC17D;
 .container {
-	height: 100%;
-	padding-top: 50px;
-	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
-	background: #fff;
-	// 存衣数量
-	.pane {
-		padding: 0px 3px;
-		margin-bottom: 10px;
-		.pane_header {
-			height: 28px;
-			line-height: 28px;
-			color: #fff;
-			text-align: center;
-			font-size: 13px;
-			background: @primary;
-		}
-		.pane_body {
-			padding: 6px 10px 10px;
-			border: 1px solid #CCCCCC;
-			border-top: none;
-			.title {
-				text-align: center;
-				border-bottom: 1px solid #D6D9E1;
-				line-height: 24px;
-			}
-			.pane_input {
-				margin-top: 10px;
-				img {
-					height: 30px;
-					vertical-align: middle;
-					margin-right: 5px;
-				}
-			}
-		}
-	}
-	// tips
-	.tips_container {
-		padding: 16px;
-		font-size: 12px;
-		.ant-input-number {
-			vertical-align: middle;
-			border-color: @primary;
-		}
-		.tips {
-			margin-bottom: 10px;
-		}
-		.total_price {
-			color: #757575;
-			font-size: 14px;
-			span {
-				color: #FC9421;
-				font-size: 24px;
-			}
-		}
-	}
-	// 入库
-	.btn_container {
-		width: 100%;
-		background: #fff;
-		padding: 8px 0px 24px;
-		text-align: center;
-		.tab_btn {
-			display: block;
-			height: 50px;
-			width: 85%;
-			padding: 0;
-			line-height: 50px;
-			border-radius: 25px;
-			margin: 0 auto;
-			background: @primary;
-			color: #fff;
-			font-size: 18px;
-			text-align: center;
-			border: none;
-			&:active {
-				background: darken(@primary, 10%);
-			}
-		}
-		.tab_btn[disabled] {
-			color: lighten(#fff, 10%);
-			background-color: lighten(@primary, 20%);
-		}
-	}
-	// 添加衣服PopWindow
-	.pop_content {
-		padding: 0 16px;
-		background: #fff;
-		.title {
-			height: 58px;
-			line-height: 58px;
-			text-align: center;
-			color: @primary;
-			font-size: 20px;
-			font-weight: normal;
-			border-bottom: 1px solid #CCCCCC;
-		}
-		.warehouse_length {
-			padding: 15px;
-			border-bottom: 1px solid #CCCCCC;
-			text-align: center;
-			color: #4A4A4A;
-			font-size: 14px;
-			p {
-				margin-bottom: 10px;
-			}
-			.radio_container {
-				width: 225px;
-				text-align: left;
-				margin: 0 auto;
-			}
-		}
-		.actions {
-			height: 110px;
-			padding: 42px 0 24px;
-			width: 100%;
-			.btn {
-				width: 50%;
-				float: left;
-				text-align: center;
-				button {
-					color: #4A4A4A;
-					font-size: 19px;
-					border: 1px solid @primary;
-					border-radius: 22px;
-					width: 90%;
-					height: 44px;
-					background: #fff;
-				}
-			}
-		}
-	}
+  height: 100%;
+  padding-top: 50px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  // 存衣数量
+  .pane {
+    padding: 0px 3px;
+    margin-bottom: 10px;
+    .pane_header {
+      height: 28px;
+      line-height: 28px;
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+      background: @primary;
+    }
+    .pane_body {
+      padding: 6px 10px 10px;
+      border: 1px solid #CCCCCC;
+      border-top: none;
+      .title {
+        text-align: center;
+        border-bottom: 1px solid #D6D9E1;
+        line-height: 24px;
+      }
+      .pane_input {
+        margin-top: 10px;
+        img {
+          height: 30px;
+          vertical-align: middle;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  // tips
+  .tips_container {
+    padding: 16px;
+    font-size: 12px;
+    .ant-input-number {
+      vertical-align: middle;
+      border-color: @primary;
+    }
+    .tips {
+      margin-bottom: 10px;
+    }
+    .total_price {
+      color: #757575;
+      font-size: 14px;
+      span {
+        color: #FC9421;
+        font-size: 24px;
+      }
+    }
+  }
+  // 入库
+  .btn_container {
+    width: 100%;
+    background: #fff;
+    padding: 8px 0px 24px;
+    text-align: center;
+    .tab_btn {
+      display: block;
+      height: 50px;
+      width: 85%;
+      padding: 0;
+      line-height: 50px;
+      border-radius: 25px;
+      margin: 0 auto;
+      background: @primary;
+      color: #fff;
+      font-size: 18px;
+      text-align: center;
+      border: none;
+      &:active {
+        background: darken(@primary, 10%);
+      }
+    }
+    .tab_btn[disabled] {
+      color: lighten(#fff, 10%);
+      background-color: lighten(@primary, 20%);
+    }
+  }
+  // 添加衣服PopWindow
+  .pop_content {
+    padding: 0 16px;
+    background: #fff;
+    .title {
+      height: 58px;
+      line-height: 58px;
+      text-align: center;
+      color: @primary;
+      font-size: 20px;
+      font-weight: normal;
+      border-bottom: 1px solid #CCCCCC;
+    }
+    .warehouse_length {
+      padding: 15px;
+      border-bottom: 1px solid #CCCCCC;
+      text-align: center;
+      color: #4A4A4A;
+      font-size: 14px;
+      p {
+        margin-bottom: 10px;
+      }
+      .radio_container {
+        width: 225px;
+        text-align: left;
+        margin: 0 auto;
+      }
+    }
+    .actions {
+      height: 110px;
+      padding: 42px 0 24px;
+      width: 100%;
+      .btn {
+        width: 50%;
+        float: left;
+        text-align: center;
+        button {
+          color: #4A4A4A;
+          font-size: 19px;
+          border: 1px solid @primary;
+          border-radius: 22px;
+          width: 90%;
+          height: 44px;
+          background: #fff;
+        }
+      }
+    }
+  }
 }

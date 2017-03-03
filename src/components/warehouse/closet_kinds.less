@@ -1,75 +1,75 @@
 // 衣服种类(ClosetKinds.jsx)
 .closet_kind {
-	padding: 7px 16px;
-	background: #fff;
-	text-align: center;
-	font-size: 13px;
-	border-top: 1px solid #EBEBEB;
-	h3 {
-		text-align: left;
-		line-height: 28px;
-		font-size: 13px;
-		margin-bottom: 10px;
-	}
-	.row {
-		position: relative;
+  padding: 7px 16px;
+  background: #fff;
+  text-align: center;
+  font-size: 13px;
+  border-top: 1px solid #EBEBEB;
+  h3 {
+    text-align: left;
+    line-height: 28px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .row {
+    position: relative;
     height: auto;
     zoom: 1;
     display: block;
     &:before {
-    	content: " ";
-	    display: table;
-	    box-sizing: border-box;
+      content: " ";
+      display: table;
+      box-sizing: border-box;
     }
     &:after {
-    	clear: both;
-	    font-size: 0;
-	    content: " ";
-	    display: table;
+      clear: both;
+      font-size: 0;
+      content: " ";
+      display: table;
     }
-	}
-	.grid_item, .active_item {
-		display: block;
-		width: 25%;
-		float: left;
-		position: relative;
-		.sideBorder {
-			position: absolute;
-			top: 15px;
-			bottom: 15px;
-			right: 0;
-			width: 1px;
-			background-color: #EBEBEB;
-		}
-		&:nth-child(4n), &:last-child {
-			.sideBorder {
-				display: none;
-			}
-		}
-		
-		img {
-			height: 46px;
-		}
-		button {
-			border: none;
-			background: transparent;
-			width: 70px;
-			height: 90px;
-			border-radius: 0;
-			padding: 0;
-			margin-bottom: 4px;
-			font-weight: 200;
-			color: #4A4A4A;
-			&:hover {
-				color: #919191;
-			}
-		}
-		.active {
-			background-color: #FDEDDF;
-		}
-	}
-	.active_item {
-		background: rgba(236, 193, 125, 0.2);
-		outline: 1px solid #EBBA6C;
-	}
+  }
+  .grid_item, .active_item {
+    display: block;
+    width: 25%;
+    float: left;
+    position: relative;
+    .sideBorder {
+      position: absolute;
+      top: 15px;
+      bottom: 15px;
+      right: 0;
+      width: 1px;
+      background-color: #EBEBEB;
+    }
+    &:nth-child(4n), &:last-child {
+      .sideBorder {
+        display: none;
+      }
+    }
+    
+    img {
+      height: 46px;
+    }
+    button {
+      border: none;
+      background: transparent;
+      width: 70px;
+      height: 90px;
+      border-radius: 0;
+      padding: 0;
+      margin-bottom: 4px;
+      font-weight: 200;
+      color: #4A4A4A;
+      &:hover {
+        color: #919191;
+      }
+    }
+    .active {
+      background-color: #FDEDDF;
+    }
+  }
+  .active_item {
+    background: rgba(236, 193, 125, 0.2);
+    outline: 1px solid #EBBA6C;
+  }
 }

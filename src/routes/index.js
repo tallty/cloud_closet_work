@@ -25,9 +25,9 @@ export class Routes extends Component {
     auth.loggedIn();
   }
 
-	render() {
-		return (
-			<Router history={this.props.history}>
+  render() {
+    return (
+      <Router history={this.props.history}>
         {/* 添加登陆路由 */}
         <Route path="/login" component={LogIn}/>
         {/* 获取用户openid */}
@@ -44,13 +44,13 @@ export class Routes extends Component {
         <Route path="/order" component={Order}/>
         {/* 预约清单 - 入库成功 */}
         <Route path="/success" component={Success}/>
-		  </Router>
-		)
-	}
+      </Router>
+    )
+  }
 }
 
 Routes.defaultProps = {
-	
+  
 }
 
 Routes.propTypes = {
