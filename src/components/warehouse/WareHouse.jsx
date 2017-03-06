@@ -24,11 +24,6 @@ const editItem = {
   index: null,
   item: null
 };
-const clothesKindMap = new Map([
-  ['full_dressing', '礼服'],
-  ['hanging', '挂件'],
-  ['stacking', '叠放件']
-])
 // 入库列表操作事件类别：
 const NEW = 'new';
 const EDIT = 'edit';
@@ -43,7 +38,7 @@ class WareHouse extends Component {
     event: null,            // 【Logic】事件：【新增 | 编辑】
     stacking: 0,
     hanging: 0,
-    full_dress: 0,
+    fullDress: 0,
     object: {}
   }
 
@@ -51,12 +46,17 @@ class WareHouse extends Component {
     // 取得缓存本地的 appointment 清单
     const localAppointment = sessionStorage.appointment;
     const data = JSON.parse(localAppointment);
-    const countInfo = data.countInfo || {};
+    const countInfo = data.garment_count_info || {};
     this.setState({
-      appointment: data,
+      appointment: {
+        ...data,
+        care_cost: data.care_cost || 0,
+        service_cost: data.service_cost || 0,
+        care_type: data.care_type || '普通护理'
+      },
       stacking: countInfo.stacking || 0,
       hanging: countInfo.hanging || 0,
-      full_dress: countInfo.full_dress || 0
+      fullDress: countInfo.full_dress || 0
     });
     this.getTypes();
   }
@@ -73,7 +73,6 @@ class WareHouse extends Component {
       .end((err, res) => {
         if (!err || err === null) {
           const data = res.body.price_systems;
-          console.log(data);
           this.setState({ types: data });
         } else {
           this.setState({ types: [] });
@@ -87,7 +86,6 @@ class WareHouse extends Component {
    */
   selectClotheType(type) {
     // 创建一个临时对象
-    console.log(type);
     const obj = {
       price_system_id: type.id,
       title: type.title,
@@ -111,9 +109,9 @@ class WareHouse extends Component {
    * [handleCountChange] 处理数量改变
    */
   handleCountChange(count) {
-    const { object } = this.state;
-    object.count = count;
-    this.setState({ object: object });
+    const obj = this.state.object;
+    obj.count = count;
+    this.setState({ object: obj });
   }
 
   /**
@@ -121,9 +119,9 @@ class WareHouse extends Component {
    * @param  {[node]} e [选择的radio按钮]
    */
   onLengthChange(e) {
-    const { object } = this.state;
-    object.store_month = parseInt(e.target.value, 10);
-    this.setState({ object: object });
+    const obj = this.state.object;
+    obj.store_month = parseInt(e.target.value, 10);
+    this.setState({ object: obj });
   }
 
   // 添加衣服到列表
@@ -188,7 +186,7 @@ class WareHouse extends Component {
   handleWarehouse() {
     this.setState({ loading: true });
     // 缓存数据
-    const { appointment, stacking, hanging, full_dress } = this.state;
+    const { appointment, stacking, hanging, fullDress } = this.state;
     // appointment.price = this.getAppointmentTotal();
     //存入storage
     sessionStorage.setItem('appointment', JSON.stringify(appointment));
@@ -198,7 +196,7 @@ class WareHouse extends Component {
     cache += `&appointment[service_cost]=${appointment.service_cost}`;
     cache += `&appointment[garment_count_info][hanging]=${hanging}`;
     cache += `&appointment[garment_count_info][stacking]=${stacking}`;
-    cache += `&appointment[garment_count_info][full_dress]=${full_dress}`;
+    cache += `&appointment[garment_count_info][full_dress]=${fullDress}`;
     appointment.appointment_price_groups.forEach((item, index, obj) => {
       cache += `&appointment_items[price_groups][][count]=${item.count}`;
       cache += `&appointment_items[price_groups][][price_system_id]=${item.price_system_id}`;
@@ -229,9 +227,9 @@ class WareHouse extends Component {
 
   // 验证表单
   validateForm() {
-    const { hanging, full_dress, stacking, appointment } = this.state;
+    const { hanging, fullDress, stacking, appointment } = this.state;
     let res = null;
-    if (hanging === 0 && full_dress === 0 && stacking === 0) {
+    if (hanging === 0 && fullDress === 0 && stacking === 0) {
       alert('请记录入库衣服数量');
       res = false;
     } else if (!appointment.care_type) {
@@ -256,10 +254,8 @@ class WareHouse extends Component {
   /**
    * [handleCareTypeChargeInputChange 护理费 | 服务费用 输入处理]
    */
-  handleCareAndServiceChange(kind, value) {
-    const { appointment } = this.state;
-    appointment[kind] = Number(value);
-    this.setState({ appointment: appointment });
+  handleCareAndServiceChange(kind, e) {
+    this.setState({ appointment: { ...this.state.appointment, [kind]: Number(e.target.value) } });
   }
 
   /**
@@ -277,7 +273,7 @@ class WareHouse extends Component {
   render() {
     // 状态
     const { appointment, types, pop, loading, event, object } = this.state;
-
+    console.log(appointment);
     return (
       <div className={css.container}>
         <Toolbar title="预约入库" url={`/appointment?id=${this.appointment_id}`} />
@@ -310,9 +306,9 @@ class WareHouse extends Component {
                   <span> 件 </span>
                 </div>
               </Col>
-              <Col xs={{span: 12}} sm={{span: 6}} >
+              <Col xs={{ span: 12 }} sm={{ span: 6 }} >
                 <div className={css.pane_input}>
-                  <img src="/src/images/icon_hang.svg" alt="fold"/>
+                  <img src="/src/images/icon_hang.svg" alt="fold" />
                   <span>挂放：</span>
                   <InputNumber
                     type="number"
@@ -332,7 +328,7 @@ class WareHouse extends Component {
                     type="number"
                     min={0}
                     style={{ width: 60, borderColor: '#ECC17D' }}
-                    value={this.state.full_dress}
+                    value={this.state.fullDress}
                     onChange={this.handleKindClothesCount.bind(this, 'full_dress')}
                   />
                   <span> 件 </span>
@@ -344,14 +340,15 @@ class WareHouse extends Component {
         {/* price */}
         <div className={css.tips_container}>
           <Row>
-            <Col sm={{span: 12}}>
+            <Col sm={{ span: 12 }}>
               <div className={css.tips}>
                 <span>护理要求：</span>
-                <InputNumber
-                  min={0}
+                <Input
+                  type="number"
                   style={{ width: 75, borderColor: '#ECC17D' }}
                   onChange={this.handleCareAndServiceChange.bind(this, 'care_cost')}
-                  value={appointment.care_cost} />
+                  value={appointment.care_cost}
+                />
                 <span> 元 &nbsp;&nbsp;</span>
                 <Select
                   defaultValue={appointment.care_type}
@@ -367,16 +364,17 @@ class WareHouse extends Component {
             <Col sm={{ span: 12 }}>
               <div className={css.tips}>
                 <span>服务费用：</span>
-                <InputNumber
-                  min={0}
+                <Input
+                  type="number"
                   style={{ width: 75, borderColor: '#ECC17D' }}
                   onChange={this.handleCareAndServiceChange.bind(this, 'service_cost')}
-                  value={appointment.service_cost} />
+                  value={appointment.service_cost}
+                />
                 <span> 元</span>
               </div>
             </Col>
           </Row>
-          <p className={css.total_price}>合计：<span>{appointment.price}</span></p>
+          <p className={css.total_price}>合计：<span>{appointment.price + appointment.care_cost + appointment.service_cost}</span></p>
         </div>
         {/* 入库 */}
         <div className={css.btn_container}>
@@ -387,7 +385,7 @@ class WareHouse extends Component {
           >入库</Button>
         </div>
         {/* popwindow */}
-        <PopWindow show={pop} direction='bottom' onCancel={ this.hidePopWindow.bind(this) }>
+        <PopWindow show={pop} direction="bottom" onCancel={this.hidePopWindow.bind(this)}>
           <div className={css.pop_content}>
             <div className={css.title}>{object.title}</div>
             {/* 仓储时长 */}
@@ -397,11 +395,12 @@ class WareHouse extends Component {
                 <RadioGroup
                   onChange={this.onLengthChange.bind(this)}
                   value={`${object.store_month}`}
-                  defaultValue="3">
+                  defaultValue="3"
+                >
                   <RadioButton value="3">三个月</RadioButton>
                   <RadioButton value="6">六个月</RadioButton>
                   <RadioButton value="9">九个月</RadioButton>
-                  <div style={{height: 10}}></div>
+                  <div style={{ height: 10 }}></div>
                   <RadioButton value="12">一年</RadioButton>
                   <RadioButton value="24">两年</RadioButton>
                 </RadioGroup>

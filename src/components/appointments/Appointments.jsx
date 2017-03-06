@@ -21,7 +21,10 @@ export class Appointments extends Component {
     return (
       <div className={css.appointments} id="appointments">
         <Toolbar title="预约清单" url="/" />
-        {this.state.appointments.map((item, i) => (<DateAppointments date={item.date} items={item.items} key={i} />))}
+        {
+          this.state.appointments.map((item, i) =>
+            (<DateAppointments date={item.date} items={item.items} key={i} />))
+        }
       </div>
     )
   }
