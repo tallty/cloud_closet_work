@@ -273,7 +273,6 @@ class WareHouse extends Component {
   render() {
     // 状态
     const { appointment, types, pop, loading, event, object } = this.state;
-    console.log(appointment);
     return (
       <div className={css.container}>
         <Toolbar title="预约入库" url={`/appointment?id=${this.appointment_id}`} />
@@ -294,7 +293,7 @@ class WareHouse extends Component {
             <Row>
               <Col xs={{ span: 12 }} sm={{ span: 6 }}>
                 <div className={css.pane_input}>
-                  <img src="/src/images/icon_fold.svg" alt="fold"/>
+                  <img src="/src/images/icon_fold.svg" alt="fold" />
                   <span>叠放：</span>
                   <InputNumber
                     type="number"
@@ -329,7 +328,7 @@ class WareHouse extends Component {
                     min={0}
                     style={{ width: 60, borderColor: '#ECC17D' }}
                     value={this.state.fullDress}
-                    onChange={this.handleKindClothesCount.bind(this, 'full_dress')}
+                    onChange={this.handleKindClothesCount.bind(this, 'fullDress')}
                   />
                   <span> 件 </span>
                 </div>
@@ -342,7 +341,7 @@ class WareHouse extends Component {
           <Row>
             <Col sm={{ span: 12 }}>
               <div className={css.tips}>
-                <span>护理要求：</span>
+                <span>护理费用：</span>
                 <Input
                   type="number"
                   style={{ width: 75, borderColor: '#ECC17D' }}
@@ -356,7 +355,7 @@ class WareHouse extends Component {
                   onChange={this.handleCareTypeChange.bind(this)}
                 >
                   <Option value="普通护理">普通护理</Option>
-                  <Option value="高级护理">高级护理</Option>
+                  <Option value="高级护理">精洗护理</Option>
                 </Select>
               </div>
             </Col>

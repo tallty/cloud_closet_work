@@ -5,16 +5,16 @@ import SuperAgent from 'superagent';
 
 class Desk extends Component {
   state = {
-    new_people: 0,
-    total_people: 0,
-    commited_appointments: [],
-    accepted_appointments: [],
-    unpaid_appointments: [],
-    paid_appointments: [],
-    storing_appointments: [],
-    canceled_appointments: [],
-    one_success: false,
-    two_success: false
+    newPeople: 0,
+    totalPeople: 0,
+    commitedAppointments: [],
+    acceptedAppointments: [],
+    unpaidAppointments: [],
+    paidAppointments: [],
+    storingAppointments: [],
+    canceledAppointments: [],
+    oneSuccess: false,
+    twoSuccess: false
   }
 
   componentWillMount() {
@@ -30,7 +30,7 @@ class Desk extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // 缓存入库清单 appointments
-    const appointmentsStr = JSON.stringify(this.state.commited_appointments)
+    const appointmentsStr = JSON.stringify(this.state.commitedAppointments)
     sessionStorage.setItem('appointments', appointmentsStr)
   }
 
@@ -44,10 +44,10 @@ class Desk extends Component {
         if (!err || err === null) {
           const obj = res.body;
           this.setState({
-            commited_appointments: obj.appointments,
-            new_people: obj.new_user_count_today,
-            total_people: obj.user_count,
-            one_success: true
+            commitedAppointments: obj.appointments,
+            newPeople: obj.new_user_count_today,
+            totalPeople: obj.user_count,
+            oneSuccess: true
           })
         } else {
 
@@ -65,12 +65,12 @@ class Desk extends Component {
         if (!err || err === null) {
           const obj = res.body;
           this.setState({
-            accepted_appointments: obj.accepted_appointments,
-            unpaid_appointments: obj.unpaid_appointments,
-            paid_appointments: obj.paid_appointments,
-            storing_appointments: obj.storing_appointments,
-            canceled_appointments: obj.canceled_appointments,
-            two_success: true
+            acceptedAppointments: obj.accepted_appointments,
+            unpaidAppointments: obj.unpaid_appointments,
+            paidAppointments: obj.paid_appointments,
+            storingAppointments: obj.storing_appointments,
+            canceledAppointments: obj.canceled_appointments,
+            twoSuccess: true
           })
         } else {
 
@@ -81,12 +81,11 @@ class Desk extends Component {
   // 获取入库清单数量
   getAppointmentsCount(array) {
     let count = 0;
-    for(let appointments of array) {
-      for(let obj of appointments) {
+    for (const appointments of array) {
+      for (const obj of appointments) {
         count += obj.items.length
       }
     }
-
     return count;
   }
 
@@ -95,44 +94,49 @@ class Desk extends Component {
    */
   handleClick(kind) {
     const {
-      commited_appointments,
-      accepted_appointments,
-      unpaid_appointments,
-      paid_appointments,
-      storing_appointments,
-      canceled_appointments,
-      one_success,
-      two_success
+      commitedAppointments,
+      acceptedAppointments,
+      unpaidAppointments,
+      paidAppointments,
+      storingAppointments,
+      canceledAppointments,
+      oneSuccess,
+      twoSuccess
     } = this.state;
 
-    if (!(one_success && two_success)) return null;
+    if (!(oneSuccess && twoSuccess)) return null;
 
-    if (kind === "预约入库") {
-      let appointments_str = JSON.stringify(commited_appointments);
-      sessionStorage.setItem('appointments', appointments_str);
-    } else if (kind === "配送管理") {
-      let array = accepted_appointments.concat(unpaid_appointments).concat(paid_appointments);
-      console.dir(array);
-      let appointments_str = JSON.stringify(array);
-      sessionStorage.setItem('appointments', JSON.stringify(array));
-    } else if (kind === "历史订单") {
-      let array = storing_appointments.concat(canceled_appointments);
-      console.dir(array);
-      let appointments_str = JSON.stringify(array);
-      sessionStorage.setItem('appointments', appointments_str);
+    let str = '';
+    switch (kind) {
+      case '预约入库':
+        str = JSON.stringify(commitedAppointments);
+        break;
+      case '等待服务':
+        str = JSON.stringify(acceptedAppointments);
+        break;
+      case '等待处理':
+        str = JSON.stringify(paidAppointments.concat(unpaidAppointments));
+        break;
+      case '历史订单':
+        str = JSON.stringify(storingAppointments.concat(canceledAppointments));
+        break;
+      default:
+        break;
     }
+    sessionStorage.setItem('appointments', str);
     this.props.router.replace('/appointments');
+    return null;
   }
 
   render() {
     const {
-      new_people, total_people,
-      commited_appointments,
-      accepted_appointments,
-      unpaid_appointments,
-      paid_appointments,
-      storing_appointments,
-      canceled_appointments,
+      newPeople, totalPeople,
+      commitedAppointments,
+      acceptedAppointments,
+      unpaidAppointments,
+      paidAppointments,
+      storingAppointments,
+      canceledAppointments
     } = this.state;
 
     return (
@@ -142,16 +146,16 @@ class Desk extends Component {
             <img src="src/images/logo.svg" alt="logo"/>
           </div>
           <p className={css.company}>
-            <span><img src="src/images/logo_icon.svg" alt=""/>&nbsp;上海市乐存好衣互联公司</span>
+            <span><img src="src/images/logo_icon.svg" alt="" />&nbsp;乐存家庭服务（上海）有限公司</span>
           </p>
           <div className={css.number}>
             <div className={css.new}>
               <p>新增人数</p>
-              <p><span>{new_people}</span></p>
+              <p><span>{newPeople}</span></p>
             </div>
             <div className={css.total}>
               <p>总用户数</p>
-              <p><span>{total_people}</span></p>
+              <p><span>{totalPeople}</span></p>
             </div>
           </div>
         </div>
@@ -159,22 +163,22 @@ class Desk extends Component {
           <div className={css.grid_container}>
             <div className={css.grid_item} onClick={this.handleClick.bind(this, '预约入库')}>
               <div>
-                <h1>{this.getAppointmentsCount([commited_appointments])}</h1>
+                <h1>{this.getAppointmentsCount([commitedAppointments])}</h1>
                 <p>预约入库</p>
               </div>
             </div>
 
-            <div className={css.grid_item} onClick={this.handleClick.bind(this, '配送管理')}>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '等待服务')}>
               <div>
-                <h1>{this.getAppointmentsCount([accepted_appointments, unpaid_appointments, paid_appointments])}</h1>
-                <p>配送管理</p>
+                <h1>{this.getAppointmentsCount([acceptedAppointments])}</h1>
+                <p>等待服务</p>
               </div>
             </div>
 
-            <div className={css.grid_item} onClick={this.handleClick.bind(this, '历史订单')}>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '等待处理')}>
               <div>
-                <h1>{this.getAppointmentsCount([storing_appointments, canceled_appointments])}</h1>
-                <p>历史订单</p>
+                <h1>{this.getAppointmentsCount([unpaidAppointments, paidAppointments])}</h1>
+                <p>等待处理</p>
               </div>
             </div>
 
@@ -185,8 +189,11 @@ class Desk extends Component {
               </div>
             </div>
 
-            <div className={css.grid_item}>
-              <div></div>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '历史订单')}>
+              <div>
+                <h1>{this.getAppointmentsCount([storingAppointments, canceledAppointments])}</h1>
+                <p>历史订单</p>
+              </div>
             </div>
 
             <div className={css.grid_item}>
