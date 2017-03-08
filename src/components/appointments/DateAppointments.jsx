@@ -16,40 +16,40 @@ export class DateAppointments extends Component {
     let _time_month = _time.getMonth() + 1;
     let _time_day = _time.getDate();
     // 当期时间
-    let now_time = new Date();
-    let now_year = now_time.getFullYear();
-    let now_month = now_time.getMonth() + 1;
-    let now_day = now_time.getDate();
+    const nowTime = new Date();
+    const nowYear = nowTime.getFullYear();
+    const nowMonth = nowTime.getMonth() + 1;
+    const nowDay = nowTime.getDate();
     // 返回值
-    let return_time = `${_time_year}-${_time_month}-${_time_day}`
+    let returnTime = `${_time_year}-${_time_month}-${_time_day}`;
     // 优化相邻几天的显示情况
-    if (now_year === _time_year && now_month === _time_month) {
-      switch (now_day - _time_day) {
+    if (nowYear === _time_year && nowMonth === _time_month) {
+      switch (nowDay - _time_day) {
         case 0:
-          return_time = `今天 (${return_time})`;
+          returnTime = `今天 (${returnTime})`;
           break;
         case 1:
-          return_time = `昨天 (${return_time})`;
+          returnTime = `昨天 (${returnTime})`;
           break;
         case 2:
-          return_time = `前天 (${return_time})`;
+          returnTime = `前天 (${returnTime})`;
           break;
         case -1:
-          return_time = `明天 (${return_time})`;
+          returnTime = `明天 (${returnTime})`;
           break;
         case -2:
-          return_time = `后天 (${return_time})`;
+          returnTime = `后天 (${returnTime})`;
           break;
       }
     }
-    return return_time;
+    return returnTime;
   }
 
   // 初始化列表
   initList() {
-    let list = []
+    const list = []
     this.props.items.forEach((item, index, obj) => {
-      let tag_css = cx({
+      let tagCss = cx({
         tag: true,
         tag_storing: item.state === '入库中',
         tag_service: item.state === '服务中',
@@ -60,7 +60,7 @@ export class DateAppointments extends Component {
       list.push(
         <Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
           <UserInfo name={item.name} clothe_count={item.number} phone={item.phone} created_at={item.created_at}>
-            <div className={tag_css}>{item.state}</div>
+            <div className={tagCss}>{item.state}</div>
           </UserInfo>
           <div className={css.item_footer}>
             <img src="src/images/address_icon.svg" alt="icon" />
@@ -75,16 +75,16 @@ export class DateAppointments extends Component {
   // 初始化列表头
   initHeader() {
     return this.props.date ?
-            <Affix offsetTop={50} target={() => document.getElementById('appointments')}>
-              <div className={css.item_header}>{ this.parseTime(this.props.date) }</div>
-            </Affix> : null
+      <Affix offsetTop={50} target={() => document.getElementById('appointments')}>
+        <div className={css.item_header}>{this.parseTime(this.props.date)}</div>
+      </Affix> : null;
   }
 
   render() {
     return (
       <div>
-        { this.initHeader() }
-        { this.initList() }
+        {this.initHeader()}
+        {this.initList()}
       </div>
     )
   }
@@ -92,7 +92,7 @@ export class DateAppointments extends Component {
 
 DateAppointments.defaultProps = {
   date: null,
-  items: [],
+  items: []
 }
 
 DateAppointments.PropTypes = {
@@ -105,7 +105,7 @@ DateAppointments.PropTypes = {
       phone: PropTypes.string,
       number: PropTypes.number,
       date: PropTypes.string,
-      created_at: PropTypes.string,
+      created_at: PropTypes.string
     }),
-  ),
+  )
 }

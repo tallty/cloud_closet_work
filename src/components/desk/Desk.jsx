@@ -108,13 +108,13 @@ class Desk extends Component {
 
     let str = '';
     switch (kind) {
-      case '预约入库':
+      case '待确认':
         str = JSON.stringify(commitedAppointments);
         break;
-      case '等待服务':
+      case '待服务':
         str = JSON.stringify(acceptedAppointments);
         break;
-      case '等待处理':
+      case '待入库':
         str = JSON.stringify(paidAppointments.concat(unpaidAppointments));
         break;
       case '历史订单':
@@ -161,30 +161,30 @@ class Desk extends Component {
         </div>
         <div className={css.bottom}>
           <div className={css.grid_container}>
-            <div className={css.grid_item} onClick={this.handleClick.bind(this, '预约入库')}>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '待确认')}>
               <div>
                 <h1>{this.getAppointmentsCount([commitedAppointments])}</h1>
-                <p>预约入库</p>
+                <p>待确认</p>
               </div>
             </div>
 
-            <div className={css.grid_item} onClick={this.handleClick.bind(this, '等待服务')}>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '待服务')}>
               <div>
                 <h1>{this.getAppointmentsCount([acceptedAppointments])}</h1>
-                <p>等待服务</p>
+                <p>待服务</p>
               </div>
             </div>
 
-            <div className={css.grid_item} onClick={this.handleClick.bind(this, '等待处理')}>
+            <div className={css.grid_item} onClick={this.handleClick.bind(this, '待入库')}>
               <div>
                 <h1>{this.getAppointmentsCount([unpaidAppointments, paidAppointments])}</h1>
-                <p>等待处理</p>
+                <p>待入库</p>
               </div>
             </div>
 
             <div className={css.grid_item}>
               <div>
-                <img src="src/images/notification.png" alt=""/>
+                <img src="src/images/notification.png" alt="" />
                 <p>VIP管理</p>
               </div>
             </div>
