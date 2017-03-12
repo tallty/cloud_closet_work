@@ -85,6 +85,7 @@ class WareHouse extends Component {
    * @param  {[object]} type [选择的衣服种类、价格]
    */
   selectClotheType(type) {
+    const month = type.is_chest ? 3 : 1;
     // 创建一个临时对象
     const obj = {
       price_system_id: type.id,
@@ -92,7 +93,7 @@ class WareHouse extends Component {
       count: 1,
       price: 0,
       unit_price: type.price,
-      store_month: 3,
+      store_month: month,
       is_chest: type.is_chest
     }
     this.setState({ pop: true, event: NEW, object: obj });
@@ -388,23 +389,26 @@ class WareHouse extends Component {
           <div className={css.pop_content}>
             <div className={css.title}>{object.title}</div>
             {/* 仓储时长 */}
-            <div className={css.warehouse_length}>
-              <p>仓储时长</p>
-              <div className={css.radio_container}>
-                <RadioGroup
-                  onChange={this.onLengthChange.bind(this)}
-                  value={`${object.store_month}`}
-                  defaultValue="3"
-                >
-                  <RadioButton value="3">三个月</RadioButton>
-                  <RadioButton value="6">六个月</RadioButton>
-                  <RadioButton value="9">九个月</RadioButton>
-                  <div style={{ height: 10 }}></div>
-                  <RadioButton value="12">一年</RadioButton>
-                  <RadioButton value="24">两年</RadioButton>
-                </RadioGroup>
-              </div>
-            </div>
+            {
+              object.is_chest ?
+                <div className={css.warehouse_length}>
+                  <p>仓储时长</p>
+                  <div className={css.radio_container}>
+                    <RadioGroup
+                      onChange={this.onLengthChange.bind(this)}
+                      value={`${object.store_month}`}
+                      defaultValue="3"
+                    >
+                      <RadioButton value="3">三个月</RadioButton>
+                      <RadioButton value="6">六个月</RadioButton>
+                      <RadioButton value="9">九个月</RadioButton>
+                      <div style={{ height: 10 }}></div>
+                      <RadioButton value="12">一年</RadioButton>
+                      <RadioButton value="24">两年</RadioButton>
+                    </RadioGroup>
+                  </div>
+                </div> : null
+            }
             {/* 衣柜数量 */}
             <CountEditer count={object.count} onChange={this.handleCountChange.bind(this)} />
             {/* 操作 */}
