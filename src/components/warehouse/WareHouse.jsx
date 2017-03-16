@@ -219,7 +219,7 @@ class WareHouse extends Component {
         if (res.status === 422) {
           alert(res.body.error);
         } else if (res.status < 300 && res.status >= 200) {
-          this.props.router.replace(`success?appointment_id=${this.appointment_id}`);
+          this.props.router.replace(`success?appointment_id=${this.appointment_id}&status=入库订单生成`);
         } else {
           alert('提交订单失败，工程师正在紧急修复')
         }

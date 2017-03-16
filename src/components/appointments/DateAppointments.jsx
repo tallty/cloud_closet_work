@@ -59,7 +59,7 @@ export class DateAppointments extends Component {
       });
       list.push(
         <Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
-          <UserInfo name={item.name} clothe_count={item.number} phone={item.phone} created_at={item.created_at}>
+          <UserInfo {...item}>
             <div className={tagCss}>{item.state}</div>
           </UserInfo>
           <div className={css.item_footer}>

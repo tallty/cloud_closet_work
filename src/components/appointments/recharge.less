@@ -1,0 +1,94 @@
+.container {
+  position: relative;
+  font-family: PingFang SC;
+  .imgIcons {
+    text-align: center;
+    .iconContainer {
+      display: inline-block;
+      margin: 24px auto;
+      position: relative;
+      .icon {
+        width: 70px;
+        height: 70px;
+      }
+      .photo {
+        position: absolute;
+        right: -30px;
+        bottom: -5px;
+        border: 2px solid #fff;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+      }
+    }
+  }
+  .title {
+    text-align: center;
+    font-size: 21px;
+    color: #919191;
+    line-height: 39px;
+    margin-bottom: 24px;
+  }
+  .formContainer {
+    background: #fff;
+    margin: 0 6px;
+    color: #7F7F7F;
+    padding: 15px 10px 0;
+    .label {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+    .inputDiv {
+      overflow: hidden;
+      font-size: 34px;
+      border-bottom: 1px solid #D6D9E1;
+      padding: 10px 0;
+      span {
+        float: left;
+        width: 40px;
+      }
+      input {
+        float: left;
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        color: #FF9E4A;
+        &:focus {
+          border: none;
+          outline: none;
+        }
+      }
+    }
+    .error {
+      margin: 0;
+      color: red;
+    }
+    .tips {
+      font-size: 14px;
+      color: #7F7F7F;
+      line-height: 30px;
+      margin: 5px 0;
+      border: none;
+      padding: 0;
+      width: 100%;
+      &:focus {
+        border: none;
+        outline: none;
+      }
+    }
+  }
+  .confirmBtn {
+    width: 85%;
+    height: 50px;
+    text-align: center;
+    color: #fff;
+    line-height: 50px;
+    border-radius: 25px;
+    border: none;
+    margin: 30px auto;
+    background: #ECC17D;
+    font-size: 16px;
+    display: block;
+  }
+}

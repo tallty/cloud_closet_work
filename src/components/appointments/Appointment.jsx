@@ -21,7 +21,7 @@ class Appointment extends Component {
   componentWillMount() {
     const { id } = this.props.location.query;
     SuperAgent
-      .get(`http://closet-api.tallty.com/worker/appointments/${id}`)
+      .get(`http://closet-api.tallty.com/worker/appointments/${id}?random=${Math.random()}`)
       .set('Accept', 'application/json')
       .set('X-Worker-Token', localStorage.authentication_token)
       .set('X-Worker-Phone', localStorage.phone)
@@ -31,7 +31,6 @@ class Appointment extends Component {
           this.setState({ appointment: res.body })
         } else {
           this.setState({ appointment: {} })
-          alert("获取预约详情失败");
         }
       })
   }
@@ -89,7 +88,6 @@ class Appointment extends Component {
       .set('X-Worker-Phone', localStorage.phone)
       .end((err, res) => {
         if (!err || err === null) {
-          console.log("已取消");
           this.setState({ appointment: res.body });
         } else {
           this.setState({ error_text: "重新取消", loading: false });
@@ -127,7 +125,8 @@ class Appointment extends Component {
    * 在线充值
    */
   handleRecharge() {
-    alert('在线充值');
+    const { appointment } = this.state;
+    this.props.router.replace(`/recharge?user_id=${appointment.user_id}`);
   }
 
   /**
@@ -147,6 +146,7 @@ class Appointment extends Component {
         this.props.router.replace('/');
         break;
     }
+    return null;
   }
 
   /**
@@ -201,7 +201,7 @@ class Appointment extends Component {
           <Col span={12} className="text-right">护理费：{appointment.care_cost}</Col>
         </Row>
         <p className="text-right">服务费：{appointment.service_cost}</p>
-        <p className={css.total_price}>合计：<span>{ appointment.price }</span></p>
+        <p className={css.total_price}>合计：<span>{appointment.price}</span></p>
       </div>;
   }
 
@@ -219,18 +219,21 @@ class Appointment extends Component {
       <div>
         <Button
           className={css.recharge_btn}
-          onClick={this.handleRecharge.bind(this)}>
-          在线充值
+          onClick={this.handleRecharge.bind(this)}
+        >
+          线下充值
         </Button>
         <Button
           className={css.change_btn}
-          onClick={this.handleRecord.bind(this)}>
+          onClick={this.handleRecord.bind(this)}
+        >
           修改订单
         </Button>
         <Button
           className={css.main_btn}
-          loading={ this.state.loading }
-          onClick={ this.handleEvent.bind(this) }>
+          loading={this.state.loading}
+          onClick={this.handleEvent.bind(this)}
+        >
           {this.getBtnText()}
         </Button>
       </div>
@@ -239,8 +242,8 @@ class Appointment extends Component {
       <div className={css.affix_bottom}>
         <Button
           className={css.main_btn}
-          loading={ this.state.loading }
-          onClick={ this.handleEvent.bind(this) }>
+          loading={this.state.loading}
+          onClick={this.handleEvent.bind(this)}>
           {this.getBtnText()}
         </Button>
       </div>
@@ -250,29 +253,32 @@ class Appointment extends Component {
 
   showAppointmentDetail() {
     const { appointment } = this.state;
+    let dom;
     if (appointment === null) {
-      return <Spiner />;
+      dom = <Spiner />;
     } else {
       const states = this.getStates();
       const photoPath = appointment.photo ? appointment.photo : 'src/images/default_photo.svg'
-      return (
+      dom = (
         <div >
           <StateUserInfo
-            nowState={ states[0] }
-            nextState={ states[1] }
-            user={appointment} />
-          { this.showAppointmentInfo(appointment) }
-          { this.showStateBtns(appointment.state) }
+            nowState={states[0]}
+            nextState={states[1]}
+            user={appointment}
+          />
+          {this.showAppointmentInfo(appointment)}
+          {this.showStateBtns(appointment.state)}
         </div>
       )
     }
+    return dom;
   }
 
   render() {
     return (
       <div className={css.appointment}>
         <Toolbar title="预约详情" url="/appointments" />
-        { this.showAppointmentDetail() }
+        {this.showAppointmentDetail()}
       </div>
     );
   }
