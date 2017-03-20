@@ -281,6 +281,8 @@ class WareHouse extends Component {
           name={appointment.name}
           photo={appointment.user_avatar}
           phone={appointment.phone}
+          created_at={appointment.created_at}
+          number={appointment.number}
         />
         {/* 仓储类型 */}
         <ClosetKinds kinds={types} active={object.title} handleClick={this.selectClotheType.bind(this)} />
