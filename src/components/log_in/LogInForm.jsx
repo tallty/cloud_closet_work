@@ -13,7 +13,8 @@ class LogInForm extends Component {
     super(props);
     this.state = {
       phone: '',
-      password: ''
+      password: '',
+      loading: false
     }
   }
 
@@ -35,11 +36,16 @@ class LogInForm extends Component {
   signIn() {
     const mPhone = this.state.phone;
     const mPassword = this.state.password;
+    if (!(mPhone && mPassword)) {
+      message.warning('请输入手机号和密码');
+      return;
+    }
+    this.setState({ loading: true });
     SuperAgent
-      .post('http://closet-api.tallty.com/users/sign_in')
+      .post('http://closet-api.tallty.com/workers/sign_in')
       .set('Accept', 'application/json')
       .send({
-        user: {
+        worker: {
           phone: mPhone,
           password: mPassword
         }
@@ -51,13 +57,15 @@ class LogInForm extends Component {
           localStorage.setItem('lastTime', JSON.stringify((new Date).getTime()));
           this.props.router.replace('/');
         } else {
-          message.error('登录失败，请检查账户信息！');
+          this.setState({ loading: false });
+          message.error('登录失败，手机号或密码错误！');
         }
       })
   }
 
 
   render() {
+    const { loading } = this.state;
     const containerClassnames1 = classnames(
       styles.login_input_header_label1,
       styles.login_input_header_label,
@@ -98,6 +106,7 @@ class LogInForm extends Component {
               className={styles.login_btn}
               type="primary"
               htmlType="submit"
+              loading={loading}
               onClick={this.signIn.bind(this)}
             >登录</Button>
           </Col>
