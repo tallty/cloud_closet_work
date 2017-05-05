@@ -14,7 +14,6 @@ export class ClosetKinds extends Component {
 
     this.props.kinds.forEach((kind, index, obj) => {
       let cs = this.props.active === kind.title ? css.active_item : css.grid_item;
-
       array.push(
         <div key={index} className={cs}>
           <Button onClick={this.props.handleClick.bind(this, kind)}>

@@ -4,16 +4,16 @@
  * 点击入库时：更新 sessionStorage.appointment
  */
 import React, { Component, PropTypes } from 'react';
-import css from './ware_house.less';
+import { Row, Col, Button, Radio, Select, Input, InputNumber, message } from 'antd';
+import SuperAgent from 'superagent';
 import { withRouter } from 'react-router';
+import css from './ware_house.less';
 import { UserInfo } from '../user_info/UserInfo';
 import { ClothesTable } from '../clothes_table/ClothesTable';
 import { ClosetKinds } from './ClosetKinds';
-import { Spiner } from '../common/Spiner';
 import { Toolbar } from '../common/Toolbar';
-import { Row, Col, Button, Radio, Select, Input, InputNumber } from 'antd';
+import { Spiner } from '../common/Spiner';
 import { PopWindow } from '../common/PopWindow';
-import SuperAgent from 'superagent';
 import CountEditer from './CountEditer';
 
 const RadioButton = Radio.Button;
@@ -46,6 +46,7 @@ class WareHouse extends Component {
     // 取得缓存本地的 appointment 清单
     const localAppointment = sessionStorage.appointment;
     const data = JSON.parse(localAppointment);
+    console.log(data);
     const countInfo = data.garment_count_info || {};
     this.setState({
       appointment: {
@@ -129,7 +130,7 @@ class WareHouse extends Component {
   addClotheEvent() {
     const { object, appointment } = this.state;
     object.price = object.count * object.store_month * object.unit_price;
-    appointment.price += object.price;
+    appointment.rent_charge += object.price;
     // 增加一条入库记录
     appointment.appointment_price_groups.push(object);
 
@@ -149,7 +150,7 @@ class WareHouse extends Component {
       object.price = object.count * object.store_month * object.unit_price;
       item = object;
     }
-    appointment.price = this.getTotalPrice(appointment);
+    appointment.rent_charge = this.getTotalPrice(appointment);
     this.setState({ appointment: appointment, pop: false });
   }
 
@@ -217,11 +218,11 @@ class WareHouse extends Component {
       .end((err, res) => {
         this.setState({ loading: false });
         if (res.status === 422) {
-          alert(res.body.error);
+          message.error(res.body.error);
         } else if (res.status < 300 && res.status >= 200) {
           this.props.router.replace(`success?appointment_id=${this.appointment_id}&status=入库订单生成`);
         } else {
-          alert('提交订单失败，工程师正在紧急修复')
+          message.warning('提交订单失败，工程师正在紧急修复')
         }
       })
   }
@@ -277,11 +278,7 @@ class WareHouse extends Component {
     return (
       <div className={css.container}>
         <Toolbar title="预约入库" url={`/appointment?id=${this.appointment_id}`} />
-        <UserInfo
-          name={appointment.name}
-          photo={appointment.user_avatar}
-          phone={appointment.phone}
-        />
+        <UserInfo appointment={appointment} />
         {/* 仓储类型 */}
         <ClosetKinds kinds={types} active={object.title} handleClick={this.selectClotheType.bind(this)} />
         {/* 衣柜记录 */}
@@ -374,7 +371,7 @@ class WareHouse extends Component {
               </div>
             </Col>
           </Row>
-          <p className={css.total_price}>合计：<span>{appointment.price + appointment.care_cost + appointment.service_cost}</span></p>
+          <p className={css.total_price}>合计：<span>{appointment.rent_charge + appointment.care_cost + appointment.service_cost}</span></p>
         </div>
         {/* 入库 */}
         <div className={css.btn_container}>

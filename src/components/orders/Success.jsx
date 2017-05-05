@@ -8,7 +8,7 @@ import { Link, withRouter } from 'react-router'
 class Success extends Component {
   render() {
     const { status, action } = this.props.location.query;
-    const appointmentId = this.props.location.query.appointmentId;
+    const appointmentId = this.props.location.query.appointment_id;
     return (
       <div className={css.appoint_success}>
         <div className={css.top_part}>

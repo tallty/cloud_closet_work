@@ -9,18 +9,23 @@ import SuperAgent from 'superagent'
 
 export class Appointments extends Component {
   state = {
-    appointments: []
+    appointments: [],
+    title: '预约清单'
   }
 
   componentWillMount() {
     const apm = JSON.parse(sessionStorage.appointments)
-    this.setState({ appointments: apm })
+    const toolbarTitle = JSON.parse(sessionStorage.getItem('appointmentsTitle'));
+    this.setState({
+      appointments: apm,
+      title: toolbarTitle
+    })
   }
 
   render() {
     return (
       <div className={css.appointments} id="appointments">
-        <Toolbar title="预约清单" url="/" />
+        <Toolbar title={this.state.title} url="/" />
         {
           this.state.appointments.map((item, i) =>
             (<DateAppointments date={item.date} items={item.items} key={i} />))

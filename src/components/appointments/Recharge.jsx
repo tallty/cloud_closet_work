@@ -18,7 +18,6 @@ class Recharge extends Component {
       .set('Accept', 'application/json')
       .end((err, res) => {
         if (!err || err === null) {
-          console.log(res.body.recharge_rules)
           this.setState({ rules: res.body.recharge_rules });
         }
       })

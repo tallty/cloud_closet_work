@@ -5,19 +5,15 @@ import css from './user_info.less';
 export class UserInfo extends Component {
 
   getPhoto() {
-    if (this.props.photo.length > 0) {
-      return this.props.photo
+    if (this.props.appointment) {
+      return this.props.appointment.user_avatar;
     } else {
       return 'src/images/default_photo.png'
     }
   }
 
-  formatDate(date) {
-    return moment(date).format("YYYY-MM-DD HH:mm:ss");
-  }
-
   getItem() {
-    const { name, phone, number, created_at, seq } = this.props
+    const { name, phone, number, created_at, seq } = this.props.appointment;
     if (this.props.clothe_count != -1) {
       return (
         <div className={css.content_left}>
@@ -43,13 +39,17 @@ export class UserInfo extends Component {
     }
   }
 
+  formatDate(date) {
+    return moment(date).format('YYYY-MM-DD HH:mm:ss');
+  }
+
   render() {
     return (
       <div className={css.item_content}>
         {this.getItem()}
         <div className={css.content_right}>
           {
-            this.props.photo ? <img src={this.getPhoto()} alt="头像" /> : this.props.children
+            this.props.appointment.user_avatar ? <img src={this.getPhoto()} alt="头像" /> : this.props.children
           }
         </div>
       </div>

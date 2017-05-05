@@ -19,7 +19,7 @@ export class PopWindow extends Component {
 
   popStyle() {
     let className = null
-    switch(this.props.direction) {
+    switch (this.props.direction) {
       case 'top':
         className = cx({
           top_window: true,
@@ -59,9 +59,9 @@ export class PopWindow extends Component {
     return (
       <div>
         {/* 透明蒙层 */}
-        <div className={css.pop_bg} 
-             style={{display: show ? 'block' : 'none'}}
-             onClick={onCancel}>
+        <div className={css.pop_bg}
+          style={{ display: show ? 'block' : 'none' }}
+          onClick={onCancel}>
         </div>
         {/* 弹出框 */}
         <div className={this.popStyle()}>
@@ -75,7 +75,7 @@ export class PopWindow extends Component {
 PopWindow.defaultProps = {
   show: false,
   direction: 'bottom',
-  onCancel: () => { console.log("默认的取消事件") }
+  onCancel: () => { }
 }
 
 PopWindow.PropTypes = {

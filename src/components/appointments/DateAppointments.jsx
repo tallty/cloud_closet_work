@@ -11,20 +11,20 @@ export class DateAppointments extends Component {
   // 预约时间解析
   parseTime(time) {
     // 清单预约时间
-    let _time = new Date(time);
-    let _time_year = _time.getFullYear();
-    let _time_month = _time.getMonth() + 1;
-    let _time_day = _time.getDate();
+    const localTime = new Date(time);
+    const localTimeYear = localTime.getFullYear();
+    const localTimeMonth = localTime.getMonth() + 1;
+    const localTimeDay = localTime.getDate();
     // 当期时间
     const nowTime = new Date();
     const nowYear = nowTime.getFullYear();
     const nowMonth = nowTime.getMonth() + 1;
     const nowDay = nowTime.getDate();
     // 返回值
-    let returnTime = `${_time_year}-${_time_month}-${_time_day}`;
+    let returnTime = `${localTimeYear}-${localTimeMonth}-${localTimeDay}`;
     // 优化相邻几天的显示情况
-    if (nowYear === _time_year && nowMonth === _time_month) {
-      switch (nowDay - _time_day) {
+    if (nowYear === localTimeYear && nowMonth === localTimeMonth) {
+      switch (nowDay - localTimeDay) {
         case 0:
           returnTime = `今天 (${returnTime})`;
           break;
@@ -40,6 +40,8 @@ export class DateAppointments extends Component {
         case -2:
           returnTime = `后天 (${returnTime})`;
           break;
+        default:
+          break;
       }
     }
     return returnTime;
@@ -51,7 +53,7 @@ export class DateAppointments extends Component {
     this.props.items.forEach((item, index, obj) => {
       let tagCss = cx({
         tag: true,
-        tag_storing: item.state === '入库中',
+        tag_storing: item.state === '入库中' || item.state === '待确认',
         tag_service: item.state === '服务中',
         tag_payment: item.state === '待付款',
         tag_canceled: item.state === '已取消',
@@ -59,7 +61,7 @@ export class DateAppointments extends Component {
       });
       list.push(
         <Link to={`/appointment?id=${item.id}`} className={css.item} key={index}>
-          <UserInfo {...item}>
+          <UserInfo appointment={item}>
             <div className={tagCss}>{item.state}</div>
           </UserInfo>
           <div className={css.item_footer}>

@@ -17,12 +17,6 @@ class Desk extends Component {
     twoSuccess: false
   }
 
-  componentWillMount() {
-    localStorage.setItem('state', 'true')
-    localStorage.setItem('phone', '12312312311')
-    localStorage.setItem('authentication_token', '5DRnB4zrGeLkrkRsK92X')
-  }
-
   componentDidMount() {
     this.getCommitedAppointments();
     this.getOtheAppointments();
@@ -124,6 +118,7 @@ class Desk extends Component {
         break;
     }
     sessionStorage.setItem('appointments', str);
+    sessionStorage.setItem('appointmentsTitle', JSON.stringify(kind));
     this.props.router.replace('/appointments');
     return null;
   }
@@ -143,7 +138,7 @@ class Desk extends Component {
       <div className={css.container}>
         <div className={css.top}>
           <div className={css.logo}>
-            <img src="src/images/logo.svg" alt="logo"/>
+            <img src="src/images/logo.svg" alt="logo" />
           </div>
           <p className={css.company}>
             <span><img src="src/images/logo_icon.svg" alt="" />&nbsp;乐存家庭服务（上海）有限公司</span>
@@ -198,7 +193,7 @@ class Desk extends Component {
 
             <div className={css.grid_item}>
               <div>
-                <img src="src/images/vip.png" alt=""/>
+                <img src="src/images/vip.png" alt="" />
                 <p>系统通知</p>
               </div>
               {/* <div className={css.red_dot}></div> */}

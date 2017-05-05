@@ -27,7 +27,6 @@ class Appointment extends Component {
       .set('X-Worker-Phone', localStorage.phone)
       .end((err, res) => {
         if (!err || err === null) {
-          console.log(res.body);
           this.setState({ appointment: res.body })
         } else {
           this.setState({ appointment: {} })
@@ -113,10 +112,9 @@ class Appointment extends Component {
       .set('X-Worker-Phone', localStorage.phone)
       .end((err, res) => {
         if (!err || err === null) {
-          console.log("工作人员送入仓库后，确认入库登记");
           this.setState({ appointment: res.body });
         } else {
-          this.setState({ error_text: "重新确认", loading: false });
+          this.setState({ error_text: '重新确认', loading: false });
         }
       })
   }
