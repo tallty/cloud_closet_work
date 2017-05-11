@@ -64,10 +64,34 @@
       margin: 0;
       color: red;
     }
+    .code {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #D6D9E1;
+      .codeInput {
+        width: 100%;
+        border: 0;
+        outline: none;
+        font-size: 14px;
+        color: #e8b25e;
+      }
+      .getCodeBtn {
+        width: 140px;
+        outline: 0;
+        border: 0;
+        padding: 0;
+        background: #fff;
+        height: 32px;
+        line-height: 32px;
+        color: #e8b25e;
+        border-left: 1px solid #D6D9E1;
+        text-align: center;
+      }
+    }
     .tips {
       font-size: 14px;
       color: #7F7F7F;
-      line-height: 30px;
+      line-height: 36px;
       margin: 5px 0;
       border: none;
       padding: 0;
@@ -83,12 +107,19 @@
     height: 50px;
     text-align: center;
     color: #fff;
-    line-height: 50px;
     border-radius: 25px;
     border: none;
     margin: 30px auto;
     background: #ECC17D;
     font-size: 16px;
     display: block;
+    outline: none;
+    &:active {
+      background: #e8b25e;
+    }
   }
+}
+
+input::-webkit-input-placeholder {
+  color: #bbb;
 }
