@@ -13,8 +13,8 @@ export class UserInfo extends Component {
   }
 
   getItem() {
-    const { name, phone, number, created_at, seq } = this.props.appointment;
-    if (this.props.clothe_count != -1) {
+    const { name, phone, number_alias, created_at, seq } = this.props.appointment;
+    if (this.props.clothe_count !== -1) {
       return (
         <div className={css.content_left}>
           <p className={css.count_user_info}>
@@ -24,7 +24,7 @@ export class UserInfo extends Component {
               {phone}
             </span>
           </p>
-          <p className={css.count}>预约件数：{this.showAppointmentNumber(number)} 件</p>
+          <p className={css.count}>预约件数：{number_alias} 件</p>
           <p className={css.count}>下单时间：{this.formatDate(created_at)}</p>
           <p className={css.count}>订单编号：{seq}</p>
         </div>
@@ -36,20 +36,6 @@ export class UserInfo extends Component {
           <p>电话：&nbsp;&nbsp;<span>{phone}</span></p>
         </div>
       )
-    }
-  }
-
-  // 数量范围描述数据存到数据库时，可删除此方法
-  showAppointmentNumber(number) {
-    switch (number) {
-      case 10:
-        return '5-20';
-      case 30:
-        return '20-50';
-      case 50:
-        return '大于50';
-      default:
-        return number;
     }
   }
 

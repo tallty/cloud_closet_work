@@ -176,7 +176,7 @@ class Appointment extends Component {
     return appointment.appointment_price_groups.length === 0 ?
       <div className={css.appoint_info}>
         <p className={css.time_count}>预约时间：{appointment.date}</p>
-        <p className={css.time_count}>预约件数：{this.showAppointmentNumber(appointment.number)} 件</p>
+        <p className={css.time_count}>预约件数：{appointment.number_alias} 件</p>
       </div> :
       <div className={css.order}>
         <ClothesTable groups={appointment.appointment_price_groups} />
@@ -201,20 +201,6 @@ class Appointment extends Component {
         <p className="text-right">服务费：{appointment.service_cost}</p>
         <p className={css.total_price}>合计：<span>{appointment.price}</span></p>
       </div>;
-  }
-
-  // 数量范围描述数据存到数据库时，可删除此方法
-  showAppointmentNumber(number) {
-    switch (number) {
-      case 10:
-        return '5-20';
-      case 30:
-        return '20-50';
-      case 50:
-        return '大于50';
-      default:
-        return number;
-    }
   }
 
   /**
