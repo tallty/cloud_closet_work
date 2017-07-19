@@ -173,6 +173,7 @@ class Appointment extends Component {
    * 2、入库衣服信息
    */
   showAppointmentInfo(appointment) {
+    console.log(appointment);
     return appointment.appointment_price_groups.length === 0 ?
       <div className={css.appoint_info}>
         <p className={css.time_count}>预约时间：{appointment.date}</p>
