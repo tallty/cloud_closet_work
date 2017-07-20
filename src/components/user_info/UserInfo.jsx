@@ -13,7 +13,8 @@ export class UserInfo extends Component {
   }
 
   getItem() {
-    const { name, phone, number_alias, created_at, seq } = this.props.appointment;
+    const { name, phone, number_alias, created_at, seq, date } = this.props.appointment;
+    console.log(this.props.appointment)
     if (this.props.clothe_count !== -1) {
       return (
         <div className={css.content_left}>
@@ -25,6 +26,7 @@ export class UserInfo extends Component {
             </span>
           </p>
           <p className={css.count}>预约件数：{number_alias} 件</p>
+          <p className={css.count}>预约时间：{date}</p>
           <p className={css.count}>下单时间：{this.formatDate(created_at)}</p>
           <p className={css.count}>订单编号：{seq}</p>
         </div>

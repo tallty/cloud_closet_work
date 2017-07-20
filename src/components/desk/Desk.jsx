@@ -9,10 +9,8 @@ class Desk extends Component {
     totalPeople: 0,
     commitedAppointments: [],
     acceptedAppointments: [],
-    unpaidAppointments: [],
-    paidAppointments: [],
-    storingAppointments: [],
-    canceledAppointments: [],
+    waitingAppointments: [],
+    historyAppointments: [],
     oneSuccess: false,
     twoSuccess: false
   }
@@ -60,10 +58,8 @@ class Desk extends Component {
           const obj = res.body;
           this.setState({
             acceptedAppointments: obj.accepted_appointments,
-            unpaidAppointments: obj.unpaid_appointments,
-            paidAppointments: obj.paid_appointments,
-            storingAppointments: obj.storing_appointments,
-            canceledAppointments: obj.canceled_appointments,
+            waitingAppointments: obj.waiting_appointments,
+            historyAppointments: obj.history_appointments,
             twoSuccess: true
           })
         } else {
@@ -90,10 +86,8 @@ class Desk extends Component {
     const {
       commitedAppointments,
       acceptedAppointments,
-      unpaidAppointments,
-      paidAppointments,
-      storingAppointments,
-      canceledAppointments,
+      waitingAppointments,
+      historyAppointments,
       oneSuccess,
       twoSuccess
     } = this.state;
@@ -109,10 +103,10 @@ class Desk extends Component {
         str = JSON.stringify(acceptedAppointments);
         break;
       case '待入库':
-        str = JSON.stringify(paidAppointments.concat(unpaidAppointments));
+        str = JSON.stringify(waitingAppointments);
         break;
       case '历史订单':
-        str = JSON.stringify(storingAppointments.concat(canceledAppointments));
+        str = JSON.stringify(historyAppointments);
         break;
       default:
         break;
@@ -128,10 +122,8 @@ class Desk extends Component {
       newPeople, totalPeople,
       commitedAppointments,
       acceptedAppointments,
-      unpaidAppointments,
-      paidAppointments,
-      storingAppointments,
-      canceledAppointments
+      waitingAppointments,
+      historyAppointments
     } = this.state;
 
     return (
@@ -172,7 +164,7 @@ class Desk extends Component {
 
             <div className={css.grid_item} onClick={this.handleClick.bind(this, '待入库')}>
               <div>
-                <h1>{this.getAppointmentsCount([unpaidAppointments, paidAppointments])}</h1>
+                <h1>{this.getAppointmentsCount([waitingAppointments])}</h1>
                 <p>待入库</p>
               </div>
             </div>
@@ -186,7 +178,7 @@ class Desk extends Component {
 
             <div className={css.grid_item} onClick={this.handleClick.bind(this, '历史订单')}>
               <div>
-                <h1>{this.getAppointmentsCount([storingAppointments, canceledAppointments])}</h1>
+                <h1>{this.getAppointmentsCount([historyAppointments])}</h1>
                 <p>历史订单</p>
               </div>
             </div>
